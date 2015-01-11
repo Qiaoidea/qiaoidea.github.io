@@ -1,0 +1,688 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>深入理解ViewGroup | Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/08/ViewGroup/" title="深入理解ViewGroup" itemprop="url">深入理解ViewGroup</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-07T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 8 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewGroup定义"><span class="toc-number">1.</span> <span class="toc-text">ViewGroup定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewGroup容器"><span class="toc-number">2.</span> <span class="toc-text">ViewGroup容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#１-_添加View的算法"><span class="toc-number">2.1.</span> <span class="toc-text">１.　添加View的算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#１．１_addViewInner方法："><span class="toc-number">2.1.1.</span> <span class="toc-text">１．１ addViewInner方法：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#１．2_addInArray方法："><span class="toc-number">2.1.2.</span> <span class="toc-text">１．2  addInArray方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#２-_移除View"><span class="toc-number">2.2.</span> <span class="toc-text">２.　移除View</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#３-_查询"><span class="toc-number">2.3.</span> <span class="toc-text">３.　查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#onFinishInflate"><span class="toc-number">3.</span> <span class="toc-text">onFinishInflate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测量组件"><span class="toc-number">4.</span> <span class="toc-text">测量组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#onLayout"><span class="toc-number">5.</span> <span class="toc-text">onLayout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewGroup的绘制"><span class="toc-number">6.</span> <span class="toc-text">ViewGroup的绘制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果图片"><span class="toc-number">7.</span> <span class="toc-text">效果图片</span></a></li></ol>
+		
+		</div>
+		
+		<p>　　　　深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。</p>
+<a id="more"></a>
+
+<h2 id="ViewGroup定义">ViewGroup定义</h2>
+<p>　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。<br>　　其实ViewGroup也就是View的容器。通过ViewGroup.LayoutParams来指定子View的参数。</p>
+<p>　　ViewGroup作为一个容器，为了制定这个容器应有的标准所以为其指定了接口</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewGroup</span> <span class="keyword">extends</span> <span class="title">View</span> <span class="keyword">implements</span> <span class="title">ViewParent</span>, <span class="title">ViewManager</span>  </span>
+</code></pre><p>　　这两个接口这里不研究，如果涉及到的话会带一下。ViewGroup有小4000行代码，下面我们一个模块一个模块分析。</p>
+<h2 id="ViewGroup容器">ViewGroup容器</h2>
+<p>　　　ViewGroup是一个容器，其采用一个数组来存储这些子View：</p>
+<pre><code><span class="comment">// Child views of this ViewGroup    </span>
+<span class="keyword">private</span> View[] mChildren;  
+</code></pre><p>　　由于是通过一个数组来存储View数据的，所以对于ViewGroup来说其必须实现增、删、查的算法。下面我们就来看看其内部实现。</p>
+<h3 id="１-_添加View的算法"><strong>１.　添加View的算法</strong></h3>
+<pre><code>protected boolean addViewInLayout(View child, int index, LayoutParams params) {   
+    <span class="keyword">return</span> addViewInLayout(child, index, params, false);   
+}   
+protected boolean addViewInLayout(View child, int index, LayoutParams params,   
+        boolean preventRequestLayout) {   
+    child.mParent = null;   
+    addViewInner(child, index, params, preventRequestLayout);   
+    child.mPrivateFlags = (child.mPrivateFlags &amp; ~DIRTY_MASK) | DRAWN;   
+    <span class="keyword">return</span> true;   
+}   
+private void addViewInner(View child, int index, LayoutParams params,   
+        boolean preventRequestLayout) {   
+    <span class="keyword">...</span>   
+    addInArray(child, index);   
+    <span class="keyword">...</span>   
+}   
+private void addInArray(View child, int index) {   
+<span class="keyword">...</span>   
+}  
+</code></pre><p>　　上面四个方法就是添加View的核心算法的封装，它们是层层调用的关系。而我们通常调用的addView就是最终通过上面那个来最终达到添加到ViewGroup中的。</p>
+<h4 id="１．１_addViewInner方法："><em><strong>１．１ addViewInner方法：</strong></em></h4>
+<p>　　1.　<strong>首先是对子View是否已经包含到一个父容器中</strong>，主要的防止添加一个已经有父容器的View，因为添加一个拥有父容器的View时会碰到各种问题。比如记录本身父容器算法的问题、本身被多个父容器包含时更新的处理等等一系列的问题都会出现。</p>
+<pre><code><span class="keyword">if</span> (child.getParent() != <span class="literal">null</span>) {   
+        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"The specified child already has a parent. "</span> +   
+                <span class="string">"You must call removeView() on the child's parent first."</span>);   
+    }  
+</code></pre><p>　　2.　<strong>然后就是对子View布局参数的处理</strong><br>　　3.　<strong>调用addInArray来添加View</strong><br>　　4.　<strong>父View为当前的ViewGroup</strong><br>　　5.　<strong>焦点的处理</strong><br>　　6.　<strong>当前View的AttachInfo信息</strong>，这个信息是用来在窗口处理中用的。Android的窗口系统就是用过AttachInfo来判断View的所属窗口的，这个了解下就行。详细信息设计到Android框架层的一些东西。</p>
+<pre><code>AttachInfo <span class="variable">ai =</span> mAttachInfo;   
+    <span class="keyword">if</span> (ai != <span class="constant">null</span>) {   
+        boolean <span class="variable">lastKeepOn =</span> ai.mKeepScreenOn;   
+        ai.<span class="variable">mKeepScreenOn =</span> <span class="constant">false</span>;   
+        child.dispatchAttachedToWindow(mAttachInfo, (mViewFlags&amp;VISIBILITY_MASK));   
+        <span class="keyword">if</span> (ai.mKeepScreenOn) {   
+            needGlobalAttributesUpdate(<span class="constant">true</span>);   
+        }   
+        ai.<span class="variable">mKeepScreenOn =</span> lastKeepOn;   
+    }  
+</code></pre><p>　　7.　<strong>View树改变的监听</strong></p>
+<pre><code><span class="keyword">if</span> (mOnHierarchyChangeListener != <span class="literal">null</span>) { 
+        mOnHierarchyChangeListener.onChildViewAdded(<span class="keyword">this</span>, child); 
+}
+</code></pre><p>　　8.　<strong>子View中的mViewFlags的设置</strong></p>
+<pre><code><span class="title">if</span> ((child.mViewFlags &amp; DUPLICATE_PARENT_STATE) == DUPLICATE_PARENT_STATE) { 
+       <span class="title">mGroupFlags</span> |= FLAG_NOTIFY_CHILDREN_ON_DRAWABLE_STATE_CHANGE; 
+   }
+</code></pre><h4 id="１．2_addInArray方法："><em><strong>１．2  addInArray方法：</strong></em></h4>
+<p>　　 这个里面的实现主要是有个知识点，以前也没用过arraycopy，这里具体实现就不多加描述了。</p>
+<pre><code>System.arraycopy(children, <span class="number">0</span>, mChildren, <span class="number">0</span>, <span class="built_in">index</span>); 
+System.arraycopy(children, <span class="built_in">index</span>, mChildren, <span class="built_in">index</span> + <span class="number">1</span>, <span class="built_in">count</span> - <span class="built_in">index</span>);
+</code></pre><h3 id="２-_移除View"><strong>２.　移除View</strong></h3>
+<p>　　 移除View的几种方式：</p>
+<ul>
+<li><p><strong>移除指定的View</strong></p>
+</li>
+<li><p><strong>移除从指定位置的View</strong></p>
+</li>
+<li><p><strong>移除从指定位置开始的多个View</strong></p>
+</li>
+<li><p><strong>移除所有的View</strong></p>
+<p>　　其中具体涉及到的方法就有好多了，不过最终对要删除的子View中所做的无非就是下列的事情：</p>
+</li>
+<li><p><strong>如果拥有焦点则清除焦点</strong></p>
+</li>
+<li><p><strong>将要删除的View从当前的window中解除关系</strong></p>
+</li>
+<li><p><strong>设置View树改变的事件监听，我们可以通过监听OnHierarchyChangeListener事件来进行一些相应的处理</strong></p>
+</li>
+<li><p><strong>从父容器的子容器数组中删除</strong></p>
+<p>　　具体的内容这里就不一一贴出来了，大家回头看看源码就可以了。</p>
+</li>
+</ul>
+<h3 id="３-_查询"><strong>３.　查询</strong></h3>
+<p>　　 这个就简单了，就是直接从数组中取出就可以了：</p>
+<pre><code><span class="keyword">public</span> View <span class="title">getChildAt</span>(<span class="keyword">int</span> index) { 
+   <span class="keyword">try</span> { 
+        <span class="keyword">return</span> mChildren[index]; 
+    } <span class="keyword">catch</span> (IndexOutOfBoundsException ex) { 
+        <span class="keyword">return</span> <span class="keyword">null</span>; 
+    } 
+}
+</code></pre><p>　　分析到这儿，其实我们已经相当于分析了ViewGroup四分之一的代码了，＠＿＠。</p>
+<h2 id="onFinishInflate">onFinishInflate</h2>
+<p>　　我们一般使用View的流程是在onCreate中使用setContentView来设置要显示Layout文件或直接创建一个View，在当设置了ContentView之后系统会对这个View进行解析，然后回调当前视图View中的onFinishInflate方法。只有解析了这个View我们才能在这个View容器中获取到拥有Id的组件，同样因为系统解析完View之后才会调用onFinishInflate方法，所以我们自定义组件时可以onFinishInflate方法中获取指定子View的引用。</p>
+<h2 id="测量组件">测量组件</h2>
+<p>　　 在ViewGroup中提供了测量子组件的三个方法。<br> 　　<strong>1、measureChild(View, int, int)，为子组件添加Padding  </strong></p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">measureChild</span>(View child, <span class="keyword">int</span> parentWidthMeasureSpec,   
+        <span class="keyword">int</span> parentHeightMeasureSpec) {   
+    <span class="keyword">final</span> LayoutParams lp = child.getLayoutParams();   
+
+    <span class="keyword">final</span> <span class="keyword">int</span> childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,   
+            mPaddingLeft + mPaddingRight, lp.width);   
+    <span class="keyword">final</span> <span class="keyword">int</span> childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,   
+            mPaddingTop + mPaddingBottom, lp.height);   
+
+    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);   
+}  
+</code></pre><p> 　　<strong>2、measureChildren(int, int)根据指定的高和宽来测量所有子View中显示参数非GONE的组件。  </strong></p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">measureChildren</span>(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec) {   
+    <span class="keyword">final</span> <span class="keyword">int</span> size = mChildrenCount;   
+    <span class="keyword">final</span> View[] children = mChildren;   
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; ++i) {   
+        <span class="keyword">final</span> View child = children[i];   
+        <span class="keyword">if</span> ((child.mViewFlags &amp; VISIBILITY_MASK) != GONE) {   
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);   
+        }   
+    }   
+}  
+</code></pre><p> 　　<strong>3、measureChildWithMargins(View, int, int, int, int)测量指定的子组件，为子组件添加Padding和Margin。</strong></p>
+<pre><code> <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">measureChildWithMargins</span>(View child,   
+        <span class="keyword">int</span> parentWidthMeasureSpec, <span class="keyword">int</span> widthUsed,   
+        <span class="keyword">int</span> parentHeightMeasureSpec, <span class="keyword">int</span> heightUsed) {   
+    <span class="keyword">final</span> MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();   
+
+    <span class="keyword">final</span> <span class="keyword">int</span> childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,   
+            mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin   
+                    + widthUsed, lp.width);   
+    <span class="keyword">final</span> <span class="keyword">int</span> childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,   
+            mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin   
+                    + heightUsed, lp.height);   
+
+    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);   
+}  
+</code></pre><p>　　上面三个方法都是为子组件设置了布局参数。最终调用的方法是子组件的measure方法。在View中我们知道这个调用实际上就是设置了子组件的布局参数并且调用onMeasure方法，最终设置了View测量后的高度和宽度。</p>
+<h2 id="onLayout">onLayout</h2>
+<p>　　这个函数是一个抽象函数，要求实现ViewGroup的函数必须实现这个函数，这也就是ViewGroup是一个抽象函数的原因。因为各种组件实现的布局方式不一样，而onLayout是必须被重载的函数。</p>
+<pre><code><span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onLayout</span>(<span class="keyword">boolean</span> changed, 
+        <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b); 
+</code></pre><p>我们回头来看View中layout方法： </p>
+<pre><code><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">layout</span>(<span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b) { 
+    <span class="keyword">boolean</span> changed = setFrame(l, t, r, b); 
+    <span class="keyword">if</span> (changed || (mPrivateFlags &amp; LAYOUT_REQUIRED) == LAYOUT_REQUIRED) { 
+        <span class="keyword">if</span> (ViewDebug.TRACE_HIERARCHY) { 
+            ViewDebug.trace(<span class="keyword">this</span>, ViewDebug.HierarchyTraceType.ON_LAYOUT); 
+        } 
+
+        onLayout(changed, l, t, r, b); 
+        mPrivateFlags &amp;= ~LAYOUT_REQUIRED; 
+    } 
+    mPrivateFlags &amp;= ~FORCE_LAYOUT; 
+}
+</code></pre><p>　　 在这个方法中调用了setFrame方法，这个方法是用来设置View中的上下左右边距用的</p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">setFrame</span>(<span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom) {  
+    <span class="keyword">boolean</span> changed = <span class="keyword">false</span>;  
+    <span class="comment">//.......  </span>
+    <span class="keyword">if</span> (mLeft != left || mRight != right || mTop != top || mBottom != bottom) {  
+        changed = <span class="keyword">true</span>;  
+
+        <span class="comment">// Remember our drawn bit  </span>
+        <span class="keyword">int</span> drawn = mPrivateFlags &amp; DRAWN;  
+
+        <span class="comment">// Invalidate our old position  </span>
+        invalidate();  
+
+
+        <span class="keyword">int</span> oldWidth = mRight - mLeft;  
+        <span class="keyword">int</span> oldHeight = mBottom - mTop;  
+
+        mLeft = left;  
+        mTop = top;  
+        mRight = right;  
+        mBottom = bottom;  
+
+        mPrivateFlags |= HAS_BOUNDS;  
+
+        <span class="keyword">int</span> newWidth = right - left;  
+        <span class="keyword">int</span> newHeight = bottom - top;  
+
+        <span class="keyword">if</span> (newWidth != oldWidth || newHeight != oldHeight) {  
+            onSizeChanged(newWidth, newHeight, oldWidth, oldHeight);  
+        }  
+
+        <span class="keyword">if</span> ((mViewFlags &amp; VISIBILITY_MASK) == VISIBLE) {  
+            <span class="comment">// If we are visible, force the DRAWN bit to on so that  </span>
+            <span class="comment">// this invalidate will go through (at least to our parent).  </span>
+            <span class="comment">// This is because someone may have invalidated this view  </span>
+            <span class="comment">// before this call to setFrame came in, therby clearing  </span>
+            <span class="comment">// the DRAWN bit.  </span>
+            mPrivateFlags |= DRAWN;  
+            invalidate();  
+        }  
+
+        <span class="comment">// Reset drawn bit to original value (invalidate turns it off)  </span>
+        mPrivateFlags |= drawn;  
+
+        mBackgroundSizeChanged = <span class="keyword">true</span>;  
+    }  
+    <span class="keyword">return</span> changed;  
+}  
+<span class="comment">//我们可以看到如果新的高度和宽度改变之后会调用重新设置View的四个参数：  </span>
+<span class="comment">//protected int mLeft;  </span>
+<span class="comment">//protected int mRight;  </span>
+<span class="comment">//protected int mTop;  </span>
+<span class="comment">//protected int mBottom;  </span>
+<span class="comment">//这四个参数指定了View将要布局的位置。而绘制的时候是通过这四个参数来绘制，所以我们在View中调用layout方法可以实现指定子View中布局。</span>
+</code></pre><h2 id="ViewGroup的绘制">ViewGroup的绘制</h2>
+<p>　　ViewGroup的绘制实际上是调用的dispatchDraw，绘制时需要考虑动画问题，而动画的实现实际上就通过dispatchDraw来实现的。<br>　　 我们不用理会太多的细节，直接看其绘制子组件调用的是drawChild方法，这个里面具体的东西就多了，涉及到动画效果的处理，如果有机会的话再写，我们只要知道这个方法的功能就行。<br>　　这里有个demo贴出其中的代码大家可以测试下。</p>
+<pre><code><span class="keyword">public</span> <span class="title">ViewGroup01</span>(Context context)    
+{    
+<span class="keyword">super</span>(context);    
+Button mButton = <span class="keyword">new</span> Button(context);    
+mButton.setText(<span class="string">"测试"</span>);    
+addView(mButton);    
+}    
+
+<span class="annotation">@Override</span>  
+<span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span>(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)    
+{    
+View v = getChildAt(<span class="number">0</span>);    
+<span class="keyword">if</span>(v != <span class="keyword">null</span>)    
+    {    
+    v.layout(<span class="number">120</span>, <span class="number">120</span>, <span class="number">250</span>, <span class="number">250</span>);    
+    }    
+}  
+
+<span class="annotation">@Override</span>  
+<span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">dispatchDraw</span>(Canvas canvas)    
+{    
+<span class="keyword">super</span>.dispatchDraw(canvas);    
+View v = getChildAt(<span class="number">0</span>);    
+<span class="keyword">if</span>(v != <span class="keyword">null</span>)    
+    {    
+    drawChild(canvas, v, getDrawingTime());    
+    }    
+}    
+</code></pre><h2 id="效果图片">效果图片</h2>
+<p><img src="http://upload-images.jianshu.io/upload_images/125949-482795777110f5df.png" alt="9201345467167.png"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/学习日志/">学习日志</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android-ViewGroup/">Android , ViewGroup</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/2015/01/08/ViewGroup/" data-title="深入理解ViewGroup | Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/12/06/DailyEpitaph/" title="《每日墓志铭》">
+  <strong>上一篇：</strong><br/>
+  <span>
+  《每日墓志铭》</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/01/07/2015.01.07/"  title="2015.01.07">
+ <strong>下一篇：</strong><br/> 
+ <span>2015.01.07
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewGroup定义"><span class="toc-number">1.</span> <span class="toc-text">ViewGroup定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewGroup容器"><span class="toc-number">2.</span> <span class="toc-text">ViewGroup容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#１-_添加View的算法"><span class="toc-number">2.1.</span> <span class="toc-text">１.　添加View的算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#１．１_addViewInner方法："><span class="toc-number">2.1.1.</span> <span class="toc-text">１．１ addViewInner方法：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#１．2_addInArray方法："><span class="toc-number">2.1.2.</span> <span class="toc-text">１．2  addInArray方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#２-_移除View"><span class="toc-number">2.2.</span> <span class="toc-text">２.　移除View</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#３-_查询"><span class="toc-number">2.3.</span> <span class="toc-text">３.　查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#onFinishInflate"><span class="toc-number">3.</span> <span class="toc-text">onFinishInflate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测量组件"><span class="toc-number">4.</span> <span class="toc-text">测量组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#onLayout"><span class="toc-number">5.</span> <span class="toc-text">onLayout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewGroup的绘制"><span class="toc-number">6.</span> <span class="toc-text">ViewGroup的绘制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果图片"><span class="toc-number">7.</span> <span class="toc-text">效果图片</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5288126184&verifier=4988e869&dpc=1"></iframe>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>9</sup></a></li>
+		
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/DailyEpitaph/" title="DailyEpitaph">DailyEpitaph<sup>9</sup></a></li>
+		
+			<li><a href="/tags/Android-ViewGroup/" title="Android , ViewGroup">Android , ViewGroup<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Android-ViewGroup/" style="font-size: 10.00px;">Android , ViewGroup</a><a href="/tags/DailyEpitaph/" style="font-size: 20.00px;">DailyEpitaph</a><a href="/tags/Hexo/" style="font-size: 10.00px;">Hexo</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+         
+           <li>
+             
+             	<a href="http://user.qzone.qq.com/378675427 " target="_blank" title="Qiao的QQ空间">Qiao&#39;s QQ</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://hexo.io " target="_blank" title="Hexo官方网站">Hexo</a>
+             
+           </li>
+         
+     </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+  </body>
+</html>

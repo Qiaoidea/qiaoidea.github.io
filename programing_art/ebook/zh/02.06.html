@@ -1,0 +1,360 @@
+
+  
+    <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="Android">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+      <body>
+        <header>
+          <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/programing_art/ebook/zh/02.06.html" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-10T11:57:47.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<h1 id="奇偶调序">奇偶调序</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>输入一个整数数组，调整数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。要求时间复杂度为O(n)。</p>
+<h3 id="分析与解法">分析与解法</h3>
+<p>最容易想到的办法是从头扫描这个数组，每碰到一个偶数，拿出这个数字，并把位于这个数字后面的所有数字往前挪动一位。挪完之后在数组的末尾有一个空位，然后把该偶数放入这个空位。由于每碰到一个偶数，需要移动O(n)个数字，所以这种方法总的时间复杂度是O(n^2)，不符合题目要求。</p>
+<p>事实上，若把奇数看做是小的数，偶数看做是大的数，那么按照题目所要求的奇数放在前面偶数放在后面，就相当于小数放在前面大数放在后面，联想到快速排序中的partition过程，不就是通过一个主元把整个数组分成大小两个部分么，小于主元的小数放在前面，大于主元的大数放在后面。</p>
+<p>而partition过程有以下两种实现：</p>
+<ul>
+<li>一头一尾两个指针往中间扫描，如果头指针遇到的数比主元大且尾指针遇到的数比主元小，则交换头尾指针所分别指向的数字；</li>
+<li>一前一后两个指针同时从左往右扫，如果前指针遇到的数比主元小，则后指针右移一位，然后交换各自所指向的数字。</li>
+</ul>
+<p>类似这个partition过程，奇偶排序问题也可以分别借鉴partition的两种实现解决。 </p>
+<p>为何？比如partition的实现一中，如果最终是为了让整个序列元素从小到大排序，那么头指针理应指向的就是小数，而尾指针理应指向的就是大数，故当头指针指的是大数且尾指针指的是小数的时候就不正常，此时就当交换。</p>
+<h4 id="解法一">解法一</h4>
+<p>借鉴partition的实现一，我们可以考虑维护两个指针，一个指针指向数组的第一个数字，我们称之为头指针，向右移动；一个指针指向最后一个数字，称之为尾指针，向左移动。</p>
+<p>这样，两个指针分别从数组的头部和尾部向数组的中间移动，如果第一个指针指向的数字是偶数而第二个指针指向的数字是奇数，我们就交换这两个数字。</p>
+<p>因为按照题目要求，最终是为了让奇数排在数组的前面，偶数排在数组的后面，所以头指针理应指向的就是奇数，尾指针理应指向的就是偶数，故当头指针指向的是偶数且尾指针指向的是奇数时，我们就当立即交换它们所指向的数字。</p>
+<p>思路有了，接下来，写代码实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//判断是否为奇数</span></div><div class="line"><span class="keyword">bool</span> IsOddNumber(<span class="keyword">int</span> data)</div><div class="line">{</div><div class="line">	<span class="keyword">return</span> data & <span class="number">1</span> == <span class="number">1</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//交换两个元素</span></div><div class="line"><span class="keyword">void</span> swap(<span class="keyword">int</span>* x, <span class="keyword">int</span>* y)</div><div class="line">{</div><div class="line">	<span class="keyword">int</span> temp = *x;</div><div class="line">	*x = *y;</div><div class="line">	*y = temp;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//奇偶互换</span></div><div class="line"><span class="keyword">void</span> OddEvenSort(<span class="keyword">int</span> *pData, <span class="keyword">unsigned</span> <span class="keyword">int</span> length)</div><div class="line">{</div><div class="line">	<span class="keyword">if</span> (pData == NULL || length == <span class="number">0</span>)</div><div class="line">		<span class="keyword">return</span>;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> *pBegin = pData;</div><div class="line">	<span class="keyword">int</span> *pEnd = pData + length - <span class="number">1</span>;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (pBegin &lt; pEnd)</div><div class="line">	{</div><div class="line">		<span class="comment">//如果pBegin指针指向的是奇数，正常，向右移</span></div><div class="line">		<span class="keyword">if</span> (IsOddNumber(*pBegin))  </div><div class="line">		{</div><div class="line">			pBegin++;</div><div class="line">		}</div><div class="line">		<span class="comment">//如果pEnd指针指向的是偶数，正常，向左移</span></div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (!IsOddNumber(*pEnd))</div><div class="line">		{</div><div class="line">			pEnd--;</div><div class="line">		}</div><div class="line">		<span class="keyword">else</span></div><div class="line">		{</div><div class="line">			<span class="comment">//否则都不正常，交换</span></div><div class="line">			swap(*pBegin, *pEnd);</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>本方法通过头尾两个指针往中间扫描，一次遍历完成所有奇数偶数的重新排列，时间复杂度为O(n)。</p>
+<h4 id="解法二">解法二</h4>
+<p>我们先来看看快速排序partition过程的第二种实现是具体怎样的一个原理。</p>
+<p>partition分治过程，每一趟排序的过程中，选取的主元都会把整个数组排列成一大一小的序列，继而递归排序完整个数组。如下伪代码所示：</p>
+<pre><code>PARTITION(<span class="literal">A</span>, p, r)
+<span class="number">1</span>  x ← <span class="literal">A</span>[r]
+<span class="number">2</span>  i ← p - <span class="number">1</span>
+<span class="number">3</span>  for j ← p to r - <span class="number">1</span>
+<span class="number">4</span>       do <span class="keyword">if</span> <span class="literal">A</span>[j] ≤ x
+<span class="number">5</span>             then i ← i + <span class="number">1</span>
+<span class="number">6</span>                  exchange <span class="literal">A</span>[i] &lt;-&gt; <span class="literal">A</span>[j]
+<span class="number">7</span>  exchange <span class="literal">A</span>[i + <span class="number">1</span>] &lt;-&gt; <span class="literal">A</span>[r]
+<span class="number">8</span>  <span class="keyword">return</span> i + <span class="number">1</span>
+</code></pre><p>举个例子如下：现要对数组data = {2, 8,7, 1, 3, 5, 6, 4}进行快速排序，为了表述方便，令<code>i</code>指向数组头部前一个位置，<code>j</code>指向数组头部元素，<code>j</code>在前，<code>i</code>在后，双双从左向右移动。</p>
+<p>① j 指向元素2时，i 也指向元素2，2与2互换不变</p>
+<pre><code><span class="built_in">i</span>  p/<span class="built_in">j</span>
+
+      <span class="number">2</span>   <span class="number">8</span>   <span class="number">7</span>   <span class="number">1</span>   <span class="number">3</span>   <span class="number">5</span>   <span class="number">6</span>   <span class="number">4</span>(主元)
+</code></pre><p>② 于是j 继续后移，直到指向了1，1 &lt;= 4，于是i++，i 指向8，故j 所指元素1 与 i 所指元素8 位置互换：</p>
+<pre><code>     <span class="built_in">i</span>       <span class="built_in">j</span>
+
+  <span class="number">2</span>   <span class="number">1</span>   <span class="number">7</span>   <span class="number">8</span>   <span class="number">3</span>   <span class="number">5</span>   <span class="number">6</span>   <span class="number">4</span>
+</code></pre><p>③ j 继续后移，指到了元素3,3 &lt;= 4，于是同样i++，i 指向7，故j 所指元素3 与 i 所指元素7 位置互换：</p>
+<pre><code>        <span class="built_in">i</span>       <span class="built_in">j</span>
+
+  <span class="number">2</span>   <span class="number">1</span>   <span class="number">3</span>   <span class="number">8</span>   <span class="number">7</span>   <span class="number">5</span>   <span class="number">6</span>   <span class="number">4</span>
+</code></pre><p>④ j 一路后移，没有再碰到比主元4小的元素：</p>
+<pre><code>          <span class="built_in">i</span>               <span class="built_in">j</span>
+
+  <span class="number">2</span>   <span class="number">1</span>   <span class="number">3</span>   <span class="number">8</span>   <span class="number">7</span>   <span class="number">5</span>   <span class="number">6</span>   <span class="number">4</span>
+</code></pre><p>⑤ 最后，A[i + 1] &lt;-&gt; A[r]，即8与4交换，所以，数组最终变成了如下形式：</p>
+<pre><code>    2   1   3   4   7   5   6   8
+</code></pre><p>这样，快速排序第一趟完成。就这样，4把整个数组分成了俩部分，2 1 3,7 5 6 8，再递归对这两部分分别进行排序。</p>
+<p>借鉴partition的上述实现，我们也可以维护两个指针i和j，一个指针指向数组的第一个数的前一个位置，我们称之为后指针i，向右移动；一个指针指向数组第一个数，称之为前指针j，也向右移动，且前指针j先向右移动。如果前指针j指向的数字是奇数，则令i指针向右移动一位，然后交换i和j指针所各自指向的数字。</p>
+<p>因为按照题目要求，最终是为了让奇数排在数组的前面，偶数排在数组的后面，所以i指针理应指向的就是奇数，j指针理应指向的就是偶数，所以，当j指针指向的是奇数时，不正常，我们就当让i++，然后交换i和j指针所各自指向的数字。</p>
+<p>参考代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//奇偶互换</span></div><div class="line"><span class="keyword">void</span> OddEvenSort2(<span class="keyword">int</span> data[], <span class="keyword">int</span> lo, <span class="keyword">int</span> hi)</div><div class="line">{</div><div class="line">	<span class="keyword">int</span> i = lo - <span class="number">1</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> j = lo; j &lt; hi; j++)</div><div class="line">	{</div><div class="line">		<span class="comment">//data[j]指向奇数，交换</span></div><div class="line">		<span class="keyword">if</span> ( IsOddNumber(data[j]) )</div><div class="line">		{</div><div class="line">			i = i + <span class="number">1</span>;</div><div class="line">			swap(&data[i], &data[j]);</div><div class="line">		}</div><div class="line">	}</div><div class="line">	swap(&data[i + <span class="number">1</span>], &data[hi]);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>此解法一前一后两个指针同时向右扫描的过程中，也是一次遍历完成奇数偶数的重新排列，故时间复杂度也为O(n)。</p>
+<h3 id="举一反三">举一反三</h3>
+<p>一个未排序整数数组，有正负数，重新排列使负数排在正数前面，并且要求不改变原来的正负数之间相对顺序，比如： input: 1,7,-5,9,-12,15 ans: -5,-12,1,7,9,15 要求时间复杂度O(n),空间O(1)。</p>
+<p>分析：如果本题没有这个要求“并且要求不改变原来的正负数之间相对顺序”，那么同奇偶数排序是一道题，但加上这个不能改变正负数之间的相对顺序后，便使得问题变得比较艰难了，若有兴趣，读者可以参考这篇论文《STABLE MINIMUM SPACE PARTITIONING IN LINEAR TIME》。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/programing_art/ebook/zh/02.06.html" data-title="Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+        </div>
+        <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+      </body>
+     </html>
+     

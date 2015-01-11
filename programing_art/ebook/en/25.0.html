@@ -1,0 +1,325 @@
+
+  
+    <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="Android">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+      <body>
+        <header>
+          <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/programing_art/ebook/en/25.0.html" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-10T11:57:42.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<h1 id="Chapter_25:_Binary_Search_">Chapter 25: Binary Search </h1>
+<h2 id="1-Introduction">1.Introduction</h2>
+<p>Jon Bentley: More than 90% programmers are not able to correctly write the code of binary search. Perhaps most of the people have heard of this sentence, but I still would like to quote the following words written in the Programming Pearls.</p>
+<p>Binary search solves the problem by keeping track of the range within the array that holds r (if r is anywhere in the array). Initially, the range is the entire array. The range is shrunk by comparing its middle element to r and discarding half the range. The process continues until t is discovered in the array or until the range in which it must lie is known to be empty. In a table of n elements. binary search uses roughly log2(n) comparisons. </p>
+<p>Most programmers think that with the above description in hand, writing the code is easy. They’re wrong. The only way you’ll believe this is by putting down this col-umn right now and writing the code yourself. Try it. </p>
+<p>I’ve assigned this problem in courses for professional programmers. The students had a couple of hours to convert the description above into a program in the language of their choice: a high-level pseudocode was fine. At the end of the specified time. almost all the programmers reported that they had correct code for the task. We would then take thirty minutes to examine their code, which the programmers did with test cases. In several classes and with over a hundred programmers, the results varied little: ninety percent of the programmers found bugs in their programs (and I wasn’t always convinced of the correctness of the code in which no bugs were found). </p>
+<p>I was amazed: given ample time, only about ten percent of professional program-mers were able to get this small program right. But they aren’t the only ones to find this task difficult: in the history in Section 6.2.1 of his Sorting and Searching, Knuth points out that while the first binary search was published in 1946. the first published binary search without bugs did not appear until 1962.  - Jon Bentley, “Programming Pearls (1st Edition)” on page 35-36.</p>
+<p><strong>Are you able to write correct code of binary search? Give it a try.</strong></p>
+<h2 id="Code_of_Binary_Search">Code of Binary Search</h2>
+<p>We may explain no more the principle of the binary search, however, one thing we need to point out to the reader is that binary search is applied on pre-sorted array. Alright, what’s learned from books is superficial after all. It’s crucial to have it personally tested somehow. Following is my implementation of binary search (I once was asked to implement binary search while being interviewed. The result could be same as yours. In factI could not implement it completely correct). If there is any bug in the code, please correct me.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//Binary Search V0.1 Implementation </span></div><div class="line"><span class="comment">//copyright@2011 July</span></div><div class="line"></div><div class="line"><span class="comment">//First of all, we need to understand following key points:</span></div><div class="line"><span class="comment">//right = n-1 =&gt; while(left &lt;= right) =&gt; right = middle-1;</span></div><div class="line"><span class="comment">//right = n   =&gt; while(left &lt;  right) =&gt; right = middle;</span></div><div class="line"></div><div class="line"><span class="comment">//The calculation of "middle" should not be out of the closure of while otherwise it cannot be updated.</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> binary_search(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> n, <span class="keyword">int</span> value)</div><div class="line">{</div><div class="line">    <span class="keyword">int</span> left = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> right = n - <span class="number">1</span>;</div><div class="line">    <span class="comment">//if here we have "int right = n",then in the following code, two places need to be modified to ensure the correspondence:</span></div><div class="line">    <span class="comment">//1. The condition of while loop should be changed to "while(left &lt; right)".</span></div><div class="line">    <span class="comment">//2. Inside the loop, when array[middle] &gt; value,we should assign "right = mid".</span></div><div class="line"></div><div class="line">    <span class="keyword">while</span> (left &lt;= right)  <span class="comment">//condition of looping changes over time.</span></div><div class="line">    {</div><div class="line">        <span class="keyword">int</span> middle = left + ((right - left) &gt;&gt; <span class="number">1</span>);  <span class="comment">//It can prevent overflow and simultaneouslyt the shifting operation is more efficient. Each time it needs to be updated. </span></div><div class="line">        <span class="keyword">if</span> (<span class="built_in">array</span>[middle] &gt; value)</div><div class="line">        {</div><div class="line">            right = middle - <span class="number">1</span>;  <span class="comment">//assignment of right changes over time.</span></div><div class="line">        }</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">array</span>[middle] &lt; value)</div><div class="line">        {</div><div class="line">            left = middle + <span class="number">1</span>;</div><div class="line">        }</div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="keyword">return</span> middle;</div><div class="line">        <span class="comment">//Some readers may think we need to decide whether they are equal or not at the beginning.</span></div><div class="line">        <span class="comment">//In fact, inequality is more common to be experienced in the comparison. </span></div><div class="line">        <span class="comment">//If for every loop the algorithm checks whether they are equal or not, more time will be comsumed.</span></div><div class="line"></div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>A simple testing is presented as follows.(Of course, one time of testing does not mean the program has zero bugs and the test depth is far from enough.):</p>
+<p><img src="../images/25.1.gif" alt="img"></p>
+<h2 id="Testing">Testing</h2>
+<p>Perhaps you have implemented binary search many times, but now you may wish to write it again. Close all pages, windows, open Notepad, or editor, or directly in the comment area under this article, without reference to what I wrote above, or any other person’s program, you may just give yourself ten minutes to two hours and immediately write a binary search algorithm.<br>Of course, it does not mean anything if you can or cannot write it correctly. It is merely a simple test for Jon Bentley’s remarks only.</p>
+<h2 id="Summary">Summary</h2>
+<p>After the article was published, a lot of friends immediately tried themselves. According to comments(codes) from friends in this article, the highest error rate happened in the following places:</p>
+<p>There are still a lot of friends who committed errors mentioned in the note of the code:</p>
+<pre><code>First <span class="keyword">of</span> all, we need to understand following key <span class="attribute">points</span>::
+right = n-<span class="number">1</span><span class="function"> =&gt;</span> <span class="keyword">while</span><span class="function"><span class="params">(left &lt;= right)</span> =&gt;</span> right = middle-<span class="number">1</span>;
+The calculation <span class="keyword">of</span> middle should <span class="keyword">not</span> be out <span class="keyword">of</span> the closure <span class="keyword">of</span> <span class="keyword">while</span> otherwise it cannot be updated.
+</code></pre><p>Another most common mistake, you can refer to <a href="http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html" target="_blank" rel="external">Extra, Extra - Read All About It: Nearly All Binary Searches and Mergesorts are Broken</a>，which showed JDK5 has this BUG：</p>
+<pre><code><span class="keyword">middle</span> = (left+<span class="constant">right</span>)&gt;&gt;<span class="number">1</span>; If you <span class="constant">right</span> <span class="operator">in</span> this way, when left <span class="operator">and</span> <span class="constant">right</span> are relatively large, <span class="operator">the</span> <span class="built_in">sum</span> <span class="operator">of</span> these <span class="constant">two</span> numbers may overflow. 
+</code></pre><p>This is wrong as well:</p>
+<pre><code><span class="keyword">right</span> = <span class="keyword">n</span>   =&gt; <span class="keyword">while</span>(<span class="keyword">left</span> &lt;  <span class="keyword">right</span>) =&gt; <span class="keyword">right</span> = middle;
+</code></pre><p>As if the target number does not exist in the array, it will lead to an infinite loop.  Because of the last line “left = middle, right = middle + 1”, so for each update, left and the middle are always the same.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/programing_art/ebook/en/25.0.html" data-title="Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+        </div>
+        <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+      </body>
+     </html>
+     

@@ -1,0 +1,345 @@
+
+  
+    <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="Android">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+      <body>
+        <header>
+          <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/programing_art/ebook/zh/02.01.html" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-10T11:57:47.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<h1 id="寻找最小的k个数">寻找最小的k个数</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>输入n个整数，输出其中最小的k个。  </p>
+<h2 id="分析与解法">分析与解法</h2>
+<h3 id="解法一">解法一</h3>
+<p>要求一个序列中最小的k个数，按照惯有的思维方式，则是先对这个序列从小到大排序，然后输出前面的最小的k个数。</p>
+<p>至于选取什么的排序方法，我想你可能会第一时间想到快速排序（我们知道，快速排序平均所费时间为<code>n*logn</code>），然后再遍历序列中前k个元素输出即可。因此，总的时间复杂度：<code>O（n * log n)+O(k)=O（n * log n）</code>。</p>
+<h3 id="解法二">解法二</h3>
+<p>咱们再进一步想想，题目没有要求最小的k个数有序，也没要求最后n-k个数有序。既然如此，就没有必要对所有元素进行排序。这时，咱们想到了用选择或交换排序，即：</p>
+<p>1、遍历n个数，把最先遍历到的k个数存入到大小为k的数组中，假设它们即是最小的k个数；<br>2、对这k个数，利用选择或交换排序找到这k个元素中的最大值kmax（找最大值需要遍历这k个数，时间复杂度为<code>O（k）</code>）；<br>3、继续遍历剩余n-k个数。假设每一次遍历到的新的元素的值为x，把x与kmax比较：如果<code>x &lt; kmax</code> ，用x替换kmax，并回到第二步重新找出k个元素的数组中最大元素kmax‘；如果<code>x &gt;= kmax</code>，则继续遍历不更新数组。  </p>
+<p>每次遍历，更新或不更新数组的所用的时间为<code>O（k）</code>或<code>O（0）</code>。故整趟下来，时间复杂度为<code>n*O（k）=O（n*k）</code>。</p>
+<h3 id="解法三">解法三</h3>
+<p>更好的办法是维护容量为k的最大堆，原理跟解法二的方法相似：</p>
+<ul>
+<li>1、用容量为k的最大堆存储最先遍历到的k个数，同样假设它们即是最小的k个数；</li>
+<li>2、堆中元素是有序的，令k1&lt;k2&lt;…&lt;kmax（kmax设为最大堆中的最大元素）</li>
+<li>3、遍历剩余n-k个数。假设每一次遍历到的新的元素的值为x，把x与堆顶元素kmax比较：如果<code>x &lt; kmax</code>，用x替换kmax，然后更新堆（用时logk）；否则不更新堆。</li>
+</ul>
+<p>这样下来，总的时间复杂度:<code>O（k+（n-k）*logk）=O（n*logk）</code>。此方法得益于堆中进行查找和更新的时间复杂度均为：<code>O(logk)</code>（若使用解法二：在数组中找出最大元素，时间复杂度：<code>O（k））</code>。</p>
+<h3 id="解法四">解法四</h3>
+<p>在《数据结构与算法分析—c语言描述》一书，第7章第7.7.6节中，阐述了一种在平均情况下，时间复杂度为<code>O（N）</code>的快速选择算法。如下述文字：</p>
+<ul>
+<li>选取S中一个元素作为枢纽元v，将集合S-{v}分割成S1和S2，就像快速排序那样<ul>
+<li>如果k &lt;= |S1|，那么第k个最小元素必然在S1中。在这种情况下，返回QuickSelect(S1, k)。</li>
+<li>如果k = 1 + |S1|，那么枢纽元素就是第k个最小元素，即找到，直接返回它。</li>
+<li>否则，这第k个最小元素就在S2中，即S2中的第（k - |S1| - 1）个最小元素，我们递归调用并返回QuickSelect(S2, k - |S1| - 1)。</li>
+</ul>
+</li>
+</ul>
+<p>此算法的平均运行时间为O(n)。 </p>
+<p>示例代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//QuickSelect 将第k小的元素放在 a[k-1]  </span></div><div class="line"><span class="keyword">void</span> QuickSelect( <span class="keyword">int</span> a[], <span class="keyword">int</span> k, <span class="keyword">int</span> left, <span class="keyword">int</span> right )</div><div class="line">{</div><div class="line">    <span class="keyword">int</span> i, j;</div><div class="line">    <span class="keyword">int</span> pivot;</div><div class="line"></div><div class="line">    <span class="keyword">if</span>( left + cutoff &lt;= right )</div><div class="line">    {</div><div class="line">        pivot = median3( a, left, right );</div><div class="line">        <span class="comment">//取三数中值作为枢纽元，可以很大程度上避免最坏情况</span></div><div class="line">        i = left; j = right - <span class="number">1</span>;</div><div class="line">        <span class="keyword">for</span>( ; ; )</div><div class="line">        {</div><div class="line">            <span class="keyword">while</span>( a[ ++i ] &lt; pivot ){ }</div><div class="line">            <span class="keyword">while</span>( a[ --j ] &gt; pivot ){ }</div><div class="line">            <span class="keyword">if</span>( i &lt; j )</div><div class="line">                swap( &a[ i ], &a[ j ] );</div><div class="line">            <span class="keyword">else</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        }</div><div class="line">        <span class="comment">//重置枢纽元</span></div><div class="line">        swap( &a[ i ], &a[ right - <span class="number">1</span> ] );  </div><div class="line"></div><div class="line">        <span class="keyword">if</span>( k &lt;= i )</div><div class="line">            QuickSelect( a, k, left, i - <span class="number">1</span> );</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span>( k &gt; i + <span class="number">1</span> )</div><div class="line">            QuickSelect( a, k, i + <span class="number">1</span>, right );</div><div class="line">    }</div><div class="line">    <span class="keyword">else</span>  </div><div class="line">        InsertSort( a + left, right - left + <span class="number">1</span> );</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>这个快速选择SELECT算法，类似快速排序的划分方法。N个数存储在数组S中，再从数组中选取“中位数的中位数”作为枢纽元X，把数组划分为Sa和Sb俩部分，Sa&lt;=X&lt;=Sb，如果要查找的k个元素小于Sa的元素个数，则返回Sa中较小的k个元素，否则返回Sa中所有元素+Sb中小的k-|Sa|个元素，这种解法在平均情况下能做到<code>O(n)</code>的复杂度。</p>
+<p>更进一步，《算法导论》第9章第9.3节介绍了一个最坏情况下亦为O(n)时间的SELECT算法，有兴趣的读者可以参看。</p>
+<h2 id="举一反三">举一反三</h2>
+<p>1、谷歌面试题：输入是两个整数数组，他们任意两个数的和又可以组成一个数组，求这个和中前k个数怎么做？</p>
+<p>分析：  </p>
+<pre><code> “假设两个整数数组为<span class="literal">A</span>和B，各有N个元素，任意两个数的和组成的数组C有N^<span class="number">2</span>个元素。
+   那么可以把这些和看成N个有序数列：
+          <span class="literal">A</span>[<span class="number">1</span>]+B[<span class="number">1</span>] &lt;= <span class="literal">A</span>[<span class="number">1</span>]+B[<span class="number">2</span>] &lt;= <span class="literal">A</span>[<span class="number">1</span>]+B[<span class="number">3</span>] &lt;=…
+          <span class="literal">A</span>[<span class="number">2</span>]+B[<span class="number">1</span>] &lt;= <span class="literal">A</span>[<span class="number">2</span>]+B[<span class="number">2</span>] &lt;= <span class="literal">A</span>[<span class="number">2</span>]+B[<span class="number">3</span>] &lt;=…
+          …
+         <span class="literal">A</span>[N]+B[<span class="number">1</span>] &lt;= <span class="literal">A</span>[N]+B[<span class="number">2</span>] &lt;= <span class="literal">A</span>[N]+B[<span class="number">3</span>] &lt;=…
+    问题转变成，在这N^<span class="number">2</span>个有序数列里，找到前k小的元素”
+</code></pre><p>2、有两个序列A和B,A=(a1,a2,…,ak),B=(b1,b2,…,bk)，A和B都按升序排列。对于1&lt;=i,j&lt;=k，求k个最小的（ai+bj）。要求算法尽量高效。</p>
+<p>3、给定一个数列a1,a2,a3,…,an和m个三元组表示的查询，对于每个查询(i，j，k)，输出ai，ai+1，…，aj的升序排列中第k个数。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/programing_art/ebook/zh/02.01.html" data-title="Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+        </div>
+        <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+      </body>
+     </html>
+     

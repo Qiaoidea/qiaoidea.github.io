@@ -1,0 +1,417 @@
+
+  
+    <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="Android">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+      <body>
+        <header>
+          <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/programing_art/ebook/zh/倒排索引关键词不重复Hash编码.html" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-10T11:57:47.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<h1 id="倒排索引关键词不重复Hash编码">倒排索引关键词不重复Hash编码</h1>
+<p>作者：July、yansha。编程艺术室出品。</p>
+<p>出处：结构之法算法之道</p>
+<p>本章要介绍这样一个问题，对倒排索引中的关键词进行编码。那么，这个问题将分为两个个步骤：</p>
+<ol>
+<li>首先，要提取倒排索引内词典文件中的关键词；</li>
+<li>对提取出来的关键词进行编码。本章采取hash编码的方式。既然要用hash编码，那么最重要的就是要解决hash冲突的问题，下文会详细介绍。</li>
+</ol>
+<p>有一点必须提醒读者的是，倒排索引包含词典和倒排记录表两个部分，词典一般有词项（或称为关键词）和词项频率（即这个词项或关键词出现的次数），倒排记录表则记录着上述词项（或关键词）所出现的位置，或出现的文档及网页ID等相关信息。</p>
+<h2 id="24-1、正排索引与倒排索引">24.1、正排索引与倒排索引</h2>
+<p>咱们先来看什么是倒排索引，以及倒排索引与正排索引之间的区别：</p>
+<p>我们知道，搜索引擎的关键步骤就是建立倒排索引，所谓倒排索引一般表示为一个关键词，然后是它的频度（出现的次数），位置（出现在哪一篇文章或网页中，及有关的日期，作者等信息），它相当于为互联网上几千亿页网页做了一个索引，好比一本书的目录、标签一般。读者想看哪一个主题相关的章节，直接根据目录即可找到相关的页面。不必再从书的第一页到最后一页，一页一页的查找。</p>
+<p>接下来，阐述下正排索引与倒排索引的区别：</p>
+<h2 id="一般索引（正排索引）">一般索引（正排索引）</h2>
+<p>正排表是以文档的ID为关键字，表中记录文档中每个字的位置信息，查找时扫描表中每个文档中字的信息直到找出所有包含查询关键字的文档。正排表结构如图1所示，这种组织方法在建立索引的时候结构比较简单，建立比较方便且易于维护;因为索引是基于文档建立的，若是有新的文档假如，直接为该文档建立一个新的索引块，挂接在原来索引文件的后面。若是有文档删除，则直接找到该文档号文档对因的索引信息，将其直接删除。但是在查询的时候需对所有的文档进行扫描以确保没有遗漏，这样就使得检索时间大大延长，检索效率低下。</p>
+<p>尽管正排表的工作原理非常的简单，但是由于其检索效率太低，除非在特定情况下，否则实用性价值不大。<br><img src="../images/23~24/24.1.gif" alt="img"></p>
+<h2 id="倒排索引">倒排索引</h2>
+<p>倒排表以字或词为关键字进行索引，表中关键字所对应的记录表项记录了出现这个字或词的所有文档，一个表项就是一个字表段，它记录该文档的ID和字符在该文档中出现的位置情况。由于每个字或词对应的文档数量在动态变化，所以倒排表的建立和维护都较为复杂，但是在查询的时候由于可以一次得到查询关键字所对应的所有文档，所以效率高于正排表。在全文检索中，检索的快速响应是一个最为关键的性能，而索引建立由于在后台进行，尽管效率相对低一些，但不会影响整个搜索引擎的效率。</p>
+<p>倒排表的结构图如图2：<br><img src="../images/23~24/24.2.gif" alt="img"></p>
+<p>倒排表的索引信息保存的是字或词后继数组模型、互关联后继数组模型条在文档内的位置，在同一篇文档内相邻的字或词条的前后关系没有被保存到索引文件内。</p>
+<h2 id="24-2、倒排索引中提取关键词">24.2、倒排索引中提取关键词</h2>
+<p>倒排索引是搜索引擎之基石。建成了倒排索引后，用户要查找某个query，如在搜索框输入某个关键词：“结构之法”后，搜索引擎不会再次使用爬虫又一个一个去抓取每一个网页，从上到下扫描网页，看这个网页有没有出现这个关键词，而是会在它预先生成的倒排索引文件中查找和匹配包含这个关键词“结构之法”的所有网页。找到了之后，再按相关性度排序，最终把排序后的结果显示给用户。<br><img src="../images/23~24/24.3.gif" alt="img"></p>
+<p>如下，即是一个倒排索引文件（不全），我们把它取名为big_index，<img src="../images/23~24/24.4.gif" alt="img">文件中每一较短的，不包含有“#####”符号的便是某个关键词，及这个关键词的出现次数。现在要从这个大索引文件中提取出这些关键词，—Firelf—，-11，-Winter-，.，007，007：天降杀机，02Chan..如何做到呢？一行一行的扫描整个索引文件么？</p>
+<p>何意？之前已经说过：倒排索引包含词典和倒排记录表两个部分，词典一般有词项（或称为关键词）和词项频率（即这个词项或关键词出现的次数），倒排记录表则记录着上述词项（或关键词）所出现的位置，或出现的文档及网页ID等相关信息。</p>
+<p>最简单的讲，就是要提取词典中的词项（关键词）：—Firelf—，-11，-Winter-，.，007，007：天降杀机，02Chan…。</p>
+<p>—Firelf—（关键词）8（出现次数）<br><img src="../images/23~24/24.5.gif" alt="img"></p>
+<p>我们可以试着这么解决：通过查找#####便可判断某一行出现的词是不是关键词，但如果这样做的话，便要扫描整个索引文件的每一行，代价实在巨大。如何提高速度呢？对了，关键词后面的那个出现次数为我们问题的解决起到了很好的作用，如下注释所示：</p>
+<p>  //  本身没有##### 的行判定为关键词行，后跟这个关键词的行数N（即词项频率）<br>  //  接下来，截取关键词—Firelf—，然后读取后面关键词的行数N<br>  //  再跳过N行（滤过和避免扫描中间的倒排记录表信息）<br>  //  读取下一个关键词..</p>
+<p>有朋友指出，上述方法虽然减少了扫描的行数，但并没有减少I0开销。读者是否有更好地办法？欢迎随时交流。</p>
+<h2 id="24-3、为提取出来的关键词编码">24.3、为提取出来的关键词编码</h2>
+<p>爱思考的朋友可能会问，上述从倒排索引文件中提取出那些关键词（词项）的操作是为了什么呢？其实如我个人微博上12月12日所述的Hash词典编码：</p>
+<p>词典文件的编码：1、词典怎么生成（存储和构造词典）；2、如何运用hash对输入的汉字进行编码；3、如何更好的解决冲突，即不重复以及追加功能。具体例子为：事先构造好词典文件后，输入一个词，要求找到这个词的编码，然后将其编码输出。且要有不断能添加词的功能，不得重复。</p>
+<p>步骤应该是如下：1、读索引文件；2、提取索引中的词出来；3、词典怎么生成，存储和构造词典；4、词典文件的编码：不重复与追加功能。编码比如，输入中国，他的编码可以为10001，然后输入银行，他的编码可以为10002。只要实现不断添加词功能，以及不重复即可，词典类的大文件，hash最重要的是怎样避免冲突。</p>
+<p>也就是说，现在我要对上述提取出来后的关键词进行编码，采取何种方式编码呢？暂时用hash函数编码。编码之后的效果将是每一个关键词都有一个特定的编码，如下图所示（与上文big_index文件比较一下便知）：</p>
+<p>—Firelf—  对应编码为：135942</p>
+<p>-11         对应编码为：106101</p>
+<p>….<br><img src="../images/23~24/24.6.gif" alt="img"></p>
+<p>但细心的朋友一看上图便知，其中第34~39行显示，有重复的编码，那么如何解决这个不重复编码的问题呢？<br>用hash表编码？但其极易产生冲突碰撞，为什么？请看：</p>
+<p>哈希表是一种查找效率极高的数据结构，很多语言都在内部实现了哈希表。PHP中的哈希表是一种极为重要的数据结构，不但用于表示Array数据类型，还在Zend虚拟机内部用于存储上下文环境信息（执行上下文的变量及函数均使用哈希表结构存储）。</p>
+<p>理想情况下哈希表插入和查找操作的时间复杂度均为O(1)，任何一个数据项可以在一个与哈希表长度无关的时间内计算出一个哈希值（key），然后在常量时间内定位到一个桶（术语bucket，表示哈希表中的一个位置）。当然这是理想情况下，因为任何哈希表的长度都是有限的，所以一定存在不同的数据项具有相同哈希值的情况，此时不同数据项被定为到同一个桶，称为碰撞（collision）。</p>
+<p>哈希表的实现需要解决碰撞问题，碰撞解决大体有两种思路，</p>
+<ol>
+<li>第一种是根据某种原则将被碰撞数据定为到其它桶，例如线性探测——如果数据在插入时发生了碰撞，则顺序查找这个桶后面的桶，将其放入第一个没有被使用的桶；</li>
+<li>第二种策略是每个桶不是一个只能容纳单个数据项的位置，而是一个可容纳多个数据的数据结构（例如链表或红黑树），所有碰撞的数据以某种数据结构的形式组织起来。</li>
+</ol>
+<p>不论使用了哪种碰撞解决策略，都导致插入和查找操作的时间复杂度不再是O(1)。以查找为例，不能通过key定位到桶就结束，必须还要比较原始key（即未做哈希之前的key）是否相等，如果不相等，则要使用与插入相同的算法继续查找，直到找到匹配的值或确认数据不在哈希表中。</p>
+<p>PHP是使用单链表存储碰撞的数据，因此实际上PHP哈希表的平均查找复杂度为O(L)，其中L为桶链表的平均长度；而最坏复杂度为O(N)，此时所有数据全部碰撞，哈希表退化成单链表。下图PHP中正常哈希表和退化哈希表的示意图。<br><img src="../images/23~24/24.7.gif" alt="img"></p>
+<p>哈希表碰撞攻击就是通过精心构造数据，使得所有数据全部碰撞，人为将哈希表变成一个退化的单链表，此时哈希表各种操作的时间均提升了一个数量级，因此会消耗大量CPU资源，导致系统无法快速响应请求，从而达到拒绝服务攻击（DoS）的目的。</p>
+<p>可以看到，进行哈希碰撞攻击的前提是哈希算法特别容易找出碰撞，如果是MD5或者SHA1那基本就没戏了，幸运的是（也可以说不幸的是）大多数编程语言使用的哈希算法都十分简单（这是为了效率考虑），因此可以不费吹灰之力之力构造出攻击数据.（上述五段文字引自：<a href="http://www.codinglabs.org/html/hash-collisions-attack-on-php.html" target="_blank" rel="external">http://www.codinglabs.org/html/hash-collisions-attack-on-php.html</a>）。</p>
+<h2 id="24-4、暴雪的Hash算法">24.4、暴雪的Hash算法</h2>
+<p>值得一提的是，在解决Hash冲突的时候，搞的焦头烂额，结果今天上午在自己的博客内的一篇文章（<a href="http://blog.csdn.net/v_JULY_v/archive/2011/03/17/6256463.aspx" target="_blank" rel="external">十一、从头到尾彻底解析Hash表算法</a>）内找到了解决办法：网上流传甚广的暴雪的Hash算法。 OK，接下来，咱们回顾下暴雪的hash表算法：</p>
+<blockquote>
+<p>接下来，咱们来具体分析一下一个最快的Hash表算法。</p>
+<p>我们由一个简单的问题逐步入手：有一个庞大的字符串数组，然后给你一个单独的字符串，让你从这个数组中查找是否有这个字符串并找到它，你会怎么做？</p>
+<p>有一个方法最简单，老老实实从头查到尾，一个一个比较，直到找到为止，我想只要学过程序设计的人都能把这样一个程序作出来，但要是有程序员把这样的程序交给用户，我只能用无语来评价，或许它真的能工作，但…也只能如此了。</p>
+<p>最合适的算法自然是使用HashTable（哈希表），先介绍介绍其中的基本知识，所谓Hash，一般是一个整数，通过某种算法，可以把一个字符串”压缩” 成一个整数。当然，无论如何，一个32位整数是无法对应回一个字符串的，但在程序中，两个字符串计算出的Hash值相等的可能非常小，下面看看在MPQ中的Hash算法：</p>
+<p>函数prepareCryptTable以下的函数生成一个长度为0x500（合10进制数：1280）的cryptTable[0x500]</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//函数prepareCryptTable以下的函数生成一个长度为0x500（合10进制数：1280）的cryptTable[0x500]  </span></div><div class="line"><span class="keyword">void</span> prepareCryptTable()  </div><div class="line">{   </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed = <span class="number">0x00100001</span>, index1 = <span class="number">0</span>, index2 = <span class="number">0</span>, i;  </div><div class="line">  </div><div class="line">    <span class="keyword">for</span>( index1 = <span class="number">0</span>; index1 &lt; <span class="number">0x100</span>; index1++ )  </div><div class="line">    {   </div><div class="line">        <span class="keyword">for</span>( index2 = index1, i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++, index2 += <span class="number">0x100</span> )  </div><div class="line">        {   </div><div class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> temp1, temp2;  </div><div class="line">  </div><div class="line">            seed = (seed * <span class="number">125</span> + <span class="number">3</span>) % <span class="number">0x2AAAAB</span>;  </div><div class="line">            temp1 = (seed & <span class="number">0xFFFF</span>) &lt;&lt; <span class="number">0x10</span>;  </div><div class="line">  </div><div class="line">            seed = (seed * <span class="number">125</span> + <span class="number">3</span>) % <span class="number">0x2AAAAB</span>;  </div><div class="line">            temp2 = (seed & <span class="number">0xFFFF</span>);  </div><div class="line">  </div><div class="line">            cryptTable[index2] = ( temp1 | temp2 );   </div><div class="line">        }   </div><div class="line">    }   </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>函数HashString以下函数计算lpszFileName 字符串的hash值，其中dwHashType 为hash的类型，</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//函数HashString以下函数计算lpszFileName 字符串的hash值，其中dwHashType 为hash的类型，  </span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> HashString(<span class="keyword">const</span> <span class="keyword">char</span> *lpszkeyName, <span class="keyword">unsigned</span> <span class="keyword">long</span> dwHashType )  </div><div class="line">{  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *key  = (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)lpszkeyName;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed1 = <span class="number">0x7FED7FED</span>;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed2 = <span class="number">0xEEEEEEEE</span>;  </div><div class="line">    <span class="keyword">int</span> ch;  </div><div class="line">  </div><div class="line">    <span class="keyword">while</span>( *key != <span class="number">0</span> )  </div><div class="line">    {  </div><div class="line">        ch = *key++;  </div><div class="line">        seed1 = cryptTable[(dwHashType&lt;&lt;<span class="number">8</span>) + ch] ^ (seed1 + seed2);  </div><div class="line">        seed2 = ch + seed1 + seed2 + (seed2&lt;&lt;<span class="number">5</span>) + <span class="number">3</span>;  </div><div class="line">    }  </div><div class="line">    <span class="keyword">return</span> seed1;  </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Blizzard的这个算法是非常高效的，被称为”One-Way Hash”( A one-way hash is a an algorithm that is constructed in such a way that deriving the original string (set of strings, actually) is virtually impossible)。举个例子，字符串”unitneutralacritter.grp”通过这个算法得到的结果是0xA26067F3。</p>
+<p>是不是把第一个算法改进一下，改成逐个比较字符串的Hash值就可以了呢，答案是，远远不够，要想得到最快的算法，就不能进行逐个的比较，通常是构造一个哈希表(Hash Table)来解决问题，哈希表是一个大数组，这个数组的容量根据程序的要求来定义，</p>
+<p>例如1024，每一个Hash值通过取模运算 (mod) 对应到数组中的一个位置，这样，只要比较这个字符串的哈希值对应的位置有没有被占用，就可以得到最后的结果了，想想这是什么速度？是的，是最快的O(1)，现在仔细看看这个算法吧：</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span>  </div><div class="line">{  </div><div class="line">    <span class="keyword">int</span> nHashA;  </div><div class="line">    <span class="keyword">int</span> nHashB;  </div><div class="line">    <span class="keyword">char</span> bExists;  </div><div class="line">   ......  </div><div class="line">} SOMESTRUCTRUE;  </div><div class="line"><span class="comment">//一种可能的结构体定义？</span></div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>函数GetHashTablePos下述函数为在Hash表中查找是否存在目标字符串，有则返回要查找字符串的Hash值，无则，return -1.</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//函数GetHashTablePos下述函数为在Hash表中查找是否存在目标字符串，有则返回要查找字符串的Hash值，无则，return -1.  </span></div><div class="line"><span class="keyword">int</span> GetHashTablePos( har *lpszString, SOMESTRUCTURE *lpTable )   </div><div class="line"><span class="comment">//lpszString要在Hash表中查找的字符串，lpTable为存储字符串Hash值的Hash表。  </span></div><div class="line">{   </div><div class="line">    <span class="keyword">int</span> nHash = HashString(lpszString);  <span class="comment">//调用上述函数HashString，返回要查找字符串lpszString的Hash值。  </span></div><div class="line">    <span class="keyword">int</span> nHashPos = nHash % nTableSize;  </div><div class="line">   </div><div class="line">    <span class="keyword">if</span> ( lpTable[nHashPos].bExists  &&  !<span class="built_in">strcmp</span>( lpTable[nHashPos].pString, lpszString ) )   </div><div class="line">    {  <span class="comment">//如果找到的Hash值在表中存在，且要查找的字符串与表中对应位置的字符串相同，  </span></div><div class="line">        <span class="keyword">return</span> nHashPos;    <span class="comment">//返回找到的Hash值  </span></div><div class="line">    }   </div><div class="line">    <span class="keyword">else</span>  </div><div class="line">    {  </div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;    </div><div class="line">    }   </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>看到此，我想大家都在想一个很严重的问题：“如果两个字符串在哈希表中对应的位置相同怎么办？”,毕竟一个数组容量是有限的，这种可能性很大。解决该问题的方法很多，我首先想到的就是用“链表”,感谢大学里学的数据结构教会了这个百试百灵的法宝，我遇到的很多算法都可以转化成链表来解决，只要在哈希表的每个入口挂一个链表，保存所有对应的字符串就OK了。事情到此似乎有了完美的结局，如果是把问题独自交给我解决，此时我可能就要开始定义数据结构然后写代码了。<br>然而Blizzard的程序员使用的方法则是更精妙的方法。基本原理就是：他们在哈希表中不是用一个哈希值而是用三个哈希值来校验字符串。  </p>
+<p>MPQ使用文件名哈希表来跟踪内部的所有文件。但是这个表的格式与正常的哈希表有一些不同。首先，它没有使用哈希作为下标，把实际的文件名存储在表中用于验证，实际上它根本就没有存储文件名。而是使用了3种不同的哈希：一个用于哈希表的下标，两个用于验证。这两个验证哈希替代了实际文件名。  </p>
+<p>当然了，这样仍然会出现2个不同的文件名哈希到3个同样的哈希。但是这种情况发生的概率平均是：1:18889465931478580854784，这个概率对于任何人来说应该都是足够小的。现在再回到数据结构上，Blizzard使用的哈希表没有使用链表，而采用”顺延”的方式来解决问题。”下面，咱们来看看这个网上流传甚广的暴雪hash算法：</p>
+</blockquote>
+<p>函数GetHashTablePos中，lpszString 为要在hash表中查找的字符串；lpTable 为存储字符串hash值的hash表；nTableSize 为hash表的长度：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//函数GetHashTablePos中，lpszString 为要在hash表中查找的字符串；lpTable 为存储字符串hash值的hash表；nTableSize 为hash表的长度：   </span></div><div class="line"><span class="keyword">int</span> GetHashTablePos( <span class="keyword">char</span> *lpszString, MPQHASHTABLE *lpTable, <span class="keyword">int</span> nTableSize )  </div><div class="line">{  </div><div class="line">    <span class="keyword">const</span> <span class="keyword">int</span>  HASH_OFFSET = <span class="number">0</span>, HASH_A = <span class="number">1</span>, HASH_B = <span class="number">2</span>;  </div><div class="line">   </div><div class="line">    <span class="keyword">int</span>  nHash = HashString( lpszString, HASH_OFFSET );  </div><div class="line">    <span class="keyword">int</span>  nHashA = HashString( lpszString, HASH_A );  </div><div class="line">    <span class="keyword">int</span>  nHashB = HashString( lpszString, HASH_B );  </div><div class="line">    <span class="keyword">int</span>  nHashStart = nHash % nTableSize;  </div><div class="line">    <span class="keyword">int</span>  nHashPos = nHashStart;  </div><div class="line">   </div><div class="line">    <span class="keyword">while</span> ( lpTable[nHashPos].bExists )  </div><div class="line">   {  </div><div class="line"><span class="comment">//     如果仅仅是判断在该表中时候存在这个字符串，就比较这两个hash值就可以了，不用对结构体中的字符串进行比较。  </span></div><div class="line"><span class="comment">//         这样会加快运行的速度？减少hash表占用的空间？这种方法一般应用在什么场合？  </span></div><div class="line">        <span class="keyword">if</span> ( 　 lpTable[nHashPos].nHashA == nHashA  </div><div class="line">        &&  lpTable[nHashPos].nHashB == nHashB )  </div><div class="line">       {  </div><div class="line">            <span class="keyword">return</span> nHashPos;  </div><div class="line">       }  </div><div class="line">       <span class="keyword">else</span>  </div><div class="line">       {  </div><div class="line">            nHashPos = (nHashPos + <span class="number">1</span>) % nTableSize;  </div><div class="line">       }  </div><div class="line">   </div><div class="line">        <span class="keyword">if</span> (nHashPos == nHashStart)  </div><div class="line">              <span class="keyword">break</span>;  </div><div class="line">    }  </div><div class="line">     <span class="keyword">return</span> -<span class="number">1</span>;  </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>上述程序解释：</p>
+<ol>
+<li>计算出字符串的三个哈希值（一个用来确定位置，另外两个用来校验)  </li>
+<li>察看哈希表中的这个位置  </li>
+<li>哈希表中这个位置为空吗？如果为空，则肯定该字符串不存在，返回-1。  </li>
+<li>如果存在，则检查其他两个哈希值是否也匹配，如果匹配，则表示找到了该字符串，返回其Hash值。  </li>
+<li>移到下一个位置，如果已经移到了表的末尾，则反绕到表的开始位置起继续查询  </li>
+<li>看看是不是又回到了原来的位置，如果是，则返回没找到  </li>
+<li>回到3。  </li>
+</ol>
+<h2 id="24-5、不重复Hash编码">24.5、不重复Hash编码</h2>
+<p>有了上面的暴雪Hash算法。咱们的问题便可解决了。不过，有两点必须先提醒读者：  </p>
+<ol>
+<li>Hash表起初要初始化；  </li>
+<li>暴雪的Hash算法对于查询那样处理可以，但对插入就不能那么解决。  </li>
+</ol>
+<p>关键主体代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//函数prepareCryptTable以下的函数生成一个长度为0x500（合10进制数：1280）的cryptTable[0x500]  </span></div><div class="line"><span class="keyword">void</span> prepareCryptTable()  </div><div class="line">{  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed = <span class="number">0x00100001</span>, index1 = <span class="number">0</span>, index2 = <span class="number">0</span>, i;  </div><div class="line">  </div><div class="line">    <span class="keyword">for</span>( index1 = <span class="number">0</span>; index1 &lt;<span class="number">0x100</span>; index1++ )  </div><div class="line">    {  </div><div class="line">        <span class="keyword">for</span>( index2 = index1, i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++, index2 += <span class="number">0x100</span>)  </div><div class="line">        {  </div><div class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> temp1, temp2;  </div><div class="line">            seed = (seed * <span class="number">125</span> + <span class="number">3</span>) % <span class="number">0x2AAAAB</span>;  </div><div class="line">            temp1 = (seed & <span class="number">0xFFFF</span>)&lt;&lt;<span class="number">0x10</span>;  </div><div class="line">            seed = (seed * <span class="number">125</span> + <span class="number">3</span>) % <span class="number">0x2AAAAB</span>;  </div><div class="line">            temp2 = (seed & <span class="number">0xFFFF</span>);  </div><div class="line">            cryptTable[index2] = ( temp1 | temp2 );  </div><div class="line">        }  </div><div class="line">    }  </div><div class="line">}  </div><div class="line">  </div><div class="line"><span class="comment">//函数HashString以下函数计算lpszFileName 字符串的hash值，其中dwHashType 为hash的类型，  </span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> HashString(<span class="keyword">const</span> <span class="keyword">char</span> *lpszkeyName, <span class="keyword">unsigned</span> <span class="keyword">long</span> dwHashType )  </div><div class="line">{  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *key  = (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)lpszkeyName;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed1 = <span class="number">0x7FED7FED</span>;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed2 = <span class="number">0xEEEEEEEE</span>;  </div><div class="line">    <span class="keyword">int</span> ch;  </div><div class="line">  </div><div class="line">    <span class="keyword">while</span>( *key != <span class="number">0</span> )  </div><div class="line">    {  </div><div class="line">        ch = *key++;  </div><div class="line">        seed1 = cryptTable[(dwHashType&lt;&lt;<span class="number">8</span>) + ch] ^ (seed1 + seed2);  </div><div class="line">        seed2 = ch + seed1 + seed2 + (seed2&lt;&lt;<span class="number">5</span>) + <span class="number">3</span>;  </div><div class="line">    }  </div><div class="line">    <span class="keyword">return</span> seed1;  </div><div class="line">}  </div><div class="line">  </div><div class="line"><span class="comment">/////////////////////////////////////////////////////////////////////  </span></div><div class="line"><span class="comment">//function: 哈希词典 编码  </span></div><div class="line"><span class="comment">//parameter:  </span></div><div class="line"><span class="comment">//author: lei.zhou  </span></div><div class="line"><span class="comment">//time: 2011-12-14  </span></div><div class="line"><span class="comment">/////////////////////////////////////////////////////////////////////  </span></div><div class="line">MPQHASHTABLE TestHashTable[nTableSize];  </div><div class="line"><span class="keyword">int</span> TestHashCTable[nTableSize];  </div><div class="line"><span class="keyword">int</span> TestHashDTable[nTableSize];  </div><div class="line">key_list test_data[nTableSize];  </div><div class="line">  </div><div class="line"><span class="comment">//直接调用上面的hashstring，nHashPos就是对应的HASH值。  </span></div><div class="line"><span class="keyword">int</span> insert_string(<span class="keyword">const</span> <span class="keyword">char</span> *string_in)  </div><div class="line">{  </div><div class="line">    <span class="keyword">const</span> <span class="keyword">int</span> HASH_OFFSET = <span class="number">0</span>, HASH_C = <span class="number">1</span>, HASH_D = <span class="number">2</span>;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHash = HashString(string_in, HASH_OFFSET);  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashC = HashString(string_in, HASH_C);  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashD = HashString(string_in, HASH_D);  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashStart = nHash % nTableSize;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashPos = nHashStart;  </div><div class="line">    <span class="keyword">int</span> ln, ires = <span class="number">0</span>;  </div><div class="line">  </div><div class="line">    <span class="keyword">while</span> (TestHashTable[nHashPos].bExists)  </div><div class="line">    {  </div><div class="line"><span class="comment">//      if (TestHashCTable[nHashPos]  == (int) nHashC && TestHashDTable[nHashPos] == (int) nHashD)  </span></div><div class="line"><span class="comment">//          break;  </span></div><div class="line"><span class="comment">//      //...  </span></div><div class="line"><span class="comment">//      else  </span></div><div class="line">        <span class="comment">//如之前所提示读者的那般，暴雪的Hash算法对于查询那样处理可以，但对插入就不能那么解决  </span></div><div class="line">            nHashPos = (nHashPos + <span class="number">1</span>) % nTableSize;  </div><div class="line">  </div><div class="line">        <span class="keyword">if</span> (nHashPos == nHashStart)  </div><div class="line">            <span class="keyword">break</span>;  </div><div class="line">    }  </div><div class="line">  </div><div class="line">    ln = <span class="built_in">strlen</span>(string_in);  </div><div class="line">    <span class="keyword">if</span> (!TestHashTable[nHashPos].bExists && (ln &lt; nMaxStrLen))  </div><div class="line">    {   </div><div class="line">        TestHashCTable[nHashPos] = nHashC;  </div><div class="line">        TestHashDTable[nHashPos] = nHashD;  </div><div class="line">  </div><div class="line">        test_data[nHashPos] = (KEYNODE *) <span class="built_in">malloc</span> (<span class="keyword">sizeof</span>(KEYNODE) * <span class="number">1</span>);  </div><div class="line">        <span class="keyword">if</span>(test_data[nHashPos] == NULL)  </div><div class="line">        {  </div><div class="line">            <span class="built_in">printf</span>(<span class="string">"10000 EMS ERROR !!!!\n"</span>);  </div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;  </div><div class="line">        }  </div><div class="line">  </div><div class="line">        test_data[nHashPos]-&gt;pkey = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(ln+<span class="number">1</span>);  </div><div class="line">        <span class="keyword">if</span>(test_data[nHashPos]-&gt;pkey == NULL)  </div><div class="line">        {  </div><div class="line">            <span class="built_in">printf</span>(<span class="string">"10000 EMS ERROR !!!!\n"</span>);  </div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;  </div><div class="line">        }  </div><div class="line">  </div><div class="line">        <span class="built_in">memset</span>(test_data[nHashPos]-&gt;pkey, <span class="number">0</span>, ln+<span class="number">1</span>);  </div><div class="line">        <span class="built_in">strncpy</span>(test_data[nHashPos]-&gt;pkey, string_in, ln);  </div><div class="line">        *((test_data[nHashPos]-&gt;pkey)+ln) = <span class="number">0</span>;  </div><div class="line">        test_data[nHashPos]-&gt;weight = nHashPos;  </div><div class="line">  </div><div class="line">        TestHashTable[nHashPos].bExists = <span class="number">1</span>;  </div><div class="line">    }  </div><div class="line">    <span class="keyword">else</span>  </div><div class="line">    {  </div><div class="line">        <span class="keyword">if</span>(TestHashTable[nHashPos].bExists)  </div><div class="line">            <span class="built_in">printf</span>(<span class="string">"30000 in the hash table %s !!!\n"</span>, string_in);  </div><div class="line">        <span class="keyword">else</span>  </div><div class="line">            <span class="built_in">printf</span>(<span class="string">"90000 strkey error !!!\n"</span>);  </div><div class="line">    }  </div><div class="line">    <span class="keyword">return</span> nHashPos;  </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>接下来要读取索引文件big_index对其中的关键词进行编码（为了简单起见，直接一行一行扫描读写，没有跳过行数了）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> bigIndex_hash(<span class="keyword">const</span> <span class="keyword">char</span> *docpath, <span class="keyword">const</span> <span class="keyword">char</span> *hashpath)  </div><div class="line">{  </div><div class="line">    FILE *fr, *fw;  </div><div class="line">    <span class="keyword">int</span> len;  </div><div class="line">    <span class="keyword">char</span> *pbuf, *p;  </div><div class="line">    <span class="keyword">char</span> dockey[TERM_MAX_LENG];  </div><div class="line">  </div><div class="line">    <span class="keyword">if</span>(docpath == NULL || *docpath == <span class="string">'\0'</span>)  </div><div class="line">        <span class="keyword">return</span>;  </div><div class="line">  </div><div class="line">    <span class="keyword">if</span>(hashpath == NULL || *hashpath == <span class="string">'\0'</span>)  </div><div class="line">        <span class="keyword">return</span>;  </div><div class="line">  </div><div class="line">    fr = fopen(docpath, <span class="string">"rb"</span>);  <span class="comment">//读取文件docpath  </span></div><div class="line">    fw = fopen(hashpath, <span class="string">"wb"</span>);  </div><div class="line">    <span class="keyword">if</span>(fr == NULL || fw == NULL)  </div><div class="line">    {  </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"open read or write file error!\n"</span>);  </div><div class="line">        <span class="keyword">return</span>;  </div><div class="line">    }  </div><div class="line">  </div><div class="line">    pbuf = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(BUFF_MAX_LENG);  </div><div class="line">    <span class="keyword">if</span>(pbuf == NULL)  </div><div class="line">    {  </div><div class="line">        fclose(fr);  </div><div class="line">        <span class="keyword">return</span> ;  </div><div class="line">    }  </div><div class="line">  </div><div class="line">    <span class="built_in">memset</span>(pbuf, <span class="number">0</span>, BUFF_MAX_LENG);  </div><div class="line">  </div><div class="line">    <span class="keyword">while</span>(fgets(pbuf, BUFF_MAX_LENG, fr))  </div><div class="line">    {  </div><div class="line">        len = GetRealString(pbuf);  </div><div class="line">        <span class="keyword">if</span>(len &lt;= <span class="number">1</span>)  </div><div class="line">            <span class="keyword">continue</span>;  </div><div class="line">        p = <span class="built_in">strstr</span>(pbuf, <span class="string">"#####"</span>);    </div><div class="line">        <span class="keyword">if</span>(p != NULL)  </div><div class="line">            <span class="keyword">continue</span>;  </div><div class="line">  </div><div class="line">        p = <span class="built_in">strstr</span>(pbuf, <span class="string">"  "</span>);  </div><div class="line">        <span class="keyword">if</span> (p == NULL)  </div><div class="line">        {  </div><div class="line">            <span class="built_in">printf</span>(<span class="string">"file contents error!"</span>);  </div><div class="line">        }  </div><div class="line">  </div><div class="line">        len = p - pbuf;  </div><div class="line">        dockey[<span class="number">0</span>] = <span class="number">0</span>;  </div><div class="line">        <span class="built_in">strncpy</span>(dockey, pbuf, len);  </div><div class="line">  </div><div class="line">        dockey[len] = <span class="number">0</span>;        </div><div class="line">  </div><div class="line">        <span class="keyword">int</span> num = insert_string(dockey);   </div><div class="line">  </div><div class="line">        dockey[len] = <span class="string">' '</span>;  </div><div class="line">        dockey[len+<span class="number">1</span>] = <span class="string">'\0'</span>;  </div><div class="line">        <span class="keyword">char</span> str[<span class="number">20</span>];  </div><div class="line">        itoa(num, str, <span class="number">10</span>);  </div><div class="line">  </div><div class="line">        <span class="built_in">strcat</span>(dockey, str);  </div><div class="line">        dockey[len+<span class="built_in">strlen</span>(str)+<span class="number">1</span>] = <span class="string">'\0'</span>;  </div><div class="line">        <span class="built_in">fprintf</span> (fw, <span class="string">"%s\n"</span>, dockey);  </div><div class="line">  </div><div class="line">    }  </div><div class="line">    <span class="built_in">free</span>(pbuf);  </div><div class="line">    fclose(fr);  </div><div class="line">    fclose(fw);  </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>主函数已经很简单了，如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> main()  </div><div class="line">{  </div><div class="line">    prepareCryptTable();  <span class="comment">//Hash表起初要初始化  </span></div><div class="line">  </div><div class="line">    <span class="comment">//现在要把整个big_index文件插入hash表，以取得编码结果  </span></div><div class="line">    bigIndex_hash(<span class="string">"big_index.txt"</span>, <span class="string">"hashpath.txt"</span>);  </div><div class="line">    system(<span class="string">"pause"</span>);  </div><div class="line">  </div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;  </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>程序运行后生成的hashpath.txt文件如下：<br><img src="../images/23~24/24.8.gif" alt="img"></p>
+<p>如上所示，采取暴雪的Hash算法并在插入的时候做适当处理，当再次对上文中的索引文件big_index进行Hash编码后，冲突问题已经得到初步解决。当然，还有待更进一步更深入的测试。</p>
+<p>后续添上数目索引1~10000…</p>
+<p>后来又为上述文件中的关键词编了码一个计数的内码，不过，奇怪的是，同样的代码，在Dev C++ 与VS2010上运行结果却不同（左边dev上计数从”1”开始，VS上计数从“1994014002”开始），如下图所示：<br><img src="../images/23~24/24.9.gif" alt="img"></p>
+<p>在上面的bigIndex_hashcode函数的基础上，修改如下，即可得到上面的效果：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> bigIndex_hashcode(<span class="keyword">const</span> <span class="keyword">char</span> *in_file_path, <span class="keyword">const</span> <span class="keyword">char</span> *out_file_path)  </div><div class="line">{  </div><div class="line">    FILE *fr, *fw;  </div><div class="line">    <span class="keyword">int</span> len, value;  </div><div class="line">    <span class="keyword">char</span> *pbuf, *pleft, *p;  </div><div class="line">    <span class="keyword">char</span> keyvalue[TERM_MAX_LENG], str[WORD_MAX_LENG];  </div><div class="line">  </div><div class="line">    <span class="keyword">if</span>(in_file_path == NULL || *in_file_path == <span class="string">'\0'</span>) {  </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"input file path error!\n"</span>);  </div><div class="line">        <span class="keyword">return</span>;  </div><div class="line">    }  </div><div class="line">  </div><div class="line">    <span class="keyword">if</span>(out_file_path == NULL || *out_file_path == <span class="string">'\0'</span>) {  </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"output file path error!\n"</span>);  </div><div class="line">        <span class="keyword">return</span>;  </div><div class="line">    }  </div><div class="line">  </div><div class="line">    fr = fopen(in_file_path, <span class="string">"r"</span>);  <span class="comment">//读取in_file_path路径文件  </span></div><div class="line">    fw = fopen(out_file_path, <span class="string">"w"</span>);  </div><div class="line">  </div><div class="line">    <span class="keyword">if</span>(fr == NULL || fw == NULL)  </div><div class="line">    {  </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"open read or write file error!\n"</span>);  </div><div class="line">        <span class="keyword">return</span>;  </div><div class="line">    }  </div><div class="line">  </div><div class="line">    pbuf = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(BUFF_MAX_LENG);  </div><div class="line">    pleft = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(BUFF_MAX_LENG);  </div><div class="line">    <span class="keyword">if</span>(pbuf == NULL || pleft == NULL)  </div><div class="line">    {  </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"allocate memory error!"</span>);  </div><div class="line">        fclose(fr);  </div><div class="line">        <span class="keyword">return</span> ;  </div><div class="line">    }  </div><div class="line">  </div><div class="line">    <span class="built_in">memset</span>(pbuf, <span class="number">0</span>, BUFF_MAX_LENG);  </div><div class="line">  </div><div class="line">    <span class="keyword">int</span> offset = <span class="number">1</span>;  </div><div class="line">    <span class="keyword">while</span>(fgets(pbuf, BUFF_MAX_LENG, fr))  </div><div class="line">    {  </div><div class="line">        <span class="keyword">if</span> (--offset &gt; <span class="number">0</span>)  </div><div class="line">            <span class="keyword">continue</span>;  </div><div class="line">  </div><div class="line">        <span class="keyword">if</span>(GetRealString(pbuf) &lt;= <span class="number">1</span>)  </div><div class="line">            <span class="keyword">continue</span>;  </div><div class="line">  </div><div class="line">        p = <span class="built_in">strstr</span>(pbuf, <span class="string">"#####"</span>);    </div><div class="line">        <span class="keyword">if</span>(p != NULL)  </div><div class="line">            <span class="keyword">continue</span>;  </div><div class="line">  </div><div class="line">        p = <span class="built_in">strstr</span>(pbuf, <span class="string">"  "</span>);  </div><div class="line">        <span class="keyword">if</span> (p == NULL)  </div><div class="line">        {  </div><div class="line">            <span class="built_in">printf</span>(<span class="string">"file contents error!"</span>);  </div><div class="line">        }  </div><div class="line">  </div><div class="line">        len = p - pbuf;  </div><div class="line">  </div><div class="line">        <span class="comment">// 确定跳过行数  </span></div><div class="line">        <span class="built_in">strcpy</span>(pleft, p+<span class="number">1</span>);   </div><div class="line">        offset = atoi(pleft) + <span class="number">1</span>;  </div><div class="line">  </div><div class="line">        <span class="built_in">strncpy</span>(keyvalue, pbuf, len);    </div><div class="line">        keyvalue[len] = <span class="string">'\0'</span>;  </div><div class="line">        value = insert_string(keyvalue);  </div><div class="line">  </div><div class="line">        <span class="keyword">if</span> (value != -<span class="number">1</span>) {  </div><div class="line">  </div><div class="line">            <span class="comment">// key value中插入空格  </span></div><div class="line">            keyvalue[len] = <span class="string">' '</span>;  </div><div class="line">            keyvalue[len+<span class="number">1</span>] = <span class="string">'\0'</span>;  </div><div class="line">  </div><div class="line">            itoa(value, str, <span class="number">10</span>);  </div><div class="line">            <span class="built_in">strcat</span>(keyvalue, str);  </div><div class="line">  </div><div class="line">            keyvalue[len+<span class="built_in">strlen</span>(str)+<span class="number">1</span>] = <span class="string">' '</span>;  </div><div class="line">            keyvalue[len+<span class="built_in">strlen</span>(str)+<span class="number">2</span>] = <span class="string">'\0'</span>;  </div><div class="line">  </div><div class="line">            keysize++;  </div><div class="line">            itoa(keysize, str, <span class="number">10</span>);  </div><div class="line">            <span class="built_in">strcat</span>(keyvalue, str);  </div><div class="line">  </div><div class="line">            <span class="comment">// 将key value写入文件  </span></div><div class="line">            <span class="built_in">fprintf</span> (fw, <span class="string">"%s\n"</span>, keyvalue);  </div><div class="line">  </div><div class="line">        }  </div><div class="line">    }  </div><div class="line">    <span class="built_in">free</span>(pbuf);  </div><div class="line">    fclose(fr);  </div><div class="line">    fclose(fw);  </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h2 id="小结">小结</h2>
+<p>本文有一点值得一提的是，在此前的这篇文章（<a href="http://blog.csdn.net/v_JULY_v/archive/2011/03/17/6256463.aspx" target="_blank" rel="external">十一、从头到尾彻底解析Hash表算法</a>）之中，只是对Hash表及暴雪的Hash算法有过学习和了解，但尚未真正运用过它，而今在本章中体现，证明还是之前写的文章，及之前对Hash表等算法的学习还是有一定作用的。同时，也顺便对暴雪的Hash函数算是做了个测试，其的确能解决一般的冲突性问题，创造这个算法的人不简单呐。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/programing_art/ebook/zh/倒排索引关键词不重复Hash编码.html" data-title="Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+        </div>
+        <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+      </body>
+     </html>
+     

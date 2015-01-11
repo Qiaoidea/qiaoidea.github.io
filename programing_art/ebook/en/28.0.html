@@ -1,0 +1,379 @@
+
+  
+    <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="Android">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+      <body>
+        <header>
+          <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/programing_art/ebook/en/28.0.html" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-10T11:57:42.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<h1 id="Chapter_28:_Largest_Product_Continuous_Substring">Chapter 28: Largest Product Continuous Substring</h1>
+<h2 id="Foreword">Foreword</h2>
+<p>The questions introduced in this chapter and next chapter are the most popular questions that major companies would like to ask during their interviews, especially the latter one, which is more frequently asked. The Largest Product Continuous Substring(LPCS) problem appeared in last September 26 Baidu’s interview twelveth question, in October 9th Tencent interview first small problem, 13 October 2013 Baidu School Recruit third small problems, and last in October 15 Google’s School Recruit Interview.</p>
+<h2 id="Porblem_Description:">Porblem Description:</h2>
+<p>Given a floating-point number, the algorithm should return continuous substring which has the largest value of producte. For example, given a string of “-2.5, 4, 0, 3, 0.5, 8, -1”, the algorithm should return “3, 0.5, 8”. i.e. the continuous substring that gives the largest value of the product. That is to say ,in above array, the product given by continuous substring “3, 0.5, 8” is the largest.</p>
+<p>Reminder: Here the LPCS is different from the the Largest Product Subsequence. The former requires continuity, on the contrary, the latter does not require the subsequence to be continuous. That is to say, it is also the same difference between the longest common substring and the Longest Common Subsequence(LCS). </p>
+<ul>
+<li><p>Substring is a continuous part of original string.</p>
+</li>
+<li><p>Subsequence is a new sequence obtained by removing out elements from the original sequence without changing the order.</p>
+</li>
+</ul>
+<p>More Briefly, the former’s (substring’s) character must be continuous, the latter’s (sequences’ LCS) characters are not. For example, the longest common substring of “acdfg” and “akdfc”  is “df”, and their LCS is “adf”, LCS can be solved using dynamic programming.</p>
+<p><strong>Solution: </strong>  </p>
+<p><strong>Solution one: </strong> </p>
+<p>Enumerate all combinations:</p>
+<p>The reader may naturally think that maximum product is similar to <a href="http://blog.csdn.net/v_JULY_v/article/details/6444021" target="_blank" rel="external">the largest subarray problem</a>, people may use the most simple way: using two for loops.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">double</span> max = <span class="number">0</span>;</div><div class="line"><span class="keyword">double</span> start = <span class="number">0</span>;</div><div class="line"><span class="keyword">double</span> end = <span class="number">0</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num; i++)</div><div class="line">{</div><div class="line">    <span class="keyword">double</span> x = arrs[i];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; num; j++)</div><div class="line">    {</div><div class="line">        x *= arrs[j];</div><div class="line">        <span class="keyword">if</span> (x &gt; max)</div><div class="line">        {</div><div class="line">            max = x;</div><div class="line">            start = arrs[i];</div><div class="line">            end = arrs[j];</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p><strong>Solution two:  </strong></p>
+<p>Although this problem is similar to Largest Sum Subarray(LSS) problem, in fact there are many differences between two of them as the subsequence may contain positive value, negative value or zero. We can simplify the problem as follows: The algorithm needs to find a subsequence, which has largest product and simultaneously it also needs to find a subsequence which has minimum product (we need to also deal with negative number). As a consequence, we let:</p>
+<ul>
+<li>“maxCurrent” represents the current candidate that may be the largest product.</li>
+<li>“minCurrent” , on the contrary, represents the current candidate that may be the smallest product.</li>
+<li>“maxProduct” stores the the largest value of all candidates that may have the largest produce value.<br>We use candidate here because they may become the largest/smallest value for a new episode.)</li>
+</ul>
+<p>As the empty set was defined by one, before the we search the array, “maxCurrent”, “minCurrent” and “maxProduct” were all initialized as 1. Assume that we already have “maxCurrent” and “minCurrent”, which are the two candidates of the largest/smallest product, after reading element x(i) of the array, the new largest candidate can only be bigger value of product of x(i) with maxCurrent or minCurrent. If “x(i) &lt; 0” leads to “maxCurrent &lt; minCurrent”, we need to exchange the values of two candidates. Whenever “maxCurrent &lt; 1”, as 1(empty set) is a better candidate than “maxCurrent”, we update the “maxCurrent” to be 1 and similarly, we also can update “minCurrent”. Whenever “maxCurrent” is bigger than “maxProdtct”, we update “maxProdect”.</p>
+<p>Code one:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Comparable&gt;</div><div class="line">Comparable maxprod( <span class="keyword">const</span> <span class="stl_container"><span class="built_in">vector</span>&lt;Comparable&gt;</span>&v)</div><div class="line">{</div><div class="line">    <span class="keyword">int</span> i;</div><div class="line">    Comparable maxProduct = <span class="number">1</span>;</div><div class="line">    Comparable minProduct = <span class="number">1</span>;</div><div class="line">    Comparable maxCurrent = <span class="number">1</span>;</div><div class="line">    Comparable minCurrent = <span class="number">1</span>;</div><div class="line">    <span class="comment">//Comparable t;</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; v.size() ; i++)</div><div class="line">    {</div><div class="line">        maxCurrent *= v[i];</div><div class="line">        minCurrent *= v[i];</div><div class="line">        <span class="keyword">if</span> (maxCurrent &gt; maxProduct)</div><div class="line">            maxProduct = maxCurrent;</div><div class="line">        <span class="keyword">if</span> (minCurrent &gt; maxProduct)</div><div class="line">            maxProduct = minCurrent;</div><div class="line">        <span class="keyword">if</span> (maxCurrent &lt; minProduct)</div><div class="line">            minProduct = maxCurrent;</div><div class="line">        <span class="keyword">if</span> (minCurrent &lt; minProduct)</div><div class="line">            minProduct = minCurrent;</div><div class="line">        <span class="keyword">if</span> (minCurrent &gt; maxCurrent)</div><div class="line">            swap(maxCurrent, minCurrent);</div><div class="line">        <span class="keyword">if</span> (maxCurrent &lt; <span class="number">1</span>)</div><div class="line">            maxCurrent = <span class="number">1</span>;</div><div class="line">        <span class="comment">//if(minCurrent&gt;1)</span></div><div class="line">        <span class="comment">//    minCurrent =1;</span></div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> maxProduct;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Code two: </p>
+<p>Here we record the largest and the smallest product of i’th element as “M” and “m” individually. We also record starting point of these two intervals(the end points are i) and keep updating.<a href="http://www.51weixue.com/thread-246-1-1.html" target="_blank" rel="external">Source</a>.</p>
+<p>// here    </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; maxproduct(<span class="keyword">double</span> *f, <span class="keyword">int</span> n)</div><div class="line">{</div><div class="line">    <span class="comment">//Return the starting point and end point of the largest product</span></div><div class="line">    <span class="keyword">int</span> R = <span class="number">0</span>, r = <span class="number">0</span>;   <span class="comment">// Starting point of the largest and the smallest product.</span></div><div class="line">    pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; ret = make_pair(<span class="number">0</span>, <span class="number">0</span>);     <span class="comment">// the subscript of the intervals of the largest and the smallest product</span></div><div class="line">    <span class="keyword">double</span> M = f[<span class="number">0</span>], m = f[<span class="number">0</span>], answer = f[<span class="number">0</span>]; <span class="comment">// Value of the largest and the smallest product.</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i)</div><div class="line">    {</div><div class="line">        <span class="keyword">double</span> t0 = f[i] * M, t1 = f[i] * m;</div><div class="line">        <span class="keyword">if</span> (t0 &gt; t1)</div><div class="line">        {</div><div class="line">            M = t0;</div><div class="line">            m = t1;</div><div class="line">        }</div><div class="line">        <span class="keyword">else</span></div><div class="line">        {</div><div class="line">            <span class="keyword">int</span> t = R;</div><div class="line">            R = r;</div><div class="line">            r = t;</div><div class="line">            M = t1;</div><div class="line">            m = t0;</div><div class="line">        }</div><div class="line">        <span class="keyword">if</span> (M &lt; f[i])</div><div class="line">        {</div><div class="line">            M = f[i];</div><div class="line">            R = i;</div><div class="line">        }</div><div class="line">        <span class="keyword">if</span> (m &gt; f[i])</div><div class="line">        {</div><div class="line">            m = f[i];</div><div class="line">            r = i;</div><div class="line">        }</div><div class="line">        <span class="keyword">if</span> (answer &lt; M)</div><div class="line">        {</div><div class="line">            answer = M;</div><div class="line">            ret = make_pair(R, i);</div><div class="line">        }</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> ret;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p><strong>Solution three: </strong>  </p>
+<p>Besides the solution that we showed above, which is similar as LSCS, This problem can also be solved using dynamic programming. (in fact, the above solution is also an dynamic programming solution, but solving the specific form shown by the next solution with two different timetables. This difference lies in the following two will write dynamic programming solution of the problem in the classical equations of common DP, and one is a direct solution to solve). </p>
+<p>Assuming the array is a[], we can directly solve the problem using dynamic programming. Taking into account the possible negative value, we use Max to represent the largest value of product of subsequence which ends with a. Similarly we use Min to represent the smallest value of product of subsequence which ends with a:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Max</span>=<span class="built_in">max</span>{a, <span class="built_in">Max</span>[i-<span class="number">1</span>]*a, <span class="built_in">Min</span>[i-<span class="number">1</span>]*a};  </div><div class="line"><span class="built_in">Min</span>=<span class="built_in">min</span>{a, <span class="built_in">Max</span>[i-<span class="number">1</span>]*a, <span class="built_in">Min</span>[i-<span class="number">1</span>]*a};</div></pre></td></tr></table></figure>
+
+<p>The initial state is Max[1]=Min[1]=a[1].</p>
+<p>C/C++ code one, a very simple piece of code: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">double</span> func(<span class="keyword">double</span> *a, <span class="keyword">const</span> <span class="keyword">int</span> n)</div><div class="line">{</div><div class="line">    <span class="keyword">double</span> *maxA = <span class="keyword">new</span> <span class="keyword">double</span>[n];</div><div class="line">    <span class="keyword">double</span> *minA = <span class="keyword">new</span> <span class="keyword">double</span>[n];</div><div class="line">    maxA[<span class="number">0</span>] = minA[<span class="number">0</span>] = a[<span class="number">0</span>];</div><div class="line">    <span class="keyword">double</span> value = maxA[<span class="number">0</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; n ; ++i)</div><div class="line">    {</div><div class="line">        maxA[i] = max(max(a[i], maxA[i - <span class="number">1</span>] * a[i]), minA[i - <span class="number">1</span>] * a[i]);</div><div class="line">        minA[i] = min(min(a[i], maxA[i - <span class="number">1</span>] * a[i]), minA[i - <span class="number">1</span>] * a[i]);</div><div class="line">        value = max(value, maxA[i]);</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>C/C++ code two:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"></div><div class="line"> Given a floating-point array consisting of positive number, 0, and negative number. </div><div class="line"> The array index starts from one, return the Largest Product Continuous Subsequence(LPSC) and the corresponding value of product. </div><div class="line"> If the value of LPSC is negative then output -1.</div><div class="line"> We use Max[i] to represent Largest Product Continuous Subsequence that ends with a[i]</div><div class="line"> We use Min[i] to represent Smallest Product Continuous Subsequence that ends with a[i]. </div><div class="line"> As we have more than one value, then this saving is nessesary.</div><div class="line"></div><div class="line">*/</div><div class="line"></div><div class="line"><span class="keyword">void</span> longest_multiple(<span class="keyword">double</span> *a, <span class="keyword">int</span> n)</div><div class="line">{</div><div class="line">    <span class="keyword">double</span> *Min = <span class="keyword">new</span> <span class="keyword">double</span>[n + <span class="number">1</span>]();</div><div class="line">    <span class="keyword">double</span> *Max = <span class="keyword">new</span> <span class="keyword">double</span>[n + <span class="number">1</span>]();</div><div class="line">    <span class="keyword">double</span> *p = <span class="keyword">new</span> <span class="keyword">double</span>[n + <span class="number">1</span>]();</div><div class="line">    <span class="comment">//Initialization</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++)</div><div class="line">    {</div><div class="line">        p[i] = -<span class="number">1</span>;</div><div class="line">    }</div><div class="line">    Min[<span class="number">1</span>] = a[<span class="number">1</span>];</div><div class="line">    Max[<span class="number">1</span>] = a[<span class="number">1</span>];</div><div class="line">    <span class="keyword">double</span> max_val = Max[<span class="number">1</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++)</div><div class="line">    {</div><div class="line">        Max[i] = max(Max[i - <span class="number">1</span>] * a[i], Min[i - <span class="number">1</span>] * a[i], a[i]);</div><div class="line">        Min[i] = min(Max[i - <span class="number">1</span>] * a[i], Min[i - <span class="number">1</span>] * a[i], a[i]);</div><div class="line">        <span class="keyword">if</span> (max_val &lt; Max[i])</div><div class="line">            max_val = Max[i];</div><div class="line">    }</div><div class="line">    <span class="keyword">if</span> (max_val &lt; <span class="number">0</span>)</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d"</span>, -<span class="number">1</span>);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d"</span>, max_val);</div><div class="line">    <span class="comment">//Free memory</span></div><div class="line">    <span class="keyword">delete</span> [] Max;</div><div class="line">    <span class="keyword">delete</span> [] Min;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>C# complete code (the code is from one of participants of the Hero online programming challenges<a href="http://hero.pongo.cn/Question/Details?ID=19&amp;ExamID=19" target="_blank" rel="external">1019.Largest Product Continuous Subsequence</a>) </p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//The Hero: danielqkj</span></div><div class="line"></div><div class="line"><span class="keyword">using</span> System;</div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> Test</div><div class="line">{</div><div class="line">    <span class="keyword">void</span> Max(<span class="keyword">double</span> a, <span class="keyword">double</span> b, <span class="keyword">double</span> c)</div><div class="line">    {</div><div class="line">        <span class="keyword">double</span> d = (a &gt; b) ? a : b;</div><div class="line">        <span class="keyword">return</span> (d &gt; c) ? d : c;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">void</span> Min(<span class="keyword">double</span> a, <span class="keyword">double</span> b, <span class="keyword">double</span> c)</div><div class="line">    {</div><div class="line">        <span class="keyword">double</span> d = (a &gt; b) ? b : a;</div><div class="line">        <span class="keyword">return</span> (d &gt; c) ? c : d;</div><div class="line">    }</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</div><div class="line">    {</div><div class="line">        <span class="keyword">int</span> n = Int32.parse(Console.readline());</div><div class="line">        <span class="keyword">double</span>[] a = <span class="keyword">new</span> <span class="keyword">double</span>[n];</div><div class="line">        <span class="keyword">double</span> maxvalue = a[<span class="number">0</span>];</div><div class="line">        <span class="keyword">double</span>[] max = <span class="keyword">new</span> <span class="keyword">double</span>[n];</div><div class="line">        <span class="keyword">double</span>[] min = <span class="keyword">new</span> <span class="keyword">double</span>[n];</div><div class="line">        <span class="keyword">double</span> start, end;</div><div class="line"></div><div class="line">        String[] s = Console.readline().split(<span class="string">' '</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</div><div class="line">        {</div><div class="line">            a[i] = Double.parse(s[i])</div><div class="line">        }</div><div class="line"></div><div class="line">               max[<span class="number">0</span>] = a[<span class="number">0</span>];</div><div class="line">        min[<span class="number">0</span>] = a[<span class="number">0</span>];</div><div class="line">        start = <span class="number">0</span>, end = <span class="number">0</span>;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++)</div><div class="line">        {</div><div class="line">            max[i] = Max(a[i], a[i] * max[i - <span class="number">1</span>], a[i] * min[i - <span class="number">1</span>]);</div><div class="line">            min[i] = Min(a[i], a[i] * max[i - <span class="number">1</span>], a[i] * min[i - <span class="number">1</span>]);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (max[i] &gt; maxvalue)</div><div class="line">            {</div><div class="line">                maxvalue = max[i];</div><div class="line">                end = i;</div><div class="line">            }</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="keyword">double</span> mmm = maxvalue;</div><div class="line">        <span class="keyword">while</span> ( (mmm - <span class="number">0.0</span>) &gt; <span class="number">0.00001</span> )</div><div class="line">        {</div><div class="line">            start = end;</div><div class="line">            mmm = mmm / a[start];</div><div class="line">        }</div><div class="line"></div><div class="line">        Console.Writeline(a[start] + <span class="string">" "</span> + a[end] + <span class="string">" "</span> + maxvalue);</div><div class="line"></div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p><strong>Variants</strong>  </p>
+<p>This problem has another variance. That is, given an array that have size N, the algorithm can only use multiplication but not devision and algorithm must give the any conbination of subsequence that has the largest product .</p>
+<p>One way to solve this quetion is we enumerate all the possible combinations of N-1 numbers and calculate the product of them then compare the size of them. As in total we have N times N-1 combinations. The time complexity is O(N^2) and obviously, this is not the best solution.</p>
+<p>The following solution is from “The Beauty of Programming”.</p>
+<p><strong>Solution one :</strong>  </p>
+<p><img src="../images/28~29/28.1.jpg" alt=""></p>
+<p><strong>Solution two :</strong></p>
+<p>In addition, you can also further reduce the amount of computing through analysis. Assuming the product of N integers is P, the following analysis considers the sign of P (where, AN-1 represents the number of combinations of N-1, PN-1 represents the product of combinations of N-1 number). </p>
+<ol>
+<li>When P = 0</li>
+</ol>
+<p>Then the array contains at least one 0. Assume that if we except one zero then we get Q as the product of rest of other numbers. Now we discuss Q according to whether it is negative or positive:</p>
+<p>Q is 0:</p>
+<p>Return 0 (This means the array has at least two zeros so that the product of the rest of numbers is zero.)</p>
+<p>Q is positive:</p>
+<p>Reuturn Q (Because if we use zero to substitute any number in the array, the value we get must be smaller than Q.)</p>
+<p>Q is negative:</p>
+<p>Reuturn 0 (Because if we use zero to substitute any number in the array, the value we get is 0, which is bigger than Q.)</p>
+<ol>
+<li>P is negative</li>
+</ol>
+<p>According to pricipal of multiplication “Negatives make a positive”, nauturelym we want to remove one negative number to make PN-1 to be a positive number. To ensure the product to be largest, the removed negative value must have the smallest absolute value. Now we just need to traverse the array and remove the negative that have smallest absolute value.  </p>
+<ol>
+<li>P is negative<br>Similarly, if there is a positive value in the array, you should remove the smallest positive value, otherwise remove the negative value that has maximum absolute value. </li>
+</ol>
+<p>The above solution uses a direct product P of N integers, and thus determine the sign of P. But a direct multiplication may suffer the danger of being stackoverflow (this is why this problem require us not using divesion), In fact if we just make a smalll modification and calculate the number of negative numbers,positive numbers and 0 without calculating proudct directly, we can already decide whether P is negative or positive. The rest is the same as above solution.</p>
+<p>Consider the time complexity, since the algorithm only need to traverse the array once to get the number of positive(+) value, negative(-) value, 0 , positive number that has smallest abolute value and negative number that has smallest abolute value, then the time complexity is O(N).  </p>
+<h2 id="References_and_recommended_reading">References and recommended reading</h2>
+<ol>
+<li><a href="">http://www.bjwilly.com/archives/395.html</a>; </li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/programing_art/ebook/en/28.0.html" data-title="Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+        </div>
+        <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+      </body>
+     </html>
+     

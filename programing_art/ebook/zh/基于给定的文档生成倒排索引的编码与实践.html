@@ -1,0 +1,432 @@
+
+  
+    <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="Android">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+      <body>
+        <header>
+          <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/programing_art/ebook/zh/基于给定的文档生成倒排索引的编码与实践.html" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-10T11:57:47.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<h1 id="基于给定的文档生成倒排索引的编码与实践">基于给定的文档生成倒排索引的编码与实践</h1>
+<p>作者：July、yansha。</p>
+<p>出处：结构之法算法之道</p>
+<h2 id="引言">引言</h2>
+<p>本周实现倒排索引。实现过程中，寻找资料，结果发现找份资料诸多不易：1、网上搜倒排索引实现，结果千篇一律，例子都是那几个同样的单词；2、到谷歌学术上想找点稍微有价值水平的资料，结果下篇论文还收费或者要求注册之类；3、大部分技术书籍只有理论，没有实践。于是，朋友戏言：网上一般有价值的东西不多。希望，本blog的出现能改变此现状。</p>
+<p>在第二十四章、倒排索引关键词不重复Hash编码中，我们针对一个给定的倒排索引文件，提取出其中的关键词，然后针对这些关键词进行Hash不重复编码。本章，咱们再倒退一步，即给定一个正排文档（暂略过文本解析，分词等步骤，日后会慢慢考虑这些且一并予以实现），要求生成对应的倒排索引文件。同时，本章还是基于Hash索引之上（运用暴雪的Hash函数可以比较完美的解决大数据量下的冲突问题），日后自会实现B+树索引。</p>
+<p>与此同时，本编程艺术系列逐步从为面试服务而转到实战性的编程当中了，教初学者如何编程，如何运用高效的算法解决实际应用中的编程问题，将逐步成为本编程艺术系列的主旨之一。</p>
+<p>OK，接下来，咱们针对给定的正排文档一步一步来生成倒排索引文件，有任何问题，欢迎随时不吝赐教或批评指正。谢谢。</p>
+<h2 id="第一节、索引的构建方法">第一节、索引的构建方法</h2>
+<ul>
+<li>根据信息检索导论（Christtopher D.Manning等著，王斌译）一书给的提示，我们可以选择两种构建索引的算法：BSBI算法，与SPIMI算法。</li>
+</ul>
+<p>BSBI算法，基于磁盘的外部排序算法，此算法首先将词项映射成其ID的数据结构，如Hash映射。而后将文档解析成词项ID-文档ID对，并在内存中一直处理，直到累积至放满一个固定大小的块空间为止，我们选择合适的块大小，使之能方便加载到内存中并允许在内存中快速排序，快速排序后的块转换成倒排索引格式后写入磁盘。</p>
+<p>建立倒排索引的步骤如下：</p>
+<ul>
+<li>将文档分割成几个大小相等的部分；</li>
+<li>对词项ID-文档ID进行排序；</li>
+<li>将具有同一词项ID的所有文档ID放到倒排记录表中，其中每条倒排记录仅仅是一个文档ID；</li>
+<li>将基于块的倒排索引写到磁盘上。</li>
+</ul>
+<p>此算法假如说最后可能会产生10个块。其伪码如下：</p>
+<pre><code>BSBI NDEXConSTRUCTION()
+n &lt;- <span class="number">0</span>
+<span class="keyword">while</span>(all documents have not been processed)
+    do n&lt;-n+<span class="number">1</span>
+        block &lt;- PARSENEXTBLOCK()    //文档分析
+        BSBI-INVERT(block)
+        WRITEBLOCKTODISK(block,fn)
+        MERGEBLOCKS(f1,<span class="keyword">...</span>,fn;fmerged)
+</code></pre><p>（基于块的排序索引算法，该算法将每个块的倒排索引文件存入文件f1,…,fn中，最后合并成fmerged<br>如果该算法应用最后一步产生了10个块，那么接下来便会将10个块索引同时合并成一个索引文件。）</p>
+<p>合并时，同时打开所有块对应的文件，内存中维护了为10个块准备的读缓冲区和一个为最终合并索引准备的写缓冲区。每次迭代中，利用优先级队列（如堆结构或类似的数据结构）选择最小的未处理的词项ID进行处理。如下图所示（图片引自深入搜索引擎—海里信息的压缩、索引和查询，梁斌译），分块索引，分块排序，最终全部合并（说实话，跟MapReduce还是有些类似的）：</p>
+<p><img src="../images/26/26.1.gif" alt=""></p>
+<p>读入该词项的倒排记录表并合并，合并结果写回磁盘中。需要时，再次从文件中读入数据到每个读缓冲区。</p>
+<p>BSBI算法主要的时间消耗在排序上，选择什么排序方法呢，简单的快速排序足矣，其时间复杂度为O（N*logN），其中N是所需要排序的项（词项ID-文档ID对）的数目的上界。</p>
+<p>SPIMI算法，内存式单遍扫描索引算法</p>
+<p>与上述BSBI算法不同的是：SPIMI使用词项而不是其ID，它将每个块的词典写入磁盘，对于写一块则重新采用新的词典，只要硬盘空间足够大，它能索引任何大小的文档集。</p>
+<p>倒排索引 = 词典（关键词或词项+词项频率）+倒排记录表。建倒排索引的步骤如下：</p>
+<ul>
+<li>从头开始扫描每一个词项-文档ID（信息）对，遇一词，构建索引；</li>
+<li>继续扫描，若遇一新词，则再建一新索引块（加入词典，通过Hash表实现，同时，建一新的倒排记录表）；若遇一旧词，则找到其倒排记录表的位置，添加其后</li>
+<li>在内存内基于分块完成排序，后合并分块；</li>
+<li>写入磁盘。</li>
+</ul>
+<p>其伪码如下：</p>
+<pre><code>SPIMI-Invert(Token_stream)
+output.<span class="built_in">file</span>=NEWFILE()
+dictionary = NEWHASH()
+<span class="keyword">while</span> (free memory available)
+    <span class="built_in">do</span> <span class="keyword">token</span> &lt;-next(token_stream)<span class="comment"> //逐一处理每个词项-文档ID对</span>
+        <span class="keyword">if</span> term(<span class="keyword">token</span>) !(- dictionary
+           <span class="comment">/*如果词项是第一次出现，那么加入hash词典，同时，建立一个新的倒排索引表*/</span>
+           <span class="keyword">then</span> postings_list = AddToDictionary(dictionary,term(<span class="keyword">token</span>))
+        <span class="comment">/*如果不是第一次出现，那么直接返回其倒排记录表，在下面添加其后*/</span>
+        <span class="keyword">else</span> postings_list = GetPostingList(dictionary,term(<span class="keyword">token</span>))
+    <span class="keyword">if</span> full(postings_list)
+        <span class="keyword">then</span> postings_list =DoublePostingList(dictionary,term(<span class="keyword">token</span>))
+    <span class="comment">/*SPIMI与BSBI的区别就在于此，前者直接在倒排记录表中增加此项新纪录*/</span>
+    AddToPosTingsList (postings_list,docID(<span class="keyword">token</span>))
+sorted_terms &lt;- SortTerms(dictionary)
+WriteBlockToDisk(sorted_terms,dictionary,output_file)
+<span class="constant">return</span> output_file
+</code></pre><p><strong>SPIMI与BSBI的主要区别：</strong></p>
+<p>SPIMI当发现关键词是第一次出现时，会直接在倒排记录表中增加一项（与BSBI算法不同）。同时，与BSBI算法一开始就整理出所有的词项ID-文档ID，并对它们进行排序的做法不同（而这恰恰是BSBI的做法），这里的每个倒排记录表都是动态增长的（也就是说，倒排记录表的大小会不断调整），同时，扫描一遍就可以实现全体倒排记录表的收集。</p>
+<p><strong>SPIMI这样做有两点好处:</strong></p>
+<p>由于不需要排序操作，因此处理的速度更快，<br>由于保留了倒排记录表对词项的归属关系，因此能节省内存，词项的ID也不需要保存。这样，每次单独的SPIMI-Invert调用能够处理的块大小可以非常大，整个倒排索引的构建过程也可以非常高效。</p>
+<p>但不得不提的是，由于事先并不知道每个词项的倒排记录表大小，算法一开始只能分配一个较小的倒排记录表空间，每次当该空间放满的时候，就会申请加倍的空间，</p>
+<p>与此同时，自然而然便会浪费一部分空间（当然，此前因为不保存词项ID，倒也省下一点空间，总体而言，算作是抵销了）。</p>
+<p>不过，至少SPIMI所用的空间会比BSBI所用空间少。当内存耗尽后，包括词典和倒排记录表的块索引将被写到磁盘上，但在此之前，为使倒排记录表按照词典顺序来加快最后的合并操作，所以要对词项进行排序操作。</p>
+<p>小数据量与大数据量的区别</p>
+<ul>
+<li>在小数据量时，有足够的内存保证该创建过程可以一次完成；</li>
+<li>数据规模增大后，可以采用分组索引，然后再归并索 引的策略。该策略是，</li>
+</ul>
+<p>建立索引的模块根据当时运行系统所在的计算机的内存大小，将索引分为 k 组，使得每组运算所需内存都小于系统能够提供的最大使用内存的大小。<br>按照倒排索引的生成算法，生成 k 组倒排索引。<br>然后将这 k 组索引归并，即将相同索引词对应的数据合并到一起，就得到了以索引词为主键的最终的倒排文件索引，即反向索引。</p>
+<p>为了测试的方便，本文针对小数据量进行从正排文档到倒排索引文件的实现。而且针对大数量的K路归并算法或基于磁盘的外部排序算法本编程艺术系列第十章中已有详细阐述。</p>
+<h2 id="第二节、Hash表的构建与实现">第二节、Hash表的构建与实现</h2>
+<p>如下，给定如下图所示的正排文档，每一行的信息分别为（中间用##########隔开）：文档ID、订阅源（子频道）、 频道分类、 网站类ID（大频道）、时间、 md5、文档权值、关键词、作者等等。<br><img src="../images/26/26.2.gif" alt=""></p>
+<p>要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件（注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开）：<br><img src="../images/26/26.3.gif" alt=""></p>
+<p>我们知道：为网页建立全文索引是网页预处理的核心部分，包括分析网页和建立倒排文件。二者是顺序进行，先分析网页，后建立倒排文件（也称为反向索引），如图所示：</p>
+<p><img src="../images/26/26.4.gif" alt=""></p>
+<p>正如上图粗略所示，我们知道倒排索引创建的过程如下：</p>
+<ul>
+<li>写爬虫抓取相关的网页，而后提取相关网页或文章中所有的关键词；</li>
+<li>分词，找出所有单词；</li>
+<li>过滤不相干的信息（如广告等信息）；</li>
+<li>构建倒排索引，关键词=&gt;（文章ID 出现次数 出现的位置）生成词典文件 频率文件 位置文件；</li>
+<li>压缩。</li>
+</ul>
+<p>因为已经给定了正排文档，接下来，咱们跳过一系列文本解析，分词等中间步骤，直接根据正排文档生成倒排索引文档（幸亏有yansha相助，不然，寸步难行，其微博地址为：<a href="http://weibo.com/yanshazi" target="_blank" rel="external">http://weibo.com/yanshazi</a>，欢迎关注他）。</p>
+<p>OK，闲不多说，咱们来一步一步实现吧。</p>
+<p>建相关的数据结构</p>
+<p>根据给定的正排文档，我们可以建立如下的两个结构体表示这些信息：文档ID、订阅源（子频道）、 频道分类、 网站类ID（大频道）、时间、 md5、文档权值、关键词、作者等等。如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> key_node</div><div class="line">{</div><div class="line">    <span class="keyword">char</span> *pkey;     <span class="comment">// 关键词实体</span></div><div class="line">    <span class="keyword">int</span> count;      <span class="comment">// 关键词出现次数</span></div><div class="line">    <span class="keyword">int</span> pos;        <span class="comment">// 关键词在hash表中位置</span></div><div class="line">    <span class="keyword">struct</span> doc_node *next;  <span class="comment">// 指向文档结点</span></div><div class="line">}KEYNODE, *key_list;</div><div class="line"></div><div class="line">key_list key_array[TABLE_SIZE];</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> doc_node</div><div class="line">{</div><div class="line">    <span class="keyword">char</span> id[WORD_MAX_LEN];  <span class="comment">//文档ID</span></div><div class="line">    <span class="keyword">int</span> classOne;           <span class="comment">//订阅源（子频道）</span></div><div class="line">    <span class="keyword">char</span> classTwo[WORD_MAX_LEN];    <span class="comment">//频道分类</span></div><div class="line">    <span class="keyword">int</span> classThree;                 <span class="comment">//网站类ID（大频道）</span></div><div class="line">    <span class="keyword">char</span> time[WORD_MAX_LEN];        <span class="comment">//时间</span></div><div class="line">    <span class="keyword">char</span> md5[WORD_MAX_LEN];         <span class="comment">//md5</span></div><div class="line">    <span class="keyword">int</span> weight;                     <span class="comment">//文档权值</span></div><div class="line">    <span class="keyword">struct</span> doc_node *next;</div><div class="line">}DOCNODE, *doc_list;</div></pre></td></tr></table></figure>
+
+<p>我们知道，通过第二十四章的暴雪的Hash表算法，可以比较好的避免相关冲突的问题。下面，我们再次引用其代码：<br>基于暴雪的Hash之上的改造算法</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//函数prepareCryptTable以下的函数生成一个长度为0x100的cryptTable[0x100]</span></div><div class="line"><span class="keyword">void</span> PrepareCryptTable()</div><div class="line">{</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed = <span class="number">0x00100001</span>, index1 = <span class="number">0</span>, index2 = <span class="number">0</span>, i;</div><div class="line"></div><div class="line">    <span class="keyword">for</span>( index1 = <span class="number">0</span>; index1 &lt;<span class="number">0x100</span>; index1++ )</div><div class="line">    {</div><div class="line">        <span class="keyword">for</span>( index2 = index1, i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++, index2 += <span class="number">0x100</span>)</div><div class="line">        {</div><div class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> temp1, temp2;</div><div class="line">            seed = (seed * <span class="number">125</span> + <span class="number">3</span>) % <span class="number">0x2AAAAB</span>;</div><div class="line">            temp1 = (seed & <span class="number">0xFFFF</span>)&lt;&lt;<span class="number">0x10</span>;</div><div class="line">            seed = (seed * <span class="number">125</span> + <span class="number">3</span>) % <span class="number">0x2AAAAB</span>;</div><div class="line">            temp2 = (seed & <span class="number">0xFFFF</span>);</div><div class="line">            cryptTable[index2] = ( temp1 | temp2 );</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//函数HashString以下函数计算lpszFileName 字符串的hash值，其中dwHashType 为hash的类型，</span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> HashString(<span class="keyword">const</span> <span class="keyword">char</span> *lpszkeyName, <span class="keyword">unsigned</span> <span class="keyword">long</span> dwHashType )</div><div class="line">{</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *key  = (<span class="keyword">unsigned</span> <span class="keyword">char</span> *)lpszkeyName;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed1 = <span class="number">0x7FED7FED</span>;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> seed2 = <span class="number">0xEEEEEEEE</span>;</div><div class="line">    <span class="keyword">int</span> ch;</div><div class="line"></div><div class="line">    <span class="keyword">while</span>( *key != <span class="number">0</span> )</div><div class="line">    {</div><div class="line">        ch = *key++;</div><div class="line">        seed1 = cryptTable[(dwHashType&lt;&lt;<span class="number">8</span>) + ch] ^ (seed1 + seed2);</div><div class="line">        seed2 = ch + seed1 + seed2 + (seed2&lt;&lt;<span class="number">5</span>) + <span class="number">3</span>;</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> seed1;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//按关键字查询，如果成功返回hash表中索引位置</span></div><div class="line">key_list SearchByString(<span class="keyword">const</span> <span class="keyword">char</span> *string_in)</div><div class="line">{</div><div class="line">    <span class="keyword">const</span> <span class="keyword">int</span> HASH_OFFSET = <span class="number">0</span>, HASH_C = <span class="number">1</span>, HASH_D = <span class="number">2</span>;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHash = HashString(string_in, HASH_OFFSET);</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashC = HashString(string_in, HASH_C);</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashD = HashString(string_in, HASH_D);</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashStart = nHash % TABLE_SIZE;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashPos = nHashStart;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (HashTable[nHashPos].bExists)</div><div class="line">    {</div><div class="line">        <span class="keyword">if</span> (HashATable[nHashPos] == (<span class="keyword">int</span>) nHashC && HashBTable[nHashPos] == (<span class="keyword">int</span>) nHashD)</div><div class="line">        {</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">            <span class="comment">//查询与插入不同，此处不需修改</span></div><div class="line">        }</div><div class="line">        <span class="keyword">else</span></div><div class="line">        {</div><div class="line">            nHashPos = (nHashPos + <span class="number">1</span>) % TABLE_SIZE;</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (nHashPos == nHashStart)</div><div class="line">        {</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        }</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">if</span>( key_array[nHashPos] && <span class="built_in">strlen</span>(key_array[nHashPos]-&gt;pkey))</div><div class="line">    {</div><div class="line">        <span class="keyword">return</span> key_array[nHashPos];</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">return</span> NULL;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//按索引查询，如果成功返回关键字（此函数在本章中没有被用到，可以忽略）</span></div><div class="line">key_list SearchByIndex(<span class="keyword">unsigned</span> <span class="keyword">int</span> nIndex)</div><div class="line">{</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashPos = nIndex;</div><div class="line">    <span class="keyword">if</span> (nIndex &lt; TABLE_SIZE)</div><div class="line">    {</div><div class="line">        <span class="keyword">if</span>(key_array[nHashPos] && <span class="built_in">strlen</span>(key_array[nHashPos]-&gt;pkey))</div><div class="line">        {</div><div class="line">            <span class="keyword">return</span> key_array[nHashPos];</div><div class="line">        }</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">return</span> NULL;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//插入关键字，如果成功返回hash值</span></div><div class="line"><span class="keyword">int</span> InsertString(<span class="keyword">const</span> <span class="keyword">char</span> *str)</div><div class="line">{</div><div class="line">    <span class="keyword">const</span> <span class="keyword">int</span> HASH_OFFSET = <span class="number">0</span>, HASH_A = <span class="number">1</span>, HASH_B = <span class="number">2</span>;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHash = HashString(str, HASH_OFFSET);</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashA = HashString(str, HASH_A);</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashB = HashString(str, HASH_B);</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashStart = nHash % TABLE_SIZE;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> nHashPos = nHashStart;</div><div class="line">    <span class="keyword">int</span> len;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (HashTable[nHashPos].bExists)</div><div class="line">    {</div><div class="line">        nHashPos = (nHashPos + <span class="number">1</span>) % TABLE_SIZE;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (nHashPos == nHashStart)</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    }</div><div class="line"></div><div class="line">    len = <span class="built_in">strlen</span>(str);</div><div class="line">    <span class="keyword">if</span> (!HashTable[nHashPos].bExists && (len &lt; WORD_MAX_LEN))</div><div class="line">    {</div><div class="line">        HashATable[nHashPos] = nHashA;</div><div class="line">        HashBTable[nHashPos] = nHashB;</div><div class="line"></div><div class="line">        key_array[nHashPos] = (KEYNODE *) <span class="built_in">malloc</span> (<span class="keyword">sizeof</span>(KEYNODE) * <span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span>(key_array[nHashPos] == NULL)</div><div class="line">        {</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"10000 EMS ERROR !!!!\n"</span>);</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        }</div><div class="line"></div><div class="line">        key_array[nHashPos]-&gt;pkey = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(len+<span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span>(key_array[nHashPos]-&gt;pkey == NULL)</div><div class="line">        {</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"10000 EMS ERROR !!!!\n"</span>);</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="built_in">memset</span>(key_array[nHashPos]-&gt;pkey, <span class="number">0</span>, len+<span class="number">1</span>);</div><div class="line">        <span class="built_in">strncpy</span>(key_array[nHashPos]-&gt;pkey, str, len);</div><div class="line">        *((key_array[nHashPos]-&gt;pkey)+len) = <span class="number">0</span>;</div><div class="line">        key_array[nHashPos]-&gt;pos = nHashPos;</div><div class="line">        key_array[nHashPos]-&gt;count = <span class="number">1</span>;</div><div class="line">        key_array[nHashPos]-&gt;next = NULL;</div><div class="line">        HashTable[nHashPos].bExists = <span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> nHashPos;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">if</span>(HashTable[nHashPos].bExists)</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"30000 in the hash table %s !!!\n"</span>, str);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="built_in">printf</span>(<span class="string">"90000 strkey error !!!\n"</span>);</div><div class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>有了这个Hash表，接下来，我们就可以把词插入Hash表进行存储了。</p>
+<h2 id="第三节、倒排索引文件的生成与实现">第三节、倒排索引文件的生成与实现</h2>
+<p>Hash表实现了（存于HashSearch.h中），还得编写一系列的函数，如下所示（所有代码还只是初步实现了功能，稍后在第四部分中将予以改进与优化）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//处理空白字符和空白行</span></div><div class="line"><span class="keyword">int</span> GetRealString(<span class="keyword">char</span> *pbuf)</div><div class="line">{</div><div class="line">    <span class="keyword">int</span> len = <span class="built_in">strlen</span>(pbuf) - <span class="number">1</span>;</div><div class="line">    <span class="keyword">while</span> (len &gt; <span class="number">0</span> && (pbuf[len] == (<span class="keyword">char</span>)<span class="number">0x0d</span> || pbuf[len] == (<span class="keyword">char</span>)<span class="number">0x0a</span> || pbuf[len] == <span class="string">' '</span> || pbuf[len] == <span class="string">'\t'</span>))</div><div class="line">    {</div><div class="line">        len--;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (len &lt; <span class="number">0</span>)</div><div class="line">    {</div><div class="line">        *pbuf = <span class="string">'\0'</span>;</div><div class="line">        <span class="keyword">return</span> len;</div><div class="line">    }</div><div class="line">    pbuf[len+<span class="number">1</span>] = <span class="string">'\0'</span>;</div><div class="line">    <span class="keyword">return</span> len + <span class="number">1</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//重新strcoll字符串比较函数</span></div><div class="line"><span class="keyword">int</span> strcoll(<span class="keyword">const</span> <span class="keyword">void</span> *s1, <span class="keyword">const</span> <span class="keyword">void</span> *s2)</div><div class="line">{</div><div class="line">    <span class="keyword">char</span> *c_s1 = (<span class="keyword">char</span> *)s1;</div><div class="line">    <span class="keyword">char</span> *c_s2 = (<span class="keyword">char</span> *)s2;</div><div class="line">    <span class="keyword">while</span> (*c_s1 == *c_s2++)</div><div class="line">    {</div><div class="line">        <span class="keyword">if</span> (*c_s1++ == <span class="string">'\0'</span>)</div><div class="line">        {</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        }</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">return</span> *c_s1 - *--c_s2;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//从行缓冲中得到各项信息，将其写入items数组</span></div><div class="line"><span class="keyword">void</span> GetItems(<span class="keyword">char</span> *&move, <span class="keyword">int</span> &count, <span class="keyword">int</span> &wordnum)</div><div class="line">{</div><div class="line">    <span class="keyword">char</span> *front = move;</div><div class="line">    <span class="keyword">bool</span> flag = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">int</span> len;</div><div class="line">    move = <span class="built_in">strstr</span>(move, <span class="string">"#####"</span>);</div><div class="line">    <span class="keyword">if</span> (*(move + <span class="number">5</span>) == <span class="string">'#'</span>)</div><div class="line">    {</div><div class="line">        flag = <span class="keyword">true</span>;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (move)</div><div class="line">    {</div><div class="line">        len = move - front;</div><div class="line">        <span class="built_in">strncpy</span>(items[count], front, len);</div><div class="line">    }</div><div class="line">    items[count][len] = <span class="string">'\0'</span>;</div><div class="line">    count++;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (flag)</div><div class="line">    {</div><div class="line">        move = move + <span class="number">10</span>;</div><div class="line">    } <span class="keyword">else</span></div><div class="line">    {</div><div class="line">        move = move + <span class="number">5</span>;</div><div class="line">    }</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//保存关键字相应的文档内容</span></div><div class="line">doc_list SaveItems()</div><div class="line">{</div><div class="line">    doc_list infolist = (doc_list) <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(DOCNODE));</div><div class="line">    strcpy_s(infolist-&gt;id, items[<span class="number">0</span>]);</div><div class="line">    infolist-&gt;classOne = atoi(items[<span class="number">1</span>]);</div><div class="line">    strcpy_s(infolist-&gt;classTwo, items[<span class="number">2</span>]);</div><div class="line">    infolist-&gt;classThree = atoi(items[<span class="number">3</span>]);</div><div class="line">    strcpy_s(infolist-&gt;time, items[<span class="number">4</span>]);</div><div class="line">    strcpy_s(infolist-&gt;md5, items[<span class="number">5</span>]);</div><div class="line">    infolist-&gt;weight = atoi(items[<span class="number">6</span>]);</div><div class="line">    <span class="keyword">return</span> infolist;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//得到目录下所有文件名</span></div><div class="line"><span class="keyword">int</span> GetFileName(<span class="keyword">char</span> filename[][FILENAME_MAX_LEN])</div><div class="line">{</div><div class="line">    _finddata_t file;</div><div class="line">    <span class="keyword">long</span> handle;</div><div class="line">    <span class="keyword">int</span> filenum = <span class="number">0</span>;</div><div class="line">    <span class="comment">//C:\Users\zhangxu\Desktop\CreateInvertedIndex\data</span></div><div class="line">    <span class="keyword">if</span> ((handle = _findfirst(<span class="string">"C:\\Users\\zhangxu\\Desktop\\CreateInvertedIndex\\data\\*.txt"</span>, &file)) == -<span class="number">1</span>)</div><div class="line">    {</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"Not Found\n"</span>);</div><div class="line">    }</div><div class="line">    <span class="keyword">else</span></div><div class="line">    {</div><div class="line">        <span class="keyword">do</span></div><div class="line">        {</div><div class="line">            strcpy_s(filename[filenum++], file.name);</div><div class="line">        } <span class="keyword">while</span> (!_findnext(handle, &file));</div><div class="line">    }</div><div class="line">    _findclose(handle);</div><div class="line">    <span class="keyword">return</span> filenum;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//以读方式打开文件，如果成功返回文件指针</span></div><div class="line">FILE* OpenReadFile(<span class="keyword">int</span> index, <span class="keyword">char</span> filename[][FILENAME_MAX_LEN])</div><div class="line">{</div><div class="line">    <span class="keyword">char</span> *abspath;</div><div class="line">    <span class="keyword">char</span> dirpath[] = {<span class="string">"data\\"</span>};</div><div class="line">    abspath = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(ABSPATH_MAX_LEN);</div><div class="line">    strcpy_s(abspath, ABSPATH_MAX_LEN, dirpath);</div><div class="line">    strcat_s(abspath, FILENAME_MAX_LEN, filename[index]);</div><div class="line"></div><div class="line">    FILE *fp = fopen (abspath, <span class="string">"r"</span>);</div><div class="line">    <span class="keyword">if</span> (fp == NULL)</div><div class="line">    {</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"open read file error!\n"</span>);</div><div class="line">        <span class="keyword">return</span> NULL;</div><div class="line">    }</div><div class="line">    <span class="keyword">else</span></div><div class="line">    {</div><div class="line">        <span class="keyword">return</span> fp;</div><div class="line">    }</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//以写方式打开文件，如果成功返回文件指针</span></div><div class="line">FILE* OpenWriteFile(<span class="keyword">const</span> <span class="keyword">char</span> *in_file_path)</div><div class="line">{</div><div class="line">    <span class="keyword">if</span> (in_file_path == NULL)</div><div class="line">    {</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"output file path error!\n"</span>);</div><div class="line">        <span class="keyword">return</span> NULL;</div><div class="line">    }</div><div class="line"></div><div class="line">    FILE *fp = fopen(in_file_path, <span class="string">"w+"</span>);</div><div class="line">    <span class="keyword">if</span> (fp == NULL)</div><div class="line">    {</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"open write file error!\n"</span>);</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> fp;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>最后，主函数编写如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> main()</div><div class="line">{</div><div class="line">    key_list keylist;</div><div class="line">    <span class="keyword">char</span> *pbuf, *move;</div><div class="line">    <span class="keyword">int</span> filenum = GetFileName(filename);</div><div class="line">    FILE *fr;</div><div class="line">    pbuf = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(BUF_MAX_LEN);</div><div class="line">    <span class="built_in">memset</span>(pbuf, <span class="number">0</span>, BUF_MAX_LEN);</div><div class="line"></div><div class="line">    FILE *fw = OpenWriteFile(<span class="string">"index.txt"</span>);</div><div class="line">    <span class="keyword">if</span> (fw == NULL)</div><div class="line">    {</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    }</div><div class="line"></div><div class="line">    PrepareCryptTable();    <span class="comment">//初始化Hash表</span></div><div class="line"></div><div class="line">    <span class="keyword">int</span> wordnum = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; filenum; i++)</div><div class="line">    {</div><div class="line">        fr = OpenReadFile(i, filename);</div><div class="line">        <span class="keyword">if</span> (fr == NULL)</div><div class="line">        {</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="comment">// 每次读取一行处理</span></div><div class="line">        <span class="keyword">while</span> (fgets(pbuf, BUF_MAX_LEN, fr))</div><div class="line">        {</div><div class="line">            <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">            move = pbuf;</div><div class="line">            <span class="keyword">if</span> (GetRealString(pbuf) &lt;= <span class="number">1</span>)</div><div class="line">                <span class="keyword">continue</span>;</div><div class="line"></div><div class="line">            <span class="keyword">while</span> (move != NULL)</div><div class="line">            {</div><div class="line">                <span class="comment">// 找到第一个非'#'的字符</span></div><div class="line">                <span class="keyword">while</span> (*move == <span class="string">'#'</span>)</div><div class="line">                    move++;</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(move, <span class="string">""</span>))</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line"></div><div class="line">                GetItems(move, count, wordnum);</div><div class="line">            }</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">7</span>; i &lt; count; i++)</div><div class="line">            {</div><div class="line">                <span class="comment">// 将关键字对应的文档内容加入文档结点链表中</span></div><div class="line">                <span class="keyword">if</span> (keylist = SearchByString(items[i]))     <span class="comment">//到hash表内查询</span></div><div class="line">                {</div><div class="line">                    doc_list infolist = SaveItems();</div><div class="line">                    infolist-&gt;next = keylist-&gt;next;</div><div class="line">                    keylist-&gt;count++;</div><div class="line">                    keylist-&gt;next = infolist;</div><div class="line">                }</div><div class="line">                <span class="keyword">else</span></div><div class="line">                {</div><div class="line">                    <span class="comment">// 如果关键字第一次出现，则将其加入hash表</span></div><div class="line">                    <span class="keyword">int</span> pos = InsertString(items[i]);       <span class="comment">//插入hash表</span></div><div class="line">                    keylist = key_array[pos];</div><div class="line">                    doc_list infolist = SaveItems();</div><div class="line">                    infolist-&gt;next = NULL;</div><div class="line">                    keylist-&gt;next = infolist;</div><div class="line">                    <span class="keyword">if</span> (pos != -<span class="number">1</span>)</div><div class="line">                    {</div><div class="line">                        strcpy_s(words[wordnum++], items[i]);</div><div class="line">                    }</div><div class="line">                }</div><div class="line">            }</div><div class="line">        }</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="comment">// 通过快排对关键字进行排序</span></div><div class="line">    qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</div><div class="line"></div><div class="line">    <span class="comment">// 遍历关键字数组，将关键字及其对应的文档内容写入文件中</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; WORD_MAX_NUM; i++)</div><div class="line">    {</div><div class="line">        keylist = SearchByString(words[i]);</div><div class="line">        <span class="keyword">if</span> (keylist != NULL)</div><div class="line">        {</div><div class="line">            <span class="built_in">fprintf</span>(fw, <span class="string">"%s %d\n"</span>, words[i], keylist-&gt;count);</div><div class="line">            doc_list infolist = keylist-&gt;next;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; keylist-&gt;count; j++)</div><div class="line">            {</div><div class="line">                <span class="comment">//文档ID，订阅源（子频道） 频道分类 网站类ID（大频道） 时间  md5，文档权值</span></div><div class="line">                <span class="built_in">fprintf</span>(fw, <span class="string">"%s %d %s %d %s %s %d\n"</span>, infolist-&gt;id, infolist-&gt;classOne,</div><div class="line">                    infolist-&gt;classTwo, infolist-&gt;classThree, infolist-&gt;time, infolist-&gt;md5, infolist-&gt;weight);</div><div class="line">                infolist = infolist-&gt;next;</div><div class="line">            }</div><div class="line">        }</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="built_in">free</span>(pbuf);</div><div class="line">    fclose(fr);</div><div class="line">    fclose(fw);</div><div class="line">    system(<span class="string">"pause"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>程序编译运行后，生成的倒排索引文件为index.txt，其与原来给定的正排文档对照如下：<br><img src="../images/26/26.5.gif" alt=""></p>
+<p>有没有发现关键词奥恰洛夫出现在的三篇文章是同一个日期1210的，貌似与本文开头指定的倒排索引格式要求不符？因为第二部分开头中，已明确说明：“注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开”。OK，有疑问是好事，代表你思考了，请直接转至下文第4部分。</p>
+<h2 id="第四节、程序需求功能的改进">第四节、程序需求功能的改进</h2>
+<h3 id="对相同日期与不同日期的处理">对相同日期与不同日期的处理</h3>
+<p>细心的读者可能还是会注意到：在第二部分开头中，要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件是下面这样子的，即是：<br><img src="../images/26/26.6.gif" alt=""></p>
+<p>也就是说，上面建索引的过程本该是如下的：<br><img src="../images/26/26.7.gif" alt=""></p>
+<p>与第一部分所述的SMIPI算法有什么区别？对的，就在于对在同一个日期的出现的关键词的处理。如果是遇一旧词，则找到其倒排记录表的位置：相同日期，添加到之前同一日期的记录之后（第一个记录的后面记下同一日期的记录数目）；不同日期，另起一行新增记录。</p>
+<ul>
+<li>相同（单个）日期，根据文档权值排序</li>
+<li>不同日期，根据时间排序</li>
+</ul>
+<p>代码主要修改如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//function: 对链表进行冒泡排序</span></div><div class="line"><span class="keyword">void</span> ListSort(key_list keylist)</div><div class="line">{</div><div class="line">    doc_list p = keylist-&gt;next;</div><div class="line">    doc_list final = NULL;</div><div class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>)</div><div class="line">    {</div><div class="line">        <span class="keyword">bool</span> isfinish = <span class="keyword">true</span>;</div><div class="line">        <span class="keyword">while</span> (p-&gt;next != final) {</div><div class="line">            <span class="keyword">if</span> (<span class="built_in">strcmp</span>(p-&gt;time, p-&gt;next-&gt;time) &lt; <span class="number">0</span>)</div><div class="line">            {</div><div class="line">                SwapDocNode(p);</div><div class="line">                isfinish = <span class="keyword">false</span>;</div><div class="line">            }</div><div class="line">            p = p-&gt;next;</div><div class="line">        }</div><div class="line">        final = p;</div><div class="line">        p = keylist-&gt;next;</div><div class="line">        <span class="keyword">if</span> (isfinish || p-&gt;next == final) {</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">int</span> main()</div><div class="line">{</div><div class="line">    key_list keylist;</div><div class="line">    <span class="keyword">char</span> *pbuf, *move;</div><div class="line">    <span class="keyword">int</span> filenum = GetFileName(filename);</div><div class="line">    FILE *frp;</div><div class="line">    pbuf = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(BUF_MAX_LEN);</div><div class="line">    <span class="built_in">memset</span>(pbuf, <span class="number">0</span>, BUF_MAX_LEN);</div><div class="line"></div><div class="line">    FILE *fwp = OpenWriteFile(<span class="string">"index.txt"</span>);</div><div class="line">    <span class="keyword">if</span> (fwp == NULL) {</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    }</div><div class="line"></div><div class="line">    PrepareCryptTable();</div><div class="line"></div><div class="line">    <span class="keyword">int</span> wordnum = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; filenum; i++)</div><div class="line">    {</div><div class="line">        frp = OpenReadFile(i, filename);</div><div class="line">        <span class="keyword">if</span> (frp == NULL) {</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="comment">// 每次读取一行处理</span></div><div class="line">        <span class="keyword">while</span> (fgets(pbuf, BUF_MAX_LEN, frp))</div><div class="line">        {</div><div class="line">            <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">            move = pbuf;</div><div class="line">            <span class="keyword">if</span> (GetRealString(pbuf) &lt;= <span class="number">1</span>)</div><div class="line">                <span class="keyword">continue</span>;</div><div class="line"></div><div class="line">            <span class="keyword">while</span> (move != NULL)</div><div class="line">            {</div><div class="line">                <span class="comment">// 找到第一个非'#'的字符</span></div><div class="line">                <span class="keyword">while</span> (*move == <span class="string">'#'</span>)</div><div class="line">                    move++;</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(move, <span class="string">""</span>))</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line"></div><div class="line">                GetItems(move, count, wordnum);</div><div class="line">            }</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">7</span>; i &lt; count; i++) {</div><div class="line">                <span class="comment">// 将关键字对应的文档内容加入文档结点链表中</span></div><div class="line">                <span class="comment">// 如果关键字第一次出现，则将其加入hash表</span></div><div class="line">                <span class="keyword">if</span> (keylist = SearchByString(items[i])) {</div><div class="line">                    doc_list infolist = SaveItems();</div><div class="line">                    infolist-&gt;next = keylist-&gt;next;</div><div class="line">                    keylist-&gt;count++;</div><div class="line">                    keylist-&gt;next = infolist;</div><div class="line">                } <span class="keyword">else</span> {</div><div class="line">                    <span class="keyword">int</span> pos = InsertString(items[i]);</div><div class="line">                    keylist = key_array[pos];</div><div class="line">                    doc_list infolist = SaveItems();</div><div class="line">                    infolist-&gt;next = NULL;</div><div class="line">                    keylist-&gt;next = infolist;</div><div class="line">                    <span class="keyword">if</span> (pos != -<span class="number">1</span>) {</div><div class="line">                        strcpy_s(words[wordnum++], items[i]);</div><div class="line">                    }</div><div class="line">                }</div><div class="line">            }</div><div class="line">        }</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="comment">// 通过快排对关键字进行排序</span></div><div class="line">    qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</div><div class="line"></div><div class="line">    <span class="comment">// 遍历关键字数组，将关键字及其对应的文档内容写入文件中</span></div><div class="line">    <span class="keyword">int</span> rownum = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; WORD_MAX_NUM; i++) {</div><div class="line">        keylist = SearchByString(words[i]);</div><div class="line">        <span class="keyword">if</span> (keylist != NULL) {</div><div class="line">            doc_list infolist = keylist-&gt;next;</div><div class="line"></div><div class="line">            <span class="keyword">char</span> date[<span class="number">9</span>];</div><div class="line"></div><div class="line">            <span class="comment">// 截取年月日</span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; keylist-&gt;count; j++)</div><div class="line">            {</div><div class="line">                strncpy_s(date, infolist-&gt;time, <span class="number">8</span>);</div><div class="line">                date[<span class="number">8</span>] = <span class="string">'\0'</span>;</div><div class="line">                strncpy_s(infolist-&gt;time, date, <span class="number">9</span>);</div><div class="line">                infolist = infolist-&gt;next;</div><div class="line">            }</div><div class="line"></div><div class="line">            <span class="comment">// 对链表根据时间进行排序</span></div><div class="line">            ListSort(keylist);</div><div class="line"></div><div class="line">            infolist = keylist-&gt;next;</div><div class="line">            <span class="keyword">int</span> *count = <span class="keyword">new</span> <span class="keyword">int</span>[WORD_MAX_NUM];</div><div class="line">            <span class="built_in">memset</span>(count, <span class="number">0</span>, WORD_MAX_NUM);</div><div class="line">            strcpy_s(date, infolist-&gt;time);</div><div class="line">            <span class="keyword">int</span> num = <span class="number">0</span>;</div><div class="line">            <span class="comment">// 得到单个日期的文档数目</span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; keylist-&gt;count; j++)</div><div class="line">            {</div><div class="line">                <span class="keyword">if</span> (<span class="built_in">strcmp</span>(date, infolist-&gt;time) == <span class="number">0</span>) {</div><div class="line">                    count[num]++;</div><div class="line">                } <span class="keyword">else</span> {</div><div class="line">                    count[++num]++;</div><div class="line">                }</div><div class="line">                strcpy_s(date, infolist-&gt;time);</div><div class="line">                infolist = infolist-&gt;next;</div><div class="line">            }</div><div class="line">            <span class="built_in">fprintf</span>(fwp, <span class="string">"%s %d %d\n"</span>, words[i], num + <span class="number">1</span>, rownum);</div><div class="line">            WriteFile(keylist, num, fwp, count);</div><div class="line">            rownum++;</div><div class="line">        }</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="built_in">free</span>(pbuf);</div><div class="line"><span class="comment">//  fclose(frp);</span></div><div class="line">    fclose(fwp);</div><div class="line">    system(<span class="string">"pause"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>修改后编译运行，生成的index.txt文件如下：<br><img src="../images/26/26.8.gif" alt=""></p>
+<h3 id="为关键词添上编码">为关键词添上编码</h3>
+<p>如上图所示，已经满足需求了。但可以再在每个关键词的背后添加一个计数表示索引到了第多少个关键词：<br><img src="../images/26/26.9.gif" alt=""></p>
+<h2 id="第五节、算法的二次改进">第五节、算法的二次改进</h2>
+<h3 id="省去二次Hash">省去二次Hash</h3>
+<p>针对本文评论下读者的留言，做了下思考，自觉可以省去二次hash：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">7</span>; i &lt; count; i++)</div><div class="line">        {</div><div class="line">            <span class="comment">// 将关键字对应的文档内容加入文档结点链表中</span></div><div class="line">            <span class="comment">//也就是说当查询到hash表中没有某个关键词之,后便会插入</span></div><div class="line">            <span class="comment">//而查询的时候，search会调用hashstring，得到了nHashC ，nHashD</span></div><div class="line">            <span class="comment">//插入的时候又调用了一次hashstring，得到了nHashA，nHashB</span></div><div class="line">            <span class="comment">//而如果查询的时候，是针对同一个关键词查询的，所以也就是说nHashC&nHashD，与nHashA&nHashB是相同的，无需二次hash</span></div><div class="line">            <span class="comment">//所以，若要改进，改的也就是下面这个if~else语句里头。July，2011.12.30。</span></div><div class="line">            <span class="keyword">if</span> (keylist = SearchByString(items[i]))     <span class="comment">//到hash表内查询</span></div><div class="line">            {</div><div class="line">                doc_list infolist = SaveItems();</div><div class="line">                infolist-&gt;next = keylist-&gt;next;</div><div class="line">                keylist-&gt;count++;</div><div class="line">                keylist-&gt;next = infolist;</div><div class="line">            }</div><div class="line">            <span class="keyword">else</span></div><div class="line">            {</div><div class="line">                <span class="comment">// 如果关键字第一次出现，则将其加入hash表</span></div><div class="line">                <span class="keyword">int</span> pos = InsertString(items[i]);       <span class="comment">//插入hash表</span></div><div class="line">                keylist = key_array[pos];</div><div class="line">                doc_list infolist = SaveItems();</div><div class="line">                infolist-&gt;next = NULL;</div><div class="line">                keylist-&gt;next = infolist;</div><div class="line">                <span class="keyword">if</span> (pos != -<span class="number">1</span>)</div><div class="line">                {</div><div class="line">                    strcpy_s(words[wordnum++], items[i]);</div><div class="line">                }</div><div class="line">            }</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div><div class="line"><span class="comment">// 通过快排对关键字进行排序</span></div><div class="line">qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</div></pre></td></tr></table></figure>
+
+<h3 id="除去排序，针对不同日期的记录直接插入">除去排序，针对不同日期的记录直接插入</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//对链表进行冒泡排序。这里可以改成快速排序：等到统计完所有有关这个关键词的文章之后，才能对他集体快排。</span></div><div class="line"><span class="comment">//但其实完全可以用插入排序，不同日期的，根据时间的先后找到插入位置进行插入：</span></div><div class="line"><span class="comment">//假如说已有三条不同日期的记录 A B C</span></div><div class="line"><span class="comment">//来了D后，发现D在C之前，B之后，那么就必须为它找到B C之间的插入位置，</span></div><div class="line"><span class="comment">//A B D C。July、2011.12.31。</span></div><div class="line"><span class="keyword">void</span> ListSort(key_list keylist)</div><div class="line">{</div><div class="line">    doc_list p = keylist-&gt;next;</div><div class="line">    doc_list final = NULL;</div><div class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>)</div><div class="line">    {</div><div class="line">        <span class="keyword">bool</span> isfinish = <span class="keyword">true</span>;</div><div class="line">        <span class="keyword">while</span> (p-&gt;next != final) {</div><div class="line">            <span class="keyword">if</span> (<span class="built_in">strcmp</span>(p-&gt;time, p-&gt;next-&gt;time) &lt; <span class="number">0</span>) <span class="comment">//不同日期的按最早到最晚排序</span></div><div class="line">            {</div><div class="line">                SwapDocNode(p);</div><div class="line">                isfinish = <span class="keyword">false</span>;</div><div class="line">            }</div><div class="line">            p = p-&gt;next;</div><div class="line">        }</div><div class="line">        final = p;</div><div class="line">        p = keylist-&gt;next;</div><div class="line">        <span class="keyword">if</span> (isfinish || p-&gt;next == final) {</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>综上两节免去冒泡排序和，省去二次hash和免去冒泡排序，修改后如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">7</span>; i &lt; count; i++) {</div><div class="line">            <span class="comment">// 将关键字对应的文档内容加入文档结点链表中</span></div><div class="line">            <span class="comment">// 如果关键字第一次出现，则将其加入hash表</span></div><div class="line">            InitHashValue(items[i], hashvalue);</div><div class="line">            <span class="keyword">if</span> (keynode = SearchByString(items[i], hashvalue)) {</div><div class="line">                doc_list infonode = SaveItems();</div><div class="line">                doc_list p = keynode-&gt;next;</div><div class="line">                <span class="comment">// 根据时间由早到晚排序</span></div><div class="line">                <span class="keyword">if</span> (<span class="built_in">strcmp</span>(infonode-&gt;time, p-&gt;time) &lt; <span class="number">0</span>) {</div><div class="line">                    <span class="comment">//考虑infonode插入keynode后的情况</span></div><div class="line">                    infonode-&gt;next = p;</div><div class="line">                    keynode-&gt;next = infonode;</div><div class="line">                } <span class="keyword">else</span> {</div><div class="line">                    <span class="comment">//考虑其他情况</span></div><div class="line">                    doc_list pre = p;</div><div class="line">                    p = p-&gt;next;</div><div class="line">                    <span class="keyword">while</span> (p)</div><div class="line">                    {</div><div class="line">                        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(infonode-&gt;time, p-&gt;time) &gt; <span class="number">0</span>) {</div><div class="line">                            p = p-&gt;next;</div><div class="line">                            pre = pre-&gt;next;</div><div class="line">                        } <span class="keyword">else</span> {</div><div class="line">                            <span class="keyword">break</span>;</div><div class="line">                        }</div><div class="line">                    }</div><div class="line">                    infonode-&gt;next = p;</div><div class="line">                    pre-&gt;next = infonode;</div><div class="line">                }</div><div class="line">                keynode-&gt;count++;</div><div class="line">            } <span class="keyword">else</span> {</div><div class="line">                <span class="keyword">int</span> pos = InsertString(items[i], hashvalue);</div><div class="line">                keynode = key_array[pos];</div><div class="line">                doc_list infolist = SaveItems();</div><div class="line">                infolist-&gt;next = NULL;</div><div class="line">                keynode-&gt;next = infolist;</div><div class="line">                <span class="keyword">if</span> (pos != -<span class="number">1</span>) {</div><div class="line">                    strcpy_s(words[wordnum++], items[i]);</div><div class="line">                }</div><div class="line">            }</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">// 通过快排对关键字进行排序</span></div><div class="line">qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);</div></pre></td></tr></table></figure>
+
+<p>修改后编译运行的效果图如下（用了另外一份更大的数据文件进行测试）：<br><img src="../images/26/26.10.gif" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/programing_art/ebook/zh/基于给定的文档生成倒排索引的编码与实践.html" data-title="Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+        </div>
+        <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+      </body>
+     </html>
+     

@@ -1,0 +1,542 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Android基础_介绍 | Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="1. 3G、4G
+- 第三代移动通信技术（3rd - Generation），速率一般在几百Kbps，较之前的2G和2.5G在数据传输速度上有很大提升。
+- 第四代移动通信技术（4th - Generation），速度可达到100Mbps以上，几乎可以满足人们的所有传输数据的需求。
+
+目前主流的3G">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/10/android_note/Android基础_介绍/" title="Android基础_介绍" itemprop="url">Android基础_介绍</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-09T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_3G、4G"><span class="toc-number">1.</span> <span class="toc-text">1. 3G、4G</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_Android是什么"><span class="toc-number">2.</span> <span class="toc-text">2. Android是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-_Android体系结构"><span class="toc-number">3.</span> <span class="toc-text">3. Android体系结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-_Dalvik_VM和JVM的区别"><span class="toc-number">4.</span> <span class="toc-text">4. Dalvik VM和JVM的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-_CPU处理器架构"><span class="toc-number">5.</span> <span class="toc-text">5. CPU处理器架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-_Android项目目录结构"><span class="toc-number">6.</span> <span class="toc-text">6. Android项目目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-_APK_安装过程"><span class="toc-number">7.</span> <span class="toc-text">7. APK 安装过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-_Android安全学"><span class="toc-number">8.</span> <span class="toc-text">8. Android安全学</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-_测试分类"><span class="toc-number">9.</span> <span class="toc-text">9. 测试分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-_Android单元测试"><span class="toc-number">10.</span> <span class="toc-text">10. Android单元测试</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="1-_3G、4G">1. 3G、4G</h2>
+<pre><code>-<span class="ruby"> 第三代移动通信技术（<span class="number">3</span>rd - <span class="constant">Generation</span>），速率一般在几百<span class="constant">Kbps</span>，较之前的<span class="number">2</span>G和<span class="number">2.5</span>G在数据传输速度上有很大提升。
+</span>-<span class="ruby"> 第四代移动通信技术（<span class="number">4</span>th - <span class="constant">Generation</span>），速度可达到<span class="number">100</span>Mbps以上，几乎可以满足人们的所有传输数据的需求。
+</span>
+目前主流的3G技术标准有三种：
+-<span class="ruby"> <span class="constant">WCDMA</span>：全球<span class="number">80</span>%以上的<span class="number">3</span>G网络都是采用此种制式。中国联通运营。<span class="number">186</span>
+</span>-<span class="ruby"> <span class="constant">CDMA2000</span>：目前日韩及北美使用较多。中国电信运营。 <span class="number">189</span>
+</span>-<span class="ruby"> <span class="constant">TD</span>-<span class="constant">SCDMA</span>：中国自主知识产权的<span class="number">3</span>G通信技术。中国移动运营。 <span class="number">188</span> 
+</span>
+目前主流的4G技术为LTE，但还没有被广泛应用：    
+GSM → GPRS → EDGE → WCDMA → HSDPA → HSDPA+ → LTE
+</code></pre><h2 id="2-_Android是什么">2. Android是什么</h2>
+<pre><code>1. 手机设备的软件栈内存，包括
+    -<span class="ruby"> 一个完整的操作系统
+</span>    -<span class="ruby"> 中间件
+</span>    -<span class="ruby"> 关键的应用程序
+</span>
+2. 底层是Linux内核
+    -<span class="ruby"> 安全管理
+</span>    -<span class="ruby"> 内存管理
+</span>    -<span class="ruby"> 进程管理
+</span>    -<span class="ruby"> 电源管理
+</span>    -<span class="ruby"> 硬件驱动</span>
+</code></pre><h2 id="3-_Android体系结构">3. Android体系结构</h2>
+<pre><code>-<span class="ruby"> <span class="constant">Applications</span><span class="symbol">:</span>桌面应用、打电话应用、浏览器等应用程序
+</span>-<span class="ruby"> <span class="constant">Applications</span> <span class="constant">Framework</span><span class="symbol">:ActivityManager</span>、 <span class="constant">WindowManager</span>、<span class="constant">ContentProvider</span>、<span class="constant">ResourceManager</span>等     
+</span>-<span class="ruby"> <span class="constant">Libraries</span><span class="symbol">:</span> <span class="constant">SQLite</span>库、<span class="constant">SurfaceManager</span>、<span class="constant">WebKit</span>、<span class="constant">OppenGL</span>等。
+</span>    -<span class="ruby"> <span class="constant">Android</span>运行时
+</span>        -<span class="ruby"> <span class="constant">Core</span> <span class="constant">Libraries</span>
+</span>        -<span class="ruby"> <span class="constant">Dalvik</span> <span class="constant">Virtual</span> <span class="constant">Machine</span>
+</span>-<span class="ruby"> <span class="constant">Linux</span> <span class="constant">Kernel</span><span class="symbol">:</span> 硬件驱动、电源管理等</span>
+</code></pre><h2 id="4-_Dalvik_VM和JVM的区别">4. Dalvik VM和JVM的区别</h2>
+<pre><code>1. 编译后文件的格式： 
+    -<span class="ruby"> <span class="constant">JVM</span><span class="symbol">:</span> .java-&gt;.<span class="keyword">class</span>-&gt;.jar
+</span>    -<span class="ruby"> <span class="constant">Dalvik</span><span class="symbol">:</span> .java-&gt;.<span class="keyword">class</span>-&gt;.dex-&gt;.odex
+</span>2. 基于的架构不同
+    -<span class="ruby"> <span class="constant">JVM</span>基于栈的架构(栈内存)
+</span>    -<span class="ruby"> <span class="constant">Dalvik</span>基于寄存器的架构(<span class="constant">CPU</span>)，执行效率比<span class="constant">JVM</span>要高
+</span>3. Dalvik专门针对移动平台进行优化     
+    JVM的jar包中会有很多class文件，每个class文件中都含有头信息、常量池、字段、方法等，而apk中只有一个dex，它里面包括了所有头信息、常量池、方法等。这样读取一个文件要比读取多个文件去找块。  
+</code></pre><h2 id="5-_CPU处理器架构">5. CPU处理器架构</h2>
+<pre><code>1. x86
+    -<span class="ruby"> intel
+</span>    -<span class="ruby"> <span class="constant">AMD</span>
+</span>2. ARM
+    -<span class="ruby"> 摩托罗拉
+</span>    -<span class="ruby"> 三星</span>
+</code></pre><h2 id="6-_Android项目目录结构">6. Android项目目录结构</h2>
+<pre><code>1. src：源代码
+2. gen：系统自动生成的文件，R.java 中记录了项目中各种资源ID
+3. res：系统资源，所有文件都会在R文件生成资源ID
+    -<span class="ruby"> drawable：图片
+</span>    -<span class="ruby"> layout：界面布局
+</span>    -<span class="ruby"> values：数据
+</span>    -<span class="ruby"> anim：定义动画的<span class="constant">XML</span>
+</span>    -<span class="ruby"> raw：原生文件
+</span>4. assets：资源路径，不会在R文件注册
+5. project.properties：供Eclipse使用，读取该项目使用Android版本号。早期版本名为default.properties
+6. AndroidManifest.xml：清单文件，在软件安装的时候被读取      
+    Android中的四大组件（Activity、ContentProvider、BroadcastReceiver、Service）都需要在该文件中注册程序所需的权限也需要在此文件中声明，例如：电话、短信、互联网、访问SD卡
+7. bin：二进制文件，包括class、资源文件、dex、apk等
+8. proguard.cfg：用来混淆代码的配置文件，防止别人反编译
+</code></pre><h2 id="7-_APK_安装过程">7. APK 安装过程</h2>
+<pre><code><span class="bullet">1. </span>Eclipse将.java源文件编译成.class
+<span class="bullet">2. </span>使用dx工具将所有.class文件转换为.dex文件
+<span class="bullet">3. </span>再将.dex文件和所有资源打包并且签名成.apk文件
+<span class="bullet">4. </span>将.apk文件安装到虚拟机完成程序安装
+<span class="bullet">5. </span>启动程序 – 开启进程 – 开启主线程
+<span class="bullet">6. </span>创建Activity对象 – 执行OnCreate()方法
+<span class="bullet">7. </span>按照main.xml文件初始化界面
+
+简单的来说软件的安装都是两个过程
+<span class="bullet">- </span>拷贝apk中得一些文件到系统的某个目录，1./data/app/目录下， 2.创建一个文件夹 /data/data/com.test.helloworld/来保存数据
+<span class="bullet">- </span>在系统的注册表里面配置一些信息.  data/system/packages.xml
+</code></pre><h2 id="8-_Android安全学">8. Android安全学</h2>
+<pre><code><span class="variable">Android</span>安全学中的一个重要的设计点是在默认情况下应用程序没有权限执行对其它应用程序、操作系统或用户有害的操作。这些操作包括读/写用户的隐私数据（例如联系方式或e-mail），读/写其它应用程序的文件，执行网络访问，保持设备活动，等等。 所以牵扯到付费或者可能与用户隐私相关的操作都要申请权限.
+</code></pre><h2 id="9-_测试分类">9. 测试分类</h2>
+<pre><code>单元测试<span class="function"><span class="params">(Unit test)</span> -&gt;</span> 功能测试<span class="function"><span class="params">( Function test)</span> -&gt;</span>集成测试(Intergation test)
+</code></pre><h2 id="10-_Android单元测试">10. Android单元测试</h2>
+<pre><code>-<span class="ruby"> <span class="constant">AndroidManifest</span>.xml中进行配置,导入android的junit环境
+</span>-<span class="ruby"> 编写测试类继承<span class="constant">Android</span>的测试父类,<span class="constant">AndroidTestCase</span>这个类( <span class="constant">AndroidTestCase</span>是为了去模拟一个手机的运行环境， 这个类中有一个getContext方法能获取到当前测试类的应用上下文对象，所以这个方法必须要等到测试框架初始化完成后才可以去调用)
+</span>-<span class="ruby"> 测试的方法名要求以小写的test开头,如不以test开头只能单独点这个方法运行,整体全部运行时没有这个方法，所有的测试方法都要抛出异常，要把异常抛给测试框架不能自己去捕获。
+</span>
+注意:测试得代码也是只能在手机上跑,它是在手机上测试完之后又将信息发送到了eclipse中
+</code></pre><hr>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/学习日志/">学习日志</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android基础/">Android基础</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/2015/01/10/android_note/Android基础_介绍/" data-title="Android基础_介绍 | Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/01/11/other/如何参与一个GitHub开源项目/" title="如何参与一个GitHub开源项目">
+  <strong>上一篇：</strong><br/>
+  <span>
+  如何参与一个GitHub开源项目</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/01/09/android_note/Android动画/"  title="Android动画">
+ <strong>下一篇：</strong><br/> 
+ <span>Android动画
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_3G、4G"><span class="toc-number">1.</span> <span class="toc-text">1. 3G、4G</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_Android是什么"><span class="toc-number">2.</span> <span class="toc-text">2. Android是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-_Android体系结构"><span class="toc-number">3.</span> <span class="toc-text">3. Android体系结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-_Dalvik_VM和JVM的区别"><span class="toc-number">4.</span> <span class="toc-text">4. Dalvik VM和JVM的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-_CPU处理器架构"><span class="toc-number">5.</span> <span class="toc-text">5. CPU处理器架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-_Android项目目录结构"><span class="toc-number">6.</span> <span class="toc-text">6. Android项目目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-_APK_安装过程"><span class="toc-number">7.</span> <span class="toc-text">7. APK 安装过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-_Android安全学"><span class="toc-number">8.</span> <span class="toc-text">8. Android安全学</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-_测试分类"><span class="toc-number">9.</span> <span class="toc-text">9. 测试分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-_Android单元测试"><span class="toc-number">10.</span> <span class="toc-text">10. Android单元测试</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5288126184&verifier=4988e869&dpc=1"></iframe>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>9</sup></a></li>
+		
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/DailyEpitaph/" title="DailyEpitaph">DailyEpitaph<sup>9</sup></a></li>
+		
+			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>4</sup></a></li>
+		
+			<li><a href="/tags/Github/" title="Github">Github<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ViewGroup/" title="ViewGroup">ViewGroup<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Android基础/" style="font-size: 15.00px;">Android基础</a><a href="/tags/DailyEpitaph/" style="font-size: 20.00px;">DailyEpitaph</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Hexo/" style="font-size: 10.00px;">Hexo</a><a href="/tags/ViewGroup/" style="font-size: 10.00px;">ViewGroup</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+         
+           <li>
+             
+             	<a href="http://user.qzone.qq.com/378675427 " target="_blank" title="Qiao的QQ空间">Qiao&#39;s QQ</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://hexo.io " target="_blank" title="Hexo官方网站">Hexo</a>
+             
+           </li>
+         
+     </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+  </body>
+</html>

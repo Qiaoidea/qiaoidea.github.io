@@ -10,7 +10,7 @@
     <meta name="author" content="Qiaoidea">
     
     <meta name="description" content="1. AlphaAnimation
-1234567RelativeLayout rl_splash = (RelativeLayout) findViewById(R.id.rl_splash);//播放动画效果AlphaAnimation animation = new AlphaAnimatio">
+1234567RelativeLayout rl_splash = (RelativeLayout) findViewById(R.id.rl_splash);//播放动画效果AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);//设置Alpha动画的持续时间animation.setDuration(2000);//播放Alpha动画rl_splash.setAnimation(animation);">
     
     
     
@@ -97,6 +97,8 @@
 		
 		<h2 id="1-_AlphaAnimation">1. AlphaAnimation</h2>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">RelativeLayout rl_splash = (RelativeLayout) findViewById(R.id.rl_splash);</div><div class="line"><span class="comment">//播放动画效果</span></div><div class="line">AlphaAnimation animation = <span class="keyword">new</span> AlphaAnimation(<span class="number">1.0</span>f, <span class="number">0.0</span>f);</div><div class="line"><span class="comment">//设置Alpha动画的持续时间</span></div><div class="line">animation.setDuration(<span class="number">2000</span>);</div><div class="line"><span class="comment">//播放Alpha动画</span></div><div class="line">rl_splash.setAnimation(animation);</div></pre></td></tr></table></figure>
+
+<a id="more"></a>
 
 <h2 id="2-_RotateAnimation">2. RotateAnimation</h2>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//相对于自身的哪个位置旋转，这里是相对于自身的右下角</span></div><div class="line">RotateAnimation ra = <span class="keyword">new</span> RotateAnimation(<span class="number">0</span>, <span class="number">360</span>,  <span class="comment">//从哪旋转，旋转多少度</span></div><div class="line">        Animation.RELATIVE_TO_SELF, <span class="number">1.0</span>f, Animation.RELATIVE_TO_SELF,</div><div class="line">        <span class="number">1.0</span>f);</div><div class="line">ra.setDuration(<span class="number">800</span>);</div><div class="line">ra.setRepeatCount(Animation.INFINITE);</div><div class="line">ra.setRepeatMode(Animation.RESTART);</div><div class="line">iv_scan.startAnimation(ra);</div></pre></td></tr></table></figure>

@@ -9,7 +9,12 @@
     
     <meta name="author" content="Qiaoidea">
     
-    <meta name="description" content="深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。">
+    <meta name="description" content="深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。
+ViewGroup定义
+　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。　　其实ViewGroup也就是View的容器。通过ViewGroup.LayoutParams来指定子View的参数。
+　　ViewGroup作为一个容器，为了制定这个容器应有的标准所以为其指定了接口
+public abstract class ViewGroup extends View implements ViewParent, ViewManager  
+　　这两个接口这里不研究，如果涉及到的话会带一下。ViewGroup有小4000行代码，下面我们一个模块一个模块分析。">
     
     
     
@@ -95,13 +100,13 @@
 		</div>
 		
 		<p>　　　　深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。</p>
-<a id="more"></a>
-
 <h2 id="ViewGroup定义">ViewGroup定义</h2>
 <p>　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。<br>　　其实ViewGroup也就是View的容器。通过ViewGroup.LayoutParams来指定子View的参数。</p>
 <p>　　ViewGroup作为一个容器，为了制定这个容器应有的标准所以为其指定了接口</p>
 <pre><code><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewGroup</span> <span class="keyword">extends</span> <span class="title">View</span> <span class="keyword">implements</span> <span class="title">ViewParent</span>, <span class="title">ViewManager</span>  </span>
 </code></pre><p>　　这两个接口这里不研究，如果涉及到的话会带一下。ViewGroup有小4000行代码，下面我们一个模块一个模块分析。</p>
+<a id="more"></a>
+
 <h2 id="ViewGroup容器">ViewGroup容器</h2>
 <p>　　　ViewGroup是一个容器，其采用一个数组来存储这些子View：</p>
 <pre><code><span class="comment">// Child views of this ViewGroup    </span>

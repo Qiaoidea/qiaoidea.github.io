@@ -47,9 +47,9 @@
 					 
 						<li><a href="/">主页</a></li>
 					
-						<li><a href="/programing_art">编程艺术</a></li>
-					
 						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
 					
 						<li><a href="/archives">归档</a></li>
 					
@@ -57,10 +57,11 @@
 					
 					<li>
  					
-						<form class="search" action="http://zhannei.baidu.com/cse/search" target="_blank">
-							<label>Search</label>
-						<input name="s" type="hidden" value= null ><input type="text" name="q" size="30" placeholder="搜索"><br>
-						</form>
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:qiaoidea.github.io">
+					</form>
 					
 					</li>
 				</ul>
@@ -90,7 +91,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo"><span class="toc-number">1.</span> <span class="toc-text">Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-关于Hexo"><span class="toc-number">1.1.</span> <span class="toc-text">1.关于Hexo</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo"><span class="toc-number">1.</span> <span class="toc-text">Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-关于Hexo"><span class="toc-number">1.1.</span> <span class="toc-text">1.关于Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo你的博客"><span class="toc-number">1.1.1.</span> <span class="toc-text">hexo你的博客</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo系列教程"><span class="toc-number">1.1.2.</span> <span class="toc-text">hexo系列教程</span></a></li></ol></li></ol></li></ol>
 		
 		</div>
 		
@@ -105,6 +106,14 @@
 <p>A fast, simple &amp; powerful blog framework, powered by Node.js.</p>
 </blockquote>
 <p>类似于jekyll、Octopress、Wordpress，我们可以用hexo创建自己的博客，托管到github或Heroku上，绑定自己的域名，用markdown写文章。</p>
+<p>　　之前打算自己再走一遍流程的，后来发现有如此多文章做了详细讲解，这里就不再多做概述了，贴上我个人觉得不错的搭建指引。</p>
+<ul>
+<li><h4 id="hexo你的博客"><a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">hexo你的博客</a></h4>
+</li>
+<li><h4 id="hexo系列教程"><a href="http://zipperary.com/2013/05/28/hexo-guide-1/" target="_blank" rel="external">hexo系列教程</a></h4>
+<p>　　<strong>特此感谢！</strong></p>
+</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -136,10 +145,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/12/20/diary/2014.12.20/" title="2014.12.20">
+ <a href="/2015/01/08/android_note/Android安全退出应用程序/" title="Android安全退出应用程序">
   <strong>上一篇：</strong><br/>
   <span>
-  2014.12.20</span>
+  Android安全退出应用程序</span>
 </a>
 </div>
 
@@ -166,7 +175,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo"><span class="toc-number">1.</span> <span class="toc-text">Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-关于Hexo"><span class="toc-number">1.1.</span> <span class="toc-text">1.关于Hexo</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo"><span class="toc-number">1.</span> <span class="toc-text">Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-关于Hexo"><span class="toc-number">1.1.</span> <span class="toc-text">1.关于Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo你的博客"><span class="toc-number">1.1.1.</span> <span class="toc-text">hexo你的博客</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo系列教程"><span class="toc-number">1.1.2.</span> <span class="toc-text">hexo系列教程</span></a></li></ol></li></ol></li></ol>
  
   </div>
 
@@ -185,7 +194,9 @@
 	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>9</sup></a></li>
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>3</sup></a></li>
+		
+			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>1</sup></a></li>
 		
 			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>6</sup></a></li>
 		
@@ -198,15 +209,17 @@
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/DailyEpitaph/" title="DailyEpitaph">DailyEpitaph<sup>9</sup></a></li>
-		
 			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>4</sup></a></li>
+		
+			<li><a href="/tags/Markdown语法/" title="Markdown语法">Markdown语法<sup>3</sup></a></li>
 		
 			<li><a href="/tags/Github/" title="Github">Github<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
 		
 			<li><a href="/tags/ViewGroup/" title="ViewGroup">ViewGroup<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DailyEpitaph/" title="DailyEpitaph">DailyEpitaph<sup>1</sup></a></li>
 		
 		</ul>
 </div>
@@ -216,7 +229,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Android基础/" style="font-size: 15.00px;">Android基础</a><a href="/tags/DailyEpitaph/" style="font-size: 20.00px;">DailyEpitaph</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Hexo/" style="font-size: 10.00px;">Hexo</a><a href="/tags/ViewGroup/" style="font-size: 10.00px;">ViewGroup</a>
+       <a href="/tags/Android基础/" style="font-size: 20.00px;">Android基础</a><a href="/tags/DailyEpitaph/" style="font-size: 10.00px;">DailyEpitaph</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Hexo/" style="font-size: 10.00px;">Hexo</a><a href="/tags/Markdown语法/" style="font-size: 15.00px;">Markdown语法</a><a href="/tags/ViewGroup/" style="font-size: 10.00px;">ViewGroup</a>
     </div>
   </div>
 
@@ -224,6 +237,12 @@
   <div class="linkslist">
   <p class="asidetitle">友情链接</p>
     <ul>
+         
+           <li>
+             
+             	<a href="http://blog.csdn.net/qiaoidea" target="_blank" title="Qiao&#39;s CSDN">Qiao&#39;s CSDN</a>
+             
+           </li>
          
            <li>
              

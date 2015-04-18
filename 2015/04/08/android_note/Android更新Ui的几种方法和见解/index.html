@@ -1,0 +1,529 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Android更新Ui的几种方法和见解 | Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="《代码里的世界》
+
+用文字札记描绘自己 android学习之路
+　　转载请保留出处 by Qiao http://blog.csdn.net/qiaoidea/article/details/45115047">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:qiaoidea.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/08/android_note/Android更新Ui的几种方法和见解/" title="Android更新Ui的几种方法和见解" itemprop="url">Android更新Ui的几种方法和见解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-07T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 8 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#《代码里的世界》"><span class="toc-number">1.</span> <span class="toc-text">《代码里的世界》</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-_简述"><span class="toc-number">1.1.</span> <span class="toc-text">1. 简述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-_方案"><span class="toc-number">1.2.</span> <span class="toc-text">2. 方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-_实践"><span class="toc-number">1.3.</span> <span class="toc-text">3. 实践</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1_handler-senMessage()_+_handler-dispatchMessage()"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 handler.senMessage() + handler.dispatchMessage()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2_handler-post()"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 handler.post()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3_runOnUiThread()"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 runOnUiThread()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4_view-post()_"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 view.post()　</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="《代码里的世界》"><strong>《代码里的世界》</strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p>　　<em>转载请保留出处 by Qiao</em> <a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45115047</a></p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="1-_简述"><strong><em>1. 简述</em></strong></h3>
+<p>　　先贴一个我们刚做Android开发时候最容易遇到的一个错误异常 <strong>AndroidRuntimeException</strong> ：<em>“Only the original thread that created a view hierarchy can touch its views”</em><br>　　具体原因是当我们在对ui做出更改时，Android检查我们当前的操作线程是否为UI线程，若不是即报该异常。（详见 ViewRootImpl类的checkThread方法）。</p>
+<h3 id="2-_方案"><strong><em>2. 方案</em></strong></h3>
+<p>　　那么我们该如何更新Ui呢，这里简要使用和讲述的是Handler。先简述概念：Adroid在运行时会创建一个UiThread的主线程来负责控制UI界面的显示、更新和控件交互。其他线程则通过handler将更新逻辑等消息事件(Message) push到主线程的消息队列(MessageQueue)，最后由主线程有序地处理这些消息事件(handleMessage)，实现对界面的更新和控制。<br>　　本文主要讲述更新UI的方法和使用技巧，关于更新过程的原理内容请关注后边的 <strong><a href="http://#" target="_blank" rel="external">Android更新Ui进阶</a></strong>。<br>　　其中，常用的几种方法简单概括有：</p>
+<ul>
+<li>handler.sendMessage();</li>
+<li>handler.post();</li>
+<li>在activity中可以 runOnUiThread();</li>
+<li><p>在子view中可以  view.post()</p>
+<p>　　其实后边几种方法整个流程处理逻辑基本也是基于第一种，封装成消息事件对象发送至队列并被有序处理而已，只是android给我们封装好了方法。</p>
+<h3 id="3-_实践"><strong><em>3. 实践</em></strong></h3>
+<h4 id="3-1_handler-senMessage()_+_handler-dispatchMessage()">3.1 handler.senMessage() + handler.dispatchMessage()</h4>
+<p>　　  在activity中定义主线程的handler(子线程同样可以定义handler，当然 需要 消息泵looper来轮训），实现dispatchMessage方法处理message对象。该对象是在子线程处理逻辑完成之后，将内容封装成消息，通过handler.senMessage()发送该消息。<br>　　  示例代码：<br>a. 首先定义好更改ui的代码逻辑 handler和dispatchMessage方法</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">　　 <span class="javadoc">/**</span></div><div class="line"> * 通过message携带结果数据变更ui</div><div class="line"> * 先定义主线程handler和更新数据的方法</div><div class="line"> */</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UPDATE_TITLE = <span class="number">0</span>; <span class="comment">//更新标题的标志</span></div><div class="line"><span class="keyword">private</span> Handler mainHandler= <span class="keyword">new</span> Handler()</div><div class="line">{</div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span>(android.os.Message msg) {</div><div class="line">		<span class="keyword">if</span>(msg.what == UPDATE_TITLE){</div><div class="line">			String title = msg.getData().getString(<span class="string">"Result"</span>);</div><div class="line">			titleView.setText(title);</div><div class="line">		}<span class="keyword">else</span>{</div><div class="line">			<span class="comment">//其他消息</span></div><div class="line">		}</div><div class="line">	};</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>b. 需要处理数据的部分，比如某些耗时操作，放在子线程中执行，之后调用handler.senMessage() </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">new Thread(){</div><div class="line">			@Override</div><div class="line">			public void run() {</div><div class="line">				//你的处理逻辑,这里简单睡眠一秒</div><div class="line">				this.sleep(1000);</div><div class="line"></div><div class="line">				//通知更新UI</div><div class="line">				//Message msg = new Message();</div><div class="line">				//我们可以使用构造方法来创建Message，但出于节省内存资源的考量，我们应该使用Message.obtain()从消息池中获得空消息对象</div><div class="line">				Message msg = mainHandler.obtainMessage();</div><div class="line">				msg.what = UPDATE_TITLE;</div><div class="line">					Bundle bundle = new Bundle();//消息数据实体</div><div class="line">					bundle.putString(<span class="string">"Result"</span>, <span class="string">"sendMsg——Result"</span>);</div><div class="line">					msg.setData(bundle);</div><div class="line">					//mainHandler.sendMessage(msg);</div><div class="line">					//如果使用的是Message.obtain()我们可以直接</div><div class="line">					msg.sendToTarget();</div><div class="line">			}</div><div class="line">		}.start();</div></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>这里提下该消息对象Message</strong> （更多详见<a href="http://#" target="_blank" rel="external">Android更新Ui进阶</a>）</p>
+<p>  <em>可用于传数据的参数：</em></p>
+<ul>
+<li>int what;</li>
+<li>int arg1; </li>
+<li>int arg2; </li>
+<li>Object obj;</li>
+<li>Bundle data;</li>
+</ul>
+<p><em>用于回调的</em></p>
+<ul>
+<li>Runnable callback；</li>
+</ul>
+<hr>
+<p>　　 通常为了使代码逻辑看起来更清晰易于理解，我更倾向于通过直接传回调callback　来更新Ｕｉ（方案　２／３/４）。针对方案一，可以简单优化为<br>　　直接定义handler</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> Handler mainHandler= <span class="keyword">new</span> Handler();</div></pre></td></tr></table></figure>
+
+<p>　　发送消息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">new Thread(){</div><div class="line">			@Override</div><div class="line">			public void run() {</div><div class="line">				try {</div><div class="line">					//你的处理逻辑,这里简单睡眠一秒</div><div class="line">					this.sleep(1000);</div><div class="line">					</div><div class="line">					//利用obtain</div><div class="line">					msg = Message.obtain(mainHandler, new Runnable() {</div><div class="line">						</div><div class="line">						@Override</div><div class="line">						public void run() {</div><div class="line">							titleView.setText(<span class="string">"sendMsg——Result"</span>);</div><div class="line">						}</div><div class="line">					});</div><div class="line">					msg.sendToTarget();</div><div class="line">				} catch (InterruptedException e) {</div><div class="line">					e.printStackTrace();</div><div class="line">				}</div><div class="line">			}</div><div class="line">		}.start();</div></pre></td></tr></table></figure>
+
+<h4 id="3-2_handler-post()">3.2 handler.post()</h4>
+<p> 　　对于方案一的第二种方法，又可以简化为</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">new Thread(){</div><div class="line">	@Override</div><div class="line">	public void run() {</div><div class="line">		try {</div><div class="line">			//你的处理逻辑,这里简单睡眠一秒</div><div class="line">			this.sleep(1000);</div><div class="line">			</div><div class="line">			mainHandler.post(new Runnable() {</div><div class="line">				</div><div class="line">				@Override</div><div class="line">				public void run() {</div><div class="line">					//你的处理逻辑</div><div class="line">					titleView.setText(<span class="string">"postRunnable——Result"</span>);</div><div class="line">				}</div><div class="line">			});</div><div class="line">		} catch (InterruptedException e) {</div><div class="line">			e.printStackTrace();</div><div class="line">		}</div><div class="line">	}</div><div class="line">}.start();</div></pre></td></tr></table></figure>
+
+<h4 id="3-3_runOnUiThread()">3.3 runOnUiThread()</h4>
+<p> 　　对于上边的方案，在activity中又可以进一步简化，不用new Handler对象，直接调用runOnUiThread()方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"> <span class="javadoc">/**</span></div><div class="line"> * 使用activity的runOnUiThread</div><div class="line"> */</div><div class="line"><span class="keyword">new</span> Thread(){</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>() {</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			<span class="comment">//你的处理逻辑,这里简单睡眠一秒</span></div><div class="line">			<span class="keyword">this</span>.sleep(<span class="number">1000</span>);</div><div class="line">			</div><div class="line">			runOnUiThread(<span class="keyword">new</span> Runnable() {</div><div class="line">				</div><div class="line">				<span class="annotation">@Override</span></div><div class="line">				<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>() {</div><div class="line">					titleView.setText(<span class="string">"runOnUiThread——Result"</span>);</div><div class="line">				}</div><div class="line">			});</div><div class="line">		} <span class="keyword">catch</span> (InterruptedException e) {</div><div class="line">			e.printStackTrace();</div><div class="line">		}</div><div class="line">	}</div><div class="line">}.start();</div></pre></td></tr></table></figure>
+
+
+<h4 id="3-4_view-post()_">3.4 view.post()　</h4>
+<p> 　　当然，如果有子view或自定义view，处理逻辑后可以直接用view.post()方法</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">new Thread(){</div><div class="line">			@Override</div><div class="line">			public void run() {</div><div class="line">				try {</div><div class="line">					//你的处理逻辑,这里简单睡眠一秒</div><div class="line">					this.sleep(1000);</div><div class="line">					</div><div class="line">					viewPostBtn.post(new Runnable() {</div><div class="line">						</div><div class="line">						@Override</div><div class="line">						public void run() {</div><div class="line">							titleView.setText(<span class="string">"viewPost——Result"</span>);</div><div class="line">						}</div><div class="line">					});</div><div class="line">				} catch (InterruptedException e) {</div><div class="line">					e.printStackTrace();</div><div class="line">				}</div><div class="line">			}</div><div class="line">		}.start();</div></pre></td></tr></table></figure>
+
+<p>综上，更新view看起来就不是那么难使用了。。<br>最后附上源代码文件。<br> 　　<a href="http://download.csdn.net/detail/u011254308/8607993" target="_blank" rel="external">点击下载源码</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/学习日志/">学习日志</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android基础/">Android基础</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/2015/04/08/android_note/Android更新Ui的几种方法和见解/" data-title="Android更新Ui的几种方法和见解 | Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2049/12/01/diary/DailyEpitaph/" title="《每日墓志铭》">
+  <strong>上一篇：</strong><br/>
+  <span>
+  《每日墓志铭》</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/02/01/markdown/markdown/"  title="Markdown 入门手册">
+ <strong>下一篇：</strong><br/> 
+ <span>Markdown 入门手册
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#《代码里的世界》"><span class="toc-number">1.</span> <span class="toc-text">《代码里的世界》</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-_简述"><span class="toc-number">1.1.</span> <span class="toc-text">1. 简述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-_方案"><span class="toc-number">1.2.</span> <span class="toc-text">2. 方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-_实践"><span class="toc-number">1.3.</span> <span class="toc-text">3. 实践</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1_handler-senMessage()_+_handler-dispatchMessage()"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 handler.senMessage() + handler.dispatchMessage()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2_handler-post()"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 handler.post()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3_runOnUiThread()"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 runOnUiThread()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4_view-post()_"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 view.post()　</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5288126184&verifier=4988e869&dpc=1"></iframe>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>3</sup></a></li>
+		
+			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>1</sup></a></li>
+		
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>7</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>5</sup></a></li>
+		
+			<li><a href="/tags/Markdown语法/" title="Markdown语法">Markdown语法<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Github/" title="Github">Github<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DailyEpitaph/" title="DailyEpitaph">DailyEpitaph<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ViewGroup/" title="ViewGroup">ViewGroup<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Android基础/" style="font-size: 20.00px;">Android基础</a><a href="/tags/DailyEpitaph/" style="font-size: 10.00px;">DailyEpitaph</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Hexo/" style="font-size: 10.00px;">Hexo</a><a href="/tags/Markdown语法/" style="font-size: 15.00px;">Markdown语法</a><a href="/tags/ViewGroup/" style="font-size: 10.00px;">ViewGroup</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+         
+           <li>
+             
+             	<a href="http://blog.csdn.net/qiaoidea" target="_blank" title="Qiao&#39;s CSDN">Qiao&#39;s CSDN</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://user.qzone.qq.com/378675427 " target="_blank" title="Qiao的QQ空间">Qiao&#39;s QQ</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://hexo.io " target="_blank" title="Hexo官方网站">Hexo</a>
+             
+           </li>
+         
+     </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+  </body>
+</html>

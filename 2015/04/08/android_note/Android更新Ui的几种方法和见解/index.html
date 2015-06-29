@@ -12,7 +12,17 @@
     <meta name="description" content="《代码里的世界》
 
 用文字札记描绘自己 android学习之路
-　　转载请保留出处 by Qiao http://blog.csdn.net/qiaoidea/article/details/45115047">
+　　转载请保留出处 by Qiao http://blog.csdn.net/qiaoidea/article/details/45115047
+
+1. 简述
+　　先贴一个我们刚做Android开发时候最容易遇到的一个错误异常 AndroidRuntimeException ：“Only the original thread that created a view hierarchy can touch its views”　　具体原因是当我们在对ui做出更改时，Android检查我们当前的操作线程是否为UI线程，若不是即报该异常。（详见 ViewRootImpl类的checkThread方法）。
+2. 方案
+　　那么我们该如何更新Ui呢，这里简要使用和讲述的是Handler。先简述概念：Adroid在运行时会创建一个UiThread的主线程来负责控制UI界面的显示、更新和控件交互。其他线程则通过handler将更新逻辑等消息事件(Message) push到主线程的消息队列(MessageQueue)，最后由主线程有序地处理这些消息事件(handleMessage)，实现对界面的更新和控制。　　本文主要讲述更新UI的方法和使用技巧，关于更新过程的原理内容请关注后边的 Android更新Ui进阶。　　其中，常用的几种方法简单概括有：
+
+handler.sendMessage();
+handler.post();
+在activity中可以 runOnUiThread();
+在子view中可以  view.post()">
     
     
     
@@ -50,11 +60,11 @@
 					 
 						<li><a href="/">主页</a></li>
 					
-						<li><a href="/dj">札记</a></li>
-					
 						<li><a href="/programing_art">编程艺术</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/dj">札记</a></li>
 					
 						<li><a href="/about">关于</a></li>
 					
@@ -103,8 +113,6 @@
 <p>用文字札记描绘自己 android学习之路</p>
 <p>　　<em>转载请保留出处 by Qiao</em> <a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45115047</a></p>
 </blockquote>
-<a id="more"></a>
-
 <h3 id="1-_简述"><strong><em>1. 简述</em></strong></h3>
 <p>　　先贴一个我们刚做Android开发时候最容易遇到的一个错误异常 <strong>AndroidRuntimeException</strong> ：<em>“Only the original thread that created a view hierarchy can touch its views”</em><br>　　具体原因是当我们在对ui做出更改时，Android检查我们当前的操作线程是否为UI线程，若不是即报该异常。（详见 ViewRootImpl类的checkThread方法）。</p>
 <h3 id="2-_方案"><strong><em>2. 方案</em></strong></h3>
@@ -113,13 +121,14 @@
 <li>handler.sendMessage();</li>
 <li>handler.post();</li>
 <li>在activity中可以 runOnUiThread();</li>
-<li><p>在子view中可以  view.post()</p>
-<p>　　其实后边几种方法整个流程处理逻辑基本也是基于第一种，封装成消息事件对象发送至队列并被有序处理而已，只是android给我们封装好了方法。</p>
+<li>在子view中可以  view.post()</li>
+</ul>
+<a id="more"></a>
+
+<p> 　　其实后边几种方法整个流程处理逻辑基本也是基于第一种，封装成消息事件对象发送至队列并被有序处理而已，只是android给我们封装好了方法。</p>
 <h3 id="3-_实践"><strong><em>3. 实践</em></strong></h3>
 <h4 id="3-1_handler-senMessage()_+_handler-dispatchMessage()">3.1 handler.senMessage() + handler.dispatchMessage()</h4>
 <p>　　  在activity中定义主线程的handler(子线程同样可以定义handler，当然 需要 消息泵looper来轮训），实现dispatchMessage方法处理message对象。该对象是在子线程处理逻辑完成之后，将内容封装成消息，通过handler.senMessage()发送该消息。<br>　　  示例代码：<br>a. 首先定义好更改ui的代码逻辑 handler和dispatchMessage方法</p>
-</li>
-</ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">　　 <span class="javadoc">/**</span></div><div class="line"> * 通过message携带结果数据变更ui</div><div class="line"> * 先定义主线程handler和更新数据的方法</div><div class="line"> */</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UPDATE_TITLE = <span class="number">0</span>; <span class="comment">//更新标题的标志</span></div><div class="line"><span class="keyword">private</span> Handler mainHandler= <span class="keyword">new</span> Handler()</div><div class="line">{</div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span>(android.os.Message msg) {</div><div class="line">		<span class="keyword">if</span>(msg.what == UPDATE_TITLE){</div><div class="line">			String title = msg.getData().getString(<span class="string">"Result"</span>);</div><div class="line">			titleView.setText(title);</div><div class="line">		}<span class="keyword">else</span>{</div><div class="line">			<span class="comment">//其他消息</span></div><div class="line">		}</div><div class="line">	};</div><div class="line">};</div></pre></td></tr></table></figure>
 
 <p>b. 需要处理数据的部分，比如某些耗时操作，放在子线程中执行，之后调用handler.senMessage() </p>
@@ -191,10 +200,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2049/12/01/diary/DailyEpitaph/" title="《每日墓志铭》">
+ <a href="/2015/04/10/android_note/Android更新Ui进阶精解（一）/" title="Android更新Ui进阶精解（一）">
   <strong>上一篇：</strong><br/>
   <span>
-  《每日墓志铭》</span>
+  Android更新Ui进阶精解（一）</span>
 </a>
 </div>
 
@@ -244,7 +253,7 @@
 		
 			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>1</sup></a></li>
 		
-			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>7</sup></a></li>
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>18</sup></a></li>
 		
 		</ul>
 </div>
@@ -255,7 +264,7 @@
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>5</sup></a></li>
+			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>16</sup></a></li>
 		
 			<li><a href="/tags/Markdown语法/" title="Markdown语法">Markdown语法<sup>3</sup></a></li>
 		

@@ -1,0 +1,587 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Dialog与FragmentDialog源码解析 | Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="《代码里的世界》  —-UI篇
+
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/46402845
+
+【导航】
+
+弹出式对话框各种方案   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）
+Dialog源码解析     从源码上看Dialog与DialogFragment
+
+
+1.概述
+　　前一篇写了常用的弹出框的几种实现方式，这里通过源码来简要解析下Dialog的实现原理。后便作为补充会讲下官方提倡的FragmentDialog。
+
+2.源码解析
+　　通常创建非阻塞式对话框的方式就是使用dialog了，不过在Android 3.0 之后，google更推荐使用新引入的基于Fragment的DialogFragment。这里我们从源码层次来看下详细实现。
+2.1 Dialog
+1.DialogInterface
+　　Dialog对话框实现的接口有DialogInterface,Window.Callback, keyEvent.Callback,OnCreateContextMenuListener，后边几个基本的Activity、View等组件都或多或少实现了，这里侧重讲下Dialog专有的DialogInterface。
+123456789101112131415161718192021222324252627282930313233343536373839public interface DialogInterface {     public static final int BUTTON_POSITIVE = -1;    public static final int BUTTON_NEGATIVE = -2;    public static final int BUTTON_NEUTRAL = -3;        @Deprecated    public static final int BUTTON1 = BUTTON_POSITIVE;    @Deprecated    public static final int BUTTON2 = BUTTON_NEGATIVE;    @Deprecated    public static final int BUTTON3 = BUTTON_NEUTRAL;        public void cancel();    public void dismiss();        interface OnCancelListener {        public void onCancel(DialogInterface dialog);    }        interface OnDismissListener {        public void onDismiss(DialogInterface dialog);    }    interface OnShowListener {        public void onShow(DialogInterface dialog);    }        interface OnClickListener {        public void onClick(DialogInterface dialog, int which);    }       interface OnMultiChoiceClickListener {        public void onClick(DialogInterface dialog, int which, boolean isChecked);    }        interface OnKeyListener {        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event);    }}">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:qiaoidea.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/15/android_note/Dialog与FragmentDialog源码解析/" title="Dialog与FragmentDialog源码解析" itemprop="url">Dialog与FragmentDialog源码解析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-14T16:00:00.000Z" itemprop="datePublished"> 发表于 5月 15 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#《代码里的世界》_—-UI篇"><span class="toc-number">1.</span> <span class="toc-text">《代码里的世界》  —-UI篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-概述"><span class="toc-number">2.</span> <span class="toc-text">1.概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-源码解析"><span class="toc-number">3.</span> <span class="toc-text">2.源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1_Dialog"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 Dialog</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-DialogInterface"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.DialogInterface</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Dialog全局变量"><span class="toc-number">3.1.2.</span> <span class="toc-text">2.Dialog全局变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Dialog构造方法"><span class="toc-number">3.1.3.</span> <span class="toc-text">3.Dialog构造方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-Dialog显示_show()"><span class="toc-number">3.1.4.</span> <span class="toc-text">4.Dialog显示 show()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-ListenersHandler"><span class="toc-number">3.1.5.</span> <span class="toc-text">5.ListenersHandler</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-Dialog的hide()"><span class="toc-number">3.1.6.</span> <span class="toc-text">6.Dialog的hide()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-Dialog的dismiss()"><span class="toc-number">3.1.7.</span> <span class="toc-text">6.Dialog的dismiss()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-Dialog取消cancel()"><span class="toc-number">3.1.8.</span> <span class="toc-text">7.Dialog取消cancel()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-Dialog状态保存与恢复"><span class="toc-number">3.1.9.</span> <span class="toc-text">8.Dialog状态保存与恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-Dialog事件监听"><span class="toc-number">3.1.10.</span> <span class="toc-text">9.Dialog事件监听</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2_DialogFragment"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 DialogFragment</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-DialogFragment全局变量"><span class="toc-number">3.2.1.</span> <span class="toc-text">1.DialogFragment全局变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-DialogFragment继承和重写Fragment"><span class="toc-number">3.2.2.</span> <span class="toc-text">2.DialogFragment继承和重写Fragment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-DialogFragment的onCreateDialog()"><span class="toc-number">3.2.3.</span> <span class="toc-text">3.DialogFragment的onCreateDialog()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-DialogFragment的show()"><span class="toc-number">3.2.4.</span> <span class="toc-text">3.DialogFragment的show()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-DialogFragment的dismiss()"><span class="toc-number">3.2.5.</span> <span class="toc-text">4.DialogFragment的dismiss()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-DialogFragment的其他方法"><span class="toc-number">3.2.6.</span> <span class="toc-text">5.DialogFragment的其他方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#_"><span class="toc-number">4.</span> <span class="toc-text">　　</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-综述"><span class="toc-number">5.</span> <span class="toc-text">3.综述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#补充：_Dialog的Builder模式"><span class="toc-number">5.0.1.</span> <span class="toc-text">补充： Dialog的Builder模式</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/46402845" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/46402845</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">弹出式对话框各种方案</a>   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">Dialog源码解析</a>     从源码上看Dialog与DialogFragment</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　<a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">前一篇</a>写了常用的弹出框的几种实现方式，这里通过源码来简要解析下Dialog的实现原理。后便作为补充会讲下官方提倡的FragmentDialog。</p>
+<hr>
+<h2 id="2-源码解析"><strong>2.源码解析</strong></h2>
+<p>　　通常创建非阻塞式对话框的方式就是使用dialog了，不过在Android 3.0 之后，google更推荐使用新引入的基于Fragment的DialogFragment。这里我们从源码层次来看下详细实现。</p>
+<h3 id="2-1_Dialog">2.1 <strong>Dialog</strong></h3>
+<h4 id="1-DialogInterface">1.DialogInterface</h4>
+<p>　　Dialog对话框实现的接口有DialogInterface,Window.Callback, keyEvent.Callback,OnCreateContextMenuListener，后边几个基本的Activity、View等组件都或多或少实现了，这里侧重讲下Dialog专有的DialogInterface。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DialogInterface</span> </span>{ </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON_POSITIVE = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON_NEGATIVE = -<span class="number">2</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON_NEUTRAL = -<span class="number">3</span>;</div><div class="line">    </div><div class="line">    <span class="annotation">@Deprecated</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON1 = BUTTON_POSITIVE;</div><div class="line">    <span class="annotation">@Deprecated</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON2 = BUTTON_NEGATIVE;</div><div class="line">    <span class="annotation">@Deprecated</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON3 = BUTTON_NEUTRAL;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span>();</div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dismiss</span>();</div><div class="line">    </div><div class="line">    interface OnCancelListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCancel</span>(DialogInterface dialog);</div><div class="line">    }</div><div class="line">    </div><div class="line">    interface OnDismissListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDismiss</span>(DialogInterface dialog);</div><div class="line">    }</div><div class="line"></div><div class="line">    interface OnShowListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onShow</span>(DialogInterface dialog);</div><div class="line">    }</div><div class="line">    </div><div class="line">    interface OnClickListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(DialogInterface dialog, <span class="keyword">int</span> which);</div><div class="line">    }</div><div class="line">   </div><div class="line">    interface OnMultiChoiceClickListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(DialogInterface dialog, <span class="keyword">int</span> which, <span class="keyword">boolean</span> isChecked);</div><div class="line">    }</div><div class="line">    </div><div class="line">    interface OnKeyListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKey</span>(DialogInterface dialog, <span class="keyword">int</span> keyCode, KeyEvent event);</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+
+
+<a id="more"></a>
+
+<p>　　比较简单易懂，没什么要说的，定义了最基本的接口方法，一目了然。具体设置和使用都在在Dialog中详细实现。</p>
+<h4 id="2-Dialog全局变量">2.Dialog全局变量</h4>
+<p>　　同样比较清晰容易理解，不过多解释。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"Dialog"</span>;</div><div class="line"><span class="keyword">private</span> Activity mOwnerActivity;<span class="comment">//关联和创建它的activity</span></div><div class="line"></div><div class="line"><span class="keyword">final</span> Context mContext;</div><div class="line"><span class="keyword">final</span> WindowManager mWindowManager;</div><div class="line">Window mWindow;</div><div class="line">View mDecor;</div><div class="line"><span class="keyword">private</span> ActionBarImpl mActionBar;</div><div class="line"></div><div class="line"><span class="keyword">protected</span> <span class="keyword">boolean</span> mCancelable = <span class="keyword">true</span>;</div><div class="line"></div><div class="line"><span class="keyword">private</span> String mCancelAndDismissTaken;</div><div class="line"><span class="keyword">private</span> Message mCancelMessage;<span class="comment">//取消指令</span></div><div class="line"><span class="keyword">private</span> Message mDismissMessage;<span class="comment">//消失指令</span></div><div class="line"><span class="keyword">private</span> Message mShowMessage;<span class="comment">//显示指令</span></div><div class="line"></div><div class="line"><span class="keyword">private</span> OnKeyListener mOnKeyListener;<span class="comment">//点击事件</span></div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> mCreated = <span class="keyword">false</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> mShowing = <span class="keyword">false</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> mCanceled = <span class="keyword">false</span>;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> Handler mHandler = <span class="keyword">new</span> Handler();</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DISMISS = <span class="number">0x43</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCEL = <span class="number">0x44</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHOW = <span class="number">0x45</span>;</div><div class="line"></div><div class="line"><span class="keyword">private</span> Handler mListenersHandler;<span class="comment">//消息指令接受处理handler</span></div><div class="line"></div><div class="line"><span class="keyword">private</span> ActionMode mActionMode;</div></pre></td></tr></table></figure>
+
+<h4 id="3-Dialog构造方法">3.Dialog构造方法</h4>
+<p>　　基本所有的缺省构造方法都是最后调用到这里：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Dialog(Context context, <span class="keyword">int</span> theme, <span class="keyword">boolean</span> createContextThemeWrapper) {</div><div class="line">        <span class="keyword">if</span> (createContextThemeWrapper) {</div><div class="line">            <span class="keyword">if</span> (theme == <span class="number">0</span>) {</div><div class="line">                TypedValue outValue = <span class="keyword">new</span> TypedValue();</div><div class="line">	                context.getTheme().resolveAttribute(com.android.internal.R.attr.dialogTheme,</div><div class="line">                        outValue, <span class="keyword">true</span>);</div><div class="line">                theme = outValue.resourceId;</div><div class="line">            }</div><div class="line">            mContext = <span class="keyword">new</span> ContextThemeWrapper(context, theme);</div><div class="line">        } <span class="keyword">else</span> {</div><div class="line">            mContext = context;</div><div class="line">        }</div><div class="line"></div><div class="line">        mWindowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);</div><div class="line">        Window w = PolicyManager.makeNewWindow(mContext);</div><div class="line">        mWindow = w;</div><div class="line">        w.setCallback(<span class="keyword">this</span>);</div><div class="line">        w.setWindowManager(mWindowManager, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">        w.setGravity(Gravity.CENTER);</div><div class="line">        mListenersHandler = <span class="keyword">new</span> ListenersHandler(<span class="keyword">this</span>);</div><div class="line">    }</div></pre></td></tr></table></figure>
+
+<p>　　theme为零，则使用系统定义的主题风格，createContextThemeWrapper表示是否使用自己的主题风格。<br>　　然后初始化窗口管理器和消息指令处理handler。<br>　　贴上它的缺省构造方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="title">Dialog</span>(Context context) {</div><div class="line">       <span class="keyword">this</span>(context, <span class="number">0</span>, <span class="keyword">true</span>);</div><div class="line">   }</div><div class="line"></div><div class="line">   <span class="keyword">public</span> <span class="title">Dialog</span>(Context context, <span class="keyword">int</span> theme) {</div><div class="line">       <span class="keyword">this</span>(context, theme, <span class="keyword">true</span>);</div><div class="line">   }</div><div class="line">   </div><div class="line"><span class="annotation">@Deprecated</span></div><div class="line">   <span class="keyword">protected</span> <span class="title">Dialog</span>(Context context, <span class="keyword">boolean</span> cancelable,</div><div class="line">           Message cancelCallback) {</div><div class="line">       <span class="keyword">this</span>(context);</div><div class="line">       mCancelable = cancelable;</div><div class="line">       mCancelMessage = cancelCallback;</div><div class="line">   }</div><div class="line"></div><div class="line">   <span class="keyword">protected</span> <span class="title">Dialog</span>(Context context, <span class="keyword">boolean</span> cancelable,</div><div class="line">           OnCancelListener cancelListener) {</div><div class="line">       <span class="keyword">this</span>(context);</div><div class="line">       mCancelable = cancelable;</div><div class="line">       setOnCancelListener(cancelListener);</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<h4 id="4-Dialog显示_show()">4.Dialog显示 show()</h4>
+<p>　　通过添加dialog至根视图并附加到window窗体中去，同时发送dialog显示的消息指令。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span>() {</div><div class="line">	 <span class="javadoc">/**</span></div><div class="line">	 * 如果已经显示了，则重绘actionBar并显示根视图View mDecor</div><div class="line">	 */</div><div class="line">       <span class="keyword">if</span> (mShowing) {</div><div class="line">           <span class="keyword">if</span> (mDecor != <span class="keyword">null</span>) {</div><div class="line">               <span class="keyword">if</span> (mWindow.hasFeature(Window.FEATURE_ACTION_BAR)) {</div><div class="line">                   mWindow.invalidatePanelMenu(Window.FEATURE_ACTION_BAR);</div><div class="line">               }</div><div class="line">               mDecor.setVisibility(View.VISIBLE);</div><div class="line">           }</div><div class="line">           <span class="keyword">return</span>;</div><div class="line">       }</div><div class="line"></div><div class="line">       mCanceled = <span class="keyword">false</span>;<span class="comment">//设置取消状态为false</span></div><div class="line">       </div><div class="line">       <span class="javadoc">/**</span></div><div class="line">	 * 如果Dialog没有被创建和初始化则调用dispatchOnCreate创建操作</div><div class="line">	 */</div><div class="line">       <span class="keyword">if</span> (!mCreated) {</div><div class="line">           dispatchOnCreate(<span class="keyword">null</span>);</div><div class="line">       }</div><div class="line"></div><div class="line">	<span class="javadoc">/**</span></div><div class="line">	 * 初始化ActionBar动画效果和 根视图View</div><div class="line">	 */</div><div class="line">       onStart();</div><div class="line">       mDecor = mWindow.getDecorView();</div><div class="line"></div><div class="line">	<span class="javadoc">/**</span></div><div class="line">	 * 初始化ActionBar文本图片</div><div class="line">	 */</div><div class="line">       <span class="keyword">if</span> (mActionBar == <span class="keyword">null</span> && mWindow.hasFeature(Window.FEATURE_ACTION_BAR)) {</div><div class="line">           <span class="keyword">final</span> ApplicationInfo info = mContext.getApplicationInfo();</div><div class="line">           mWindow.setDefaultIcon(info.icon);</div><div class="line">           mWindow.setDefaultLogo(info.logo);</div><div class="line">           mActionBar = <span class="keyword">new</span> ActionBarImpl(<span class="keyword">this</span>);</div><div class="line">       }</div><div class="line"></div><div class="line">	<span class="comment">//根据输入法模式来加载布局参数</span></div><div class="line">       WindowManager.LayoutParams l = mWindow.getAttributes();</div><div class="line">       <span class="keyword">if</span> ((l.softInputMode</div><div class="line">               & WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION) == <span class="number">0</span>) {</div><div class="line">           WindowManager.LayoutParams nl = <span class="keyword">new</span> WindowManager.LayoutParams();</div><div class="line">           nl.copyFrom(l);</div><div class="line">           nl.softInputMode |=</div><div class="line">                   WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION;</div><div class="line">           l = nl;</div><div class="line">       }</div><div class="line">	</div><div class="line">	<span class="comment">//添加根视图View到窗体，发送显示指令</span></div><div class="line">       <span class="keyword">try</span> {</div><div class="line">           mWindowManager.addView(mDecor, l);</div><div class="line">           mShowing = <span class="keyword">true</span>;</div><div class="line">   </div><div class="line">           sendShowMessage();<span class="comment">//显示消息指令</span></div><div class="line">       } <span class="keyword">finally</span> {</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//设置允许ActionBar的显示隐藏动画</span></div><div class="line"> <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onStart</span>() {</div><div class="line">       <span class="keyword">if</span> (mActionBar != <span class="keyword">null</span>) mActionBar.setShowHideAnimationEnabled(<span class="keyword">true</span>);</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//从消息池去一条消息，发送显示指令给目标handler</span></div><div class="line"> <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendShowMessage</span>() {</div><div class="line">       <span class="keyword">if</span> (mShowMessage != <span class="keyword">null</span>) {</div><div class="line">           Message.obtain(mShowMessage).sendToTarget();</div><div class="line">       }</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<p>　　讲到这里不妨看一下处理消息指令的handler和其具体逻辑。</p>
+<h4 id="5-ListenersHandler">5.ListenersHandler</h4>
+<p>　　不了解Hanler的同学可以参考一下前面在线程更新UI时候讲到的 <strong><a href="http://blog.csdn.net/qiaoidea/article/details/45135731" target="_blank" rel="external">消息处理系统模型</a></strong>,其中有关于hanlder的简要讲解。<br>　　这里看ListenersHandler 的具体逻辑，其实很简单，就是调用相应的接口监听事件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ListenersHandler</span> <span class="keyword">extends</span> <span class="title">Handler</span> </span>{</div><div class="line">        <span class="keyword">private</span> WeakReference&lt;DialogInterface&gt; mDialog;</div><div class="line"></div><div class="line">        <span class="keyword">public</span> <span class="title">ListenersHandler</span>(Dialog dialog) {</div><div class="line">            mDialog = <span class="keyword">new</span> WeakReference&lt;DialogInterface&gt;(dialog);</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="annotation">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span>(Message msg) {</div><div class="line">            <span class="keyword">switch</span> (msg.what) {</div><div class="line">                <span class="keyword">case</span> DISMISS:</div><div class="line">                    ((OnDismissListener) msg.obj).onDismiss(mDialog.get());</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> CANCEL:</div><div class="line">                    ((OnCancelListener) msg.obj).onCancel(mDialog.get());</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> SHOW:</div><div class="line">                    ((OnShowListener) msg.obj).onShow(mDialog.get());</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">            }</div><div class="line">        }</div><div class="line">    }</div></pre></td></tr></table></figure>
+
+
+<h4 id="6-Dialog的hide()">6.Dialog的hide()</h4>
+<p>　　方法很简单，只是让根视图不可见:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hide</span>() {</div><div class="line">       <span class="keyword">if</span> (mDecor != <span class="keyword">null</span>) {</div><div class="line">           mDecor.setVisibility(View.GONE);</div><div class="line">       }</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<p>　　真正让dialog移除和消失的是dismiss()方法:</p>
+<h4 id="6-Dialog的dismiss()">6.Dialog的dismiss()</h4>
+<pre><code>如果当前线程不是mHandler所在线程，则通过发送消息处理，最终都是执行<span class="function">dismissDialog</span>()方法：
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dismiss</span>() {</div><div class="line">       <span class="keyword">if</span> (Looper.myLooper() == mHandler.getLooper()) {</div><div class="line">           dismissDialog();</div><div class="line">       } <span class="keyword">else</span> {</div><div class="line">           mHandler.post(mDismissAction);</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"> <span class="keyword">void</span> dismissDialog() {</div><div class="line">	 <span class="javadoc">/**</span></div><div class="line">	 *如果根视图为空或者当前dialog并没有显示，直接返回</div><div class="line">	 */</div><div class="line">       <span class="keyword">if</span> (mDecor == <span class="keyword">null</span> || !mShowing) {</div><div class="line">           <span class="keyword">return</span>;</div><div class="line">       }</div><div class="line"></div><div class="line">	<span class="comment">//如果当前窗体已经destoryed掉，直接返回</span></div><div class="line">       <span class="keyword">if</span> (mWindow.isDestroyed()) {</div><div class="line">           Log.e(TAG, <span class="string">"Tried to dismissDialog() but the Dialog's window was already destroyed!"</span>);</div><div class="line">           <span class="keyword">return</span>;</div><div class="line">       }</div><div class="line"></div><div class="line">	<span class="javadoc">/**</span></div><div class="line">	*首先移除根视图View，调用mActionMode的finish()方法，然后清空窗体，改变显示状态并发送dialog消失指令</div><div class="line">	*/</div><div class="line">       <span class="keyword">try</span> {</div><div class="line">           mWindowManager.removeViewImmediate(mDecor);</div><div class="line">       } <span class="keyword">finally</span> {</div><div class="line">           <span class="keyword">if</span> (mActionMode != <span class="keyword">null</span>) {</div><div class="line">               mActionMode.finish();</div><div class="line">           }</div><div class="line">           mDecor = <span class="keyword">null</span>;</div><div class="line">           mWindow.closeAllPanels();</div><div class="line">           onStop();</div><div class="line">           mShowing = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">           sendDismissMessage();</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//关闭ActionBar的动画效果</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onStop</span>() {</div><div class="line">       <span class="keyword">if</span> (mActionBar != <span class="keyword">null</span>) mActionBar.setShowHideAnimationEnabled(<span class="keyword">false</span>);</div><div class="line">   }</div><div class="line"></div><div class="line"> <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendDismissMessage</span>() {</div><div class="line">       <span class="keyword">if</span> (mDismissMessage != <span class="keyword">null</span>) {</div><div class="line">           <span class="comment">// Obtain a new message so this dialog can be re-used</span></div><div class="line">           Message.obtain(mDismissMessage).sendToTarget();</div><div class="line">       }</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<h4 id="7-Dialog取消cancel()">7.Dialog取消cancel()</h4>
+<pre><code>修改状态并发送消息，最后调用的是<span class="function">dismiss</span>()方法
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span>() {</div><div class="line">      <span class="keyword">if</span> (!mCanceled && mCancelMessage != <span class="keyword">null</span>) {</div><div class="line">          mCanceled = <span class="keyword">true</span>;</div><div class="line">          Message.obtain(mCancelMessage).sendToTarget();</div><div class="line">      }</div><div class="line">      dismiss();</div><div class="line">  }</div></pre></td></tr></table></figure>
+
+<h4 id="8-Dialog状态保存与恢复">8.Dialog状态保存与恢复</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DIALOG_SHOWING_TAG = <span class="string">"android:dialogShowing"</span>;</div><div class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DIALOG_HIERARCHY_TAG = <span class="string">"android:dialogHierarchy"</span>;</div><div class="line"></div><div class="line">   <span class="javadoc">/**</span></div><div class="line">    * 保存dialog当前状态</div><div class="line">    */</div><div class="line">   <span class="keyword">public</span> Bundle <span class="title">onSaveInstanceState</span>() {</div><div class="line">       Bundle bundle = <span class="keyword">new</span> Bundle();</div><div class="line">       bundle.putBoolean(DIALOG_SHOWING_TAG, mShowing);</div><div class="line">       <span class="keyword">if</span> (mCreated) {</div><div class="line">           bundle.putBundle(DIALOG_HIERARCHY_TAG, mWindow.saveHierarchyState());</div><div class="line">       }</div><div class="line">       <span class="keyword">return</span> bundle;</div><div class="line">   }</div><div class="line"></div><div class="line">   <span class="javadoc">/**</span></div><div class="line">    * 加载状态并恢复</div><div class="line">    */</div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRestoreInstanceState</span>(Bundle savedInstanceState) {</div><div class="line">       <span class="keyword">final</span> Bundle dialogHierarchyState = savedInstanceState.getBundle(DIALOG_HIERARCHY_TAG);</div><div class="line">       <span class="keyword">if</span> (dialogHierarchyState == <span class="keyword">null</span>) {</div><div class="line">           <span class="comment">// dialog has never been shown, or onCreated, nothing to restore.</span></div><div class="line">           <span class="keyword">return</span>;</div><div class="line">       }</div><div class="line">       dispatchOnCreate(savedInstanceState);</div><div class="line">       mWindow.restoreHierarchyState(dialogHierarchyState);</div><div class="line">       <span class="keyword">if</span> (savedInstanceState.getBoolean(DIALOG_SHOWING_TAG)) {</div><div class="line">           show();</div><div class="line">       }</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<h4 id="9-Dialog事件监听">9.Dialog事件监听</h4>
+<p>　　该部分省略，主要定义了返回事件，按键事件和触摸事件以及长按菜单和焦点变化事件等，可以在源码中查看详细。<br>　　<a href="http://download.csdn.net/detail/u011254308/8782261" target="_blank" rel="external">Dialog 和DialogFragment源码</a></p>
+<h3 id="2-2_DialogFragment">2.2 <strong>DialogFragment</strong></h3>
+<p>　　android 3.0之后引入Fragment,并推荐DialogFragment取代Dialog,一方面更好的碎片化布局可以内签到基本界面，另一方面更能有效地在屏幕方向切换时保存状态和恢复。<br>　　DialogFragment继承自Fragment并实现了DialogInterface的OnCancelListener和OnDismissListener 两个接口。<br>    其基本样式有：</p>
+<ul>
+<li>public static final int STYLE_NORMAL = 0;</li>
+<li>public static final int STYLE_NO_TITLE = 1;</li>
+<li>public static final int STYLE_NO_FRAME = 2;</li>
+<li>public static final int STYLE_NO_INPUT = 3;</li>
+</ul>
+<h4 id="1-DialogFragment全局变量">1.DialogFragment全局变量</h4>
+<pre><code>加上前面的几种样式和静态常量<span class="built_in">Tag</span>，其全局变量也很简单醒目
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SAVED_DIALOG_STATE_TAG = <span class="string">"android:savedDialogState"</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SAVED_STYLE = <span class="string">"android:style"</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SAVED_THEME = <span class="string">"android:theme"</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SAVED_CANCELABLE = <span class="string">"android:cancelable"</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SAVED_SHOWS_DIALOG = <span class="string">"android:showsDialog"</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SAVED_BACK_STACK_ID = <span class="string">"android:backStackId"</span>;</div><div class="line"></div><div class="line"><span class="keyword">int</span> mStyle = STYLE_NORMAL;<span class="comment">//默认样式</span></div><div class="line"><span class="keyword">int</span> mTheme = <span class="number">0</span>;</div><div class="line"><span class="keyword">boolean</span> mCancelable = <span class="keyword">true</span>;</div><div class="line"><span class="keyword">boolean</span> mShowsDialog = <span class="keyword">true</span>;</div><div class="line"><span class="keyword">int</span> mBackStackId = -<span class="number">1</span>;<span class="comment">//回退栈id</span></div><div class="line"></div><div class="line">Dialog mDialog;</div><div class="line"><span class="keyword">boolean</span> mViewDestroyed;</div><div class="line"><span class="keyword">boolean</span> mDismissed;</div><div class="line"><span class="keyword">boolean</span> mShownByMe;</div></pre></td></tr></table></figure>
+
+<h4 id="2-DialogFragment继承和重写Fragment">2.DialogFragment继承和重写Fragment</h4>
+<p>　　看下在DialogFragment中重写的Fragment方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//空的构造方法</span></div><div class="line"><span class="keyword">public</span> <span class="title">DialogFragment</span>() {</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//关联绑定activity</span></div><div class="line"><span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAttach</span>(Activity activity) {</div><div class="line">       <span class="keyword">super</span>.onAttach(activity);</div><div class="line">       <span class="keyword">if</span> (!mShownByMe) {</div><div class="line">           <span class="comment">// 如果不是通过我们的API创建，则该布局将不再被消失（例如作为activity界面碎片的一部分，而不是作为对话框）</span></div><div class="line">           mDismissed = <span class="keyword">false</span>;</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//解除绑定</span></div><div class="line"> <span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDetach</span>() {</div><div class="line">       <span class="keyword">super</span>.onDetach();</div><div class="line">       <span class="keyword">if</span> (!mShownByMe && !mDismissed) {</div><div class="line">           <span class="comment">// 同上，在家畜绑定的时候才消失</span></div><div class="line">           mDismissed = <span class="keyword">true</span>;</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//fragment创建</span></div><div class="line"> <span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {</div><div class="line">       <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line"></div><div class="line">       mShowsDialog = mContainerId == <span class="number">0</span>;</div><div class="line">	</div><div class="line">	<span class="comment">//状态恢复重建</span></div><div class="line">       <span class="keyword">if</span> (savedInstanceState != <span class="keyword">null</span>) {</div><div class="line">           mStyle = savedInstanceState.getInt(SAVED_STYLE, STYLE_NORMAL);</div><div class="line">           mTheme = savedInstanceState.getInt(SAVED_THEME, <span class="number">0</span>);</div><div class="line">           mCancelable = savedInstanceState.getBoolean(SAVED_CANCELABLE, <span class="keyword">true</span>);</div><div class="line">           mShowsDialog = savedInstanceState.getBoolean(SAVED_SHOWS_DIALOG, mShowsDialog);</div><div class="line">           mBackStackId = savedInstanceState.getInt(SAVED_BACK_STACK_ID, -<span class="number">1</span>);</div><div class="line">       }</div><div class="line">       </div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//根据主题风格来返回布局加载器LayoutInflater </span></div><div class="line"> <span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> LayoutInflater <span class="title">getLayoutInflater</span>(Bundle savedInstanceState) {</div><div class="line">       <span class="keyword">if</span> (!mShowsDialog) {</div><div class="line">           <span class="keyword">return</span> <span class="keyword">super</span>.getLayoutInflater(savedInstanceState);</div><div class="line">       }</div><div class="line"></div><div class="line">       mDialog = onCreateDialog(savedInstanceState);</div><div class="line">       <span class="keyword">switch</span> (mStyle) {</div><div class="line">           <span class="keyword">case</span> STYLE_NO_INPUT:</div><div class="line">               mDialog.getWindow().addFlags(</div><div class="line">                       WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |</div><div class="line">                       WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);</div><div class="line">               <span class="comment">// fall through...</span></div><div class="line">           <span class="keyword">case</span> STYLE_NO_FRAME:</div><div class="line">           <span class="keyword">case</span> STYLE_NO_TITLE:</div><div class="line">               mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);</div><div class="line">       }</div><div class="line">       <span class="keyword">if</span> (mDialog != <span class="keyword">null</span>) {</div><div class="line">           <span class="keyword">return</span> (LayoutInflater) mDialog.getContext().getSystemService(</div><div class="line">                   Context.LAYOUT_INFLATER_SERVICE);</div><div class="line">       }</div><div class="line">       <span class="keyword">return</span> (LayoutInflater) mActivity.getSystemService(</div><div class="line">               Context.LAYOUT_INFLATER_SERVICE);</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//当Activity创建时设置绑定Dialog的相应事件</span></div><div class="line"> <span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityCreated</span>(Bundle savedInstanceState) {</div><div class="line">       <span class="keyword">super</span>.onActivityCreated(savedInstanceState);</div><div class="line"></div><div class="line">       <span class="keyword">if</span> (!mShowsDialog) {</div><div class="line">           <span class="keyword">return</span>;</div><div class="line">       }</div><div class="line"></div><div class="line">       View view = getView();</div><div class="line">       <span class="keyword">if</span> (view != <span class="keyword">null</span>) {</div><div class="line">           <span class="keyword">if</span> (view.getParent() != <span class="keyword">null</span>) {</div><div class="line">               <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"DialogFragment can not be attached to a container view"</span>);</div><div class="line">           }</div><div class="line">           mDialog.setContentView(view);</div><div class="line">       }</div><div class="line">       mDialog.setOwnerActivity(getActivity());</div><div class="line">       mDialog.setCancelable(mCancelable);</div><div class="line">       mDialog.setOnCancelListener(<span class="keyword">this</span>);</div><div class="line">       mDialog.setOnDismissListener(<span class="keyword">this</span>);</div><div class="line">       <span class="keyword">if</span> (savedInstanceState != <span class="keyword">null</span>) {</div><div class="line">           Bundle dialogState = savedInstanceState.getBundle(SAVED_DIALOG_STATE_TAG);</div><div class="line">           <span class="keyword">if</span> (dialogState != <span class="keyword">null</span>) {</div><div class="line">               mDialog.onRestoreInstanceState(dialogState);</div><div class="line">           }</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStart</span>() {</div><div class="line">       <span class="keyword">super</span>.onStart();</div><div class="line">       <span class="keyword">if</span> (mDialog != <span class="keyword">null</span>) {</div><div class="line">           mViewDestroyed = <span class="keyword">false</span>;</div><div class="line">           mDialog.show();</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStop</span>() {</div><div class="line">       <span class="keyword">super</span>.onStop();</div><div class="line">       <span class="keyword">if</span> (mDialog != <span class="keyword">null</span>) {</div><div class="line">           mDialog.hide();</div><div class="line">       }</div><div class="line">   }</div><div class="line"></div><div class="line"><span class="comment">//移除Fragment的时候同时移除和置空dialog</span></div><div class="line"><span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroyView</span>() {</div><div class="line">       <span class="keyword">super</span>.onDestroyView();</div><div class="line">       <span class="keyword">if</span> (mDialog != <span class="keyword">null</span>) {</div><div class="line">           mViewDestroyed = <span class="keyword">true</span>;</div><div class="line">           mDialog.dismiss();</div><div class="line">           mDialog = <span class="keyword">null</span>;</div><div class="line">       }</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<h4 id="3-DialogFragment的onCreateDialog()">3.DialogFragment的onCreateDialog()</h4>
+<p>　　该方法负责创建我们的创建Dialog，返回一个Dialog实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> Dialog <span class="title">onCreateDialog</span>(Bundle savedInstanceState) {</div><div class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Dialog(getActivity(), getTheme());</div><div class="line">  }</div></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-DialogFragment的show()">3.DialogFragment的show()</h4>
+<pre><code>通过获取Fragment的FragmentTransaction 加载并显示当前布局。
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span>(FragmentManager manager, String tag) {</div><div class="line">       mDismissed = <span class="keyword">false</span>;</div><div class="line">       mShownByMe = <span class="keyword">true</span>;</div><div class="line">       FragmentTransaction ft = manager.beginTransaction();</div><div class="line">       ft.add(<span class="keyword">this</span>, tag);</div><div class="line">       ft.commit();</div><div class="line">   }</div><div class="line"></div><div class="line"> <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">show</span>(FragmentTransaction transaction, String tag) {</div><div class="line">       mDismissed = <span class="keyword">false</span>;</div><div class="line">       mShownByMe = <span class="keyword">true</span>;</div><div class="line">       transaction.add(<span class="keyword">this</span>, tag);</div><div class="line">       mViewDestroyed = <span class="keyword">false</span>;</div><div class="line">       mBackStackId = transaction.commit();</div><div class="line">       <span class="keyword">return</span> mBackStackId;</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<h4 id="4-DialogFragment的dismiss()">4.DialogFragment的dismiss()</h4>
+<p>　　如果回退栈不为空，则返回前一个栈页面，否则直接移除掉当前页，allowStateLoss参数表示是否允许提交的时候丢失保存的状态，false则状态未保存会抛异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dismiss</span>() {</div><div class="line">      dismissInternal(<span class="keyword">false</span>);</div><div class="line">  }</div><div class="line">  </div><div class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dismissAllowingStateLoss</span>() {</div><div class="line">      dismissInternal(<span class="keyword">true</span>);</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="keyword">void</span> dismissInternal(<span class="keyword">boolean</span> allowStateLoss) {</div><div class="line">      <span class="keyword">if</span> (mDismissed) {</div><div class="line">          <span class="keyword">return</span>;</div><div class="line">      }</div><div class="line">      mDismissed = <span class="keyword">true</span>;</div><div class="line">      mShownByMe = <span class="keyword">false</span>;</div><div class="line">      <span class="keyword">if</span> (mDialog != <span class="keyword">null</span>) {</div><div class="line">          mDialog.dismiss();</div><div class="line">          mDialog = <span class="keyword">null</span>;</div><div class="line">      }</div><div class="line">      mViewDestroyed = <span class="keyword">true</span>;</div><div class="line">      <span class="keyword">if</span> (mBackStackId &gt;= <span class="number">0</span>) {</div><div class="line">          getFragmentManager().popBackStack(mBackStackId,</div><div class="line">                  FragmentManager.POP_BACK_STACK_INCLUSIVE);</div><div class="line">          mBackStackId = -<span class="number">1</span>;</div><div class="line">      } <span class="keyword">else</span> {</div><div class="line">          FragmentTransaction ft = getFragmentManager().beginTransaction();</div><div class="line">          ft.remove(<span class="keyword">this</span>);</div><div class="line">          <span class="keyword">if</span> (allowStateLoss) {</div><div class="line">              ft.commitAllowingStateLoss();</div><div class="line">          } <span class="keyword">else</span> {</div><div class="line">              ft.commit();</div><div class="line">          }</div><div class="line">      }</div><div class="line">  }</div></pre></td></tr></table></figure>
+
+
+<h4 id="5-DialogFragment的其他方法">5.DialogFragment的其他方法</h4>
+<p>　　DialogFragment还定义了获取当前Dialog,设置style和取得是否显示的状态等方法，这里省略，不做赘述，详细查看源码。<br>　　<a href="http://download.csdn.net/detail/u011254308/8782261" target="_blank" rel="external">Dialog 和DialogFragment源码</a></p>
+<h2 id="_">　　</h2>
+<h2 id="3-综述"><strong>3.综述</strong></h2>
+<p>　　这两个雷相对比较简单和易于理解，重在实现view的添加，显示、隐藏和移除。</p>
+<h4 id="补充：_Dialog的Builder模式">补充： <strong>Dialog的Builder模式</strong></h4>
+<p>　　在AlertDialog的实现中，有使用到Builder这么一个静态类，其实有用的设计模式中的Builder模式。关于建造者模式（Builder Pattern），也叫生成器模式。它能将一个复杂对象的构建与它的表示分离开，同时使同样的构建过程可以创建不同的表示。<br>　从AlertDialog简单解释来讲，就是我们不用关心这个dialog是如何创建，怎么实现，只用简单的通过builder来设计我们想要的结果，他的每个set方法都返回其对象本身，我们只需将想要的效果和属性附加到这个对象上去就好了。想深入了解的同学，可以自行谷歌/百度 <strong>Java设计模式—建造者模式（Builder Pattern）</strong>.<br>　　<br>　　下一篇，我们将通过自定义来实现IOS一个常见的ActionSheet样式。demo结合自定义View,到使用builder模式，重写DialogFragment来讲，具体效果前一篇已经展示了，内容详情请关注接下来的新博文。</p>
+<hr>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/学习日志/">学习日志</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android基础/">Android基础</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://qiaoidea.github.io/2015/05/15/android_note/Dialog与FragmentDialog源码解析/" data-title="Dialog与FragmentDialog源码解析 | Qiaoidea&#39;s Blog" data-tsina="5288126184" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/20/android_note/UI--仿IOS控件之ActionSheet样式 and more../" title="UI--仿IOS控件之ActionSheet样式 and more..">
+  <strong>上一篇：</strong><br/>
+  <span>
+  UI--仿IOS控件之ActionSheet样式 and more..</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/07/android_note/从仿QQ消息提示框来谈弹出式对话框/"  title="从仿QQ消息提示框来谈弹出式对话框">
+ <strong>下一篇：</strong><br/> 
+ <span>从仿QQ消息提示框来谈弹出式对话框
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#《代码里的世界》_—-UI篇"><span class="toc-number">1.</span> <span class="toc-text">《代码里的世界》  —-UI篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-概述"><span class="toc-number">2.</span> <span class="toc-text">1.概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-源码解析"><span class="toc-number">3.</span> <span class="toc-text">2.源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1_Dialog"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 Dialog</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-DialogInterface"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.DialogInterface</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Dialog全局变量"><span class="toc-number">3.1.2.</span> <span class="toc-text">2.Dialog全局变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Dialog构造方法"><span class="toc-number">3.1.3.</span> <span class="toc-text">3.Dialog构造方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-Dialog显示_show()"><span class="toc-number">3.1.4.</span> <span class="toc-text">4.Dialog显示 show()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-ListenersHandler"><span class="toc-number">3.1.5.</span> <span class="toc-text">5.ListenersHandler</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-Dialog的hide()"><span class="toc-number">3.1.6.</span> <span class="toc-text">6.Dialog的hide()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-Dialog的dismiss()"><span class="toc-number">3.1.7.</span> <span class="toc-text">6.Dialog的dismiss()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-Dialog取消cancel()"><span class="toc-number">3.1.8.</span> <span class="toc-text">7.Dialog取消cancel()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-Dialog状态保存与恢复"><span class="toc-number">3.1.9.</span> <span class="toc-text">8.Dialog状态保存与恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-Dialog事件监听"><span class="toc-number">3.1.10.</span> <span class="toc-text">9.Dialog事件监听</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2_DialogFragment"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 DialogFragment</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-DialogFragment全局变量"><span class="toc-number">3.2.1.</span> <span class="toc-text">1.DialogFragment全局变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-DialogFragment继承和重写Fragment"><span class="toc-number">3.2.2.</span> <span class="toc-text">2.DialogFragment继承和重写Fragment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-DialogFragment的onCreateDialog()"><span class="toc-number">3.2.3.</span> <span class="toc-text">3.DialogFragment的onCreateDialog()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-DialogFragment的show()"><span class="toc-number">3.2.4.</span> <span class="toc-text">3.DialogFragment的show()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-DialogFragment的dismiss()"><span class="toc-number">3.2.5.</span> <span class="toc-text">4.DialogFragment的dismiss()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-DialogFragment的其他方法"><span class="toc-number">3.2.6.</span> <span class="toc-text">5.DialogFragment的其他方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#_"><span class="toc-number">4.</span> <span class="toc-text">　　</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-综述"><span class="toc-number">5.</span> <span class="toc-text">3.综述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#补充：_Dialog的Builder模式"><span class="toc-number">5.0.1.</span> <span class="toc-text">补充： Dialog的Builder模式</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5288126184&verifier=4988e869&dpc=1"></iframe>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>3</sup></a></li>
+		
+			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>1</sup></a></li>
+		
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>18</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>16</sup></a></li>
+		
+			<li><a href="/tags/Markdown语法/" title="Markdown语法">Markdown语法<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Github/" title="Github">Github<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DailyEpitaph/" title="DailyEpitaph">DailyEpitaph<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ViewGroup/" title="ViewGroup">ViewGroup<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Android基础/" style="font-size: 20.00px;">Android基础</a><a href="/tags/DailyEpitaph/" style="font-size: 10.00px;">DailyEpitaph</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Hexo/" style="font-size: 10.00px;">Hexo</a><a href="/tags/Markdown语法/" style="font-size: 15.00px;">Markdown语法</a><a href="/tags/ViewGroup/" style="font-size: 10.00px;">ViewGroup</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+         
+           <li>
+             
+             	<a href="http://blog.csdn.net/qiaoidea" target="_blank" title="Qiao&#39;s CSDN">Qiao&#39;s CSDN</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://user.qzone.qq.com/378675427 " target="_blank" title="Qiao的QQ空间">Qiao&#39;s QQ</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://hexo.io " target="_blank" title="Hexo官方网站">Hexo</a>
+             
+           </li>
+         
+     </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"qiaoidea"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+  </body>
+</html>

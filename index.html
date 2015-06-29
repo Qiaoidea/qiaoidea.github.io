@@ -47,11 +47,11 @@
 					 
 						<li><a href="/">主页</a></li>
 					
-						<li><a href="/dj">札记</a></li>
-					
 						<li><a href="/programing_art">编程艺术</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/dj">札记</a></li>
 					
 						<li><a href="/about">关于</a></li>
 					
@@ -77,68 +77,40 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2049/12/01/diary/DailyEpitaph/" title="《每日墓志铭》" itemprop="url">《每日墓志铭》</a>
+      <a href="/2015/06/11/android_note/UI--学习模仿QQ未读提醒拖拽删除/" title="UI--学习模仿QQ未读提醒拖拽删除" itemprop="url">UI--学习模仿QQ未读提醒拖拽删除</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2049-12-01T09:11:54.000Z" itemprop="datePublished"> 发表于 12月 1 2049</time>
+    <time datetime="2015-06-10T16:00:00.000Z" itemprop="datePublished"> 发表于 6月 11 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h3 id="《每日墓志铭》系列"><a href="/dj/">《每日墓志铭》系列</a></h3>
-<p>　　个人日记。本系列用以记录生活札记和个人所感所悟心得，目的期望能做到吾日三省吾身。文字内容谨代表个人观点，如有鄙陋，欢迎批评指正。</p>
-<h2 id="序言">序言</h2>
-<p>　　<a href="https://github.com/" target="_blank" rel="external">GitHub</a>博客部署有相当长一段时间了，然而忙着各种事由一直没能正式开始自己的码字之路。其中，很有一段时间各种推迟，各种搪塞，浑浑噩噩地过着。与其美名曰是因为写代码，赶进度，学知识，不如说就是一个懒字而已。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2049/12/01/diary/DailyEpitaph/#more">Read More..</a>
-          
-       </p>
-    </div>
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/08/android_note/Android更新Ui的几种方法和见解/" title="Android更新Ui的几种方法和见解" itemprop="url">Android更新Ui的几种方法和见解</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-07T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 8 2015</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="《代码里的世界》"><strong>《代码里的世界》</strong></h2>
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
 <blockquote>
 <p>用文字札记描绘自己 android学习之路</p>
-<p>　　<em>转载请保留出处 by Qiao</em> <a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45115047</a></p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/46608385" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/46608385</a></p>
 </blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">弹出式对话框各种方案</a>   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46402845" target="_blank" rel="external">Dialog源码解析</a>     从源码上看Dialog与DialogFragment</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46417747" target="_blank" rel="external">仿IOS ActionSheet</a>     两种方式实现ActionSheet底部弹出菜单效果</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46417747" target="_blank" rel="external">QQ未读提醒拖拽删除</a>  触摸事件监听与控件位置变换</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　作为一款优秀的社交聊天软件，QQ始终保持着优秀的交互与设计，同时引领不少新时尚与标准规范，而它同时也有一些人性化的设计颇值得为人称道。今天要提到的是<strong>QQ消息未读拖拽清除</strong>（一键退朝”，“一键清除未读”，“一键下班”）的功能。具体细节参考 <a href="http://www.zhihu.com/question/26382740" target="_blank" rel="external"><strong>知乎:一键消除红点功能是怎么想出来的？</strong></a>当然，得益于诸位大大的各种尝试，小弟也稍加模仿修改了一个类似的Demo.这里展示下我们最后实现的各种样式及效果图：<br>　　<br>　　<img src="http://img.blog.csdn.net/20150623174455621" alt="QQ未读提醒拖拽删除效果图"><br>　　<br>　　(注：部分设计思想借鉴 <a href="http://blog.csdn.net/chenupt/article/details/41478303" target="_blank" rel="external">chenupt</a>的博文，不过其部分细节和实用性不够友善，拖动区域小，移除效果不随手指移动等原因，特作修缮并加一个人理解稍作补充。)<br>　　<a href="http://download.csdn.net/detail/u011254308/8831829" target="_blank" rel="external"><strong>示例源码</strong></a> 已更新上传,包涵了滑动切换fragment和底部tab变色效果。具体实现方案鸿神已经提过，有兴趣的点个赞我后边再另开一篇仔细啰嗦下。</p>
 
         
         
         <p class="article-more-link">
           
-            <a href="/2015/04/08/android_note/Android更新Ui的几种方法和见解/#more">Read More..</a>
+            <a href="/2015/06/11/android_note/UI--学习模仿QQ未读提醒拖拽删除/#more">Read More..</a>
           
        </p>
     </div>
@@ -155,74 +127,29 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/02/01/markdown/markdown/" title="Markdown 入门手册" itemprop="url">Markdown 入门手册</a>
+      <a href="/2015/06/05/android_note/关于Google 搜索，你应该知道的梯子/" title="关于Google 搜索，你应该知道的梯子" itemprop="url">关于Google 搜索，你应该知道的梯子</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2015-01-31T16:00:00.000Z" itemprop="datePublished"> 发表于 2月 1 2015</time>
+    <time datetime="2015-06-04T16:00:00.000Z" itemprop="datePublished"> 发表于 6月 5 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h4 id="一-_简单功能">一. 简单功能</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">功能</th>
-<th style="text-align:left">效果</th>
-<th style="text-align:left">Markdown代码</th>
-<th style="text-align:left">备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">粗体</td>
-<td style="text-align:left"><strong>粗体</strong></td>
-<td style="text-align:left"><code>**粗体**</code></td>
-<td style="text-align:left">两边加**</td>
-</tr>
-<tr>
-<td style="text-align:left">斜体</td>
-<td style="text-align:left"><em>斜体</em></td>
-<td style="text-align:left"><code>_斜体_</code></td>
-<td style="text-align:left">两边加_</td>
-</tr>
-<tr>
-<td style="text-align:left">中划线</td>
-<td style="text-align:left"><del>中划线</del></td>
-<td style="text-align:left"><code>~~中划线~~</code></td>
-<td style="text-align:left">两边加~~</td>
-</tr>
-<tr>
-<td style="text-align:left">单行代码</td>
-<td style="text-align:left"><code>Log.i(&quot;Hello World!&quot;)</code></td>
-<td style="text-align:left">`Log.i(“Hello World!”)`</td>
-<td style="text-align:left">两边加`</td>
-</tr>
-<tr>
-<td style="text-align:left">插入图片</td>
-<td style="text-align:left"><img src="http://www.trinea.cn/rss.png" alt="Image"></td>
-<td style="text-align:left"><code>![Image](http://www.trinea.cn/rss.png)</code></td>
-<td style="text-align:left">[] 中间为占位符,() 中间为图片链接</td>
-</tr>
-<tr>
-<td style="text-align:left">链接</td>
-<td style="text-align:left"><a href="http://www.github.com" target="_blank" rel="external">Visit Github</a></td>
-<td style="text-align:left"><code>[Visit Github](http://www.github.com)</code></td>
-<td style="text-align:left">[] 中间为显示文字,() 中间为链接</td>
-</tr>
-</tbody>
-</table>
+        <p>没有了google的日子是相当难受，下面推荐一些google的镜像站，好东西当然要拿出来共同分享！<br>以下镜像站分原版和非原版，非原版界面有些改变，搜索结果依然是相同的。</p>
+<hr>
+<h3 id="1-非原版："><strong>1.非原版：</strong></h3>
+<p>Glgoo：<a href="http://www.glgoo.com/" target="_blank" rel="external">http://www.glgoo.com/</a><br>谷粉搜搜：<a href="http://www.gfsoso.net/" target="_blank" rel="external">http://www.gfsoso.net/</a><br>谷粉搜搜：<a href="http://www.gfsswy.com/" target="_blank" rel="external">http://www.gfsswy.com/</a><br>谷粉搜搜：<a href="http://gufensoso.com/" target="_blank" rel="external">http://gufensoso.com/</a><br>谷粉恰搜：<a href="http://www.qiasou.com/" target="_blank" rel="external">http://www.qiasou.com/</a><br>蝴蝶：<a href="http://www.xiexingwen.com/" target="_blank" rel="external">http://www.xiexingwen.com/</a><br>Googleout：<a href="https://www.out1000.com/" target="_blank" rel="external">https://www.out1000.com/</a><br>一哥搜：<a href="http://www.egeso.com/" target="_blank" rel="external">http://www.egeso.com/</a><br>谷歌搜：<a href="http://www.gugesou.com/" target="_blank" rel="external">http://www.gugesou.com/</a><br>谷壳：<a href="http://www.googke.me/" target="_blank" rel="external">http://www.googke.me/</a><br>谷鸽：<a href="http://www.gvgle.com/" target="_blank" rel="external">http://www.gvgle.com/</a><br>南搜：<a href="http://nan.so/" target="_blank" rel="external">http://nan.so/</a><br>白鸽：<a href="http://baigeso.com/" target="_blank" rel="external">http://baigeso.com/</a><br>GG搜索：<a href="http://ggsousuo.duapp.com/" target="_blank" rel="external">http://ggsousuo.duapp.com/</a><br>Avira：<a href="https://safesearch.avira.com/" target="_blank" rel="external">https://safesearch.avira.com/</a><br>Suche：<a href="http://suche.web.de/" target="_blank" rel="external">http://suche.web.de/</a><br>WOW：<a href="http://www.wow.com/" target="_blank" rel="external">http://www.wow.com/</a><br>Ask：<a href="http://home.tb.ask.com/" target="_blank" rel="external">http://home.tb.ask.com/</a><br>谷歌363：<a href="http://www.g363.com/" target="_blank" rel="external">http://www.g363.com/</a></p>
 
         
         
         <p class="article-more-link">
           
-            <a href="/2015/02/01/markdown/markdown/#more">Read More..</a>
+            <a href="/2015/06/05/android_note/关于Google 搜索，你应该知道的梯子/#more">Read More..</a>
           
        </p>
     </div>
@@ -239,25 +166,43 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/01/18/markdown/快速学习markdown/" title="快速学习Markdown" itemprop="url">快速学习Markdown</a>
+      <a href="/2015/05/20/android_note/UI--仿IOS控件之ActionSheet样式 and more../" title="UI--仿IOS控件之ActionSheet样式 and more.." itemprop="url">UI--仿IOS控件之ActionSheet样式 and more..</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2015-01-17T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 18 2015</time>
+    <time datetime="2015-05-19T16:00:00.000Z" itemprop="datePublished"> 发表于 5月 20 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>　　使用Markdown写博客已经三个月了，对这个标记语言很是喜欢。现在流行的教程，要么就是太复杂太难以理解，要么就是太简单太肤浅，稍微高级点的用法没有提及。本文的初衷就是用最容易理解的方式，把Markdown入门到高级用法一一介绍给读者。看完之后，你不仅可以开始使用Markdown写东西，在日常使用中也随时可以打开这篇博客参考各种用法。<br>
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/46417747" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/46417747</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">弹出式对话框各种方案</a>   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46402845" target="_blank" rel="external">Dialog源码解析</a>     从源码上看Dialog与DialogFragment</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46417747" target="_blank" rel="external">仿IOS ActionSheet</a>     两种方式实现ActionSheet底部弹出菜单效果</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　在讲述了<a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">弹出式对话框</a>和对其 <a href="http://blog.csdn.net/qiaoidea/article/details/46402845" target="_blank" rel="external">源码分析</a>之后，我们尝试来模仿一下ios中常见的弹出式按钮选项——ActionSheet。其实样式也比较简单，从底部弹出几个按钮，提供选项菜单，同时出现半透明背景蒙版。具体详情及效果参考IOS设备。这里展示下我们最后实现的各种样式及效果图：<br>　　<br>　　<img src="http://img.blog.csdn.net/20150522203925438" alt="仿IOS ActionSheet效果图">
+　　</p>
+<hr>
+<h2 id="2-分析研究"><strong>2.分析研究</strong></h2>
+<p>　　动手实现之前，先简单说两句。实现这个样式，具体要怎么做，能做成什么样，究竟该怎么用，到底好不好用？额，不知道，似乎都看你的编写技巧和封装了。鄙人愚笨，且写且摸索。<br>　　当然先从熟悉的<strong>自定义View</strong>入手，使用一个线性布局LinearLayout嵌套N个Button实现。黑色半透明背景采用单独一个View,便于包装使用。做出最基本的效果之后，封装对外接口，用String[]数组来存取每个Button item的文本，并定义一个itemListener,设置监听item的点击事件。<br>　　OK。完成这个并不难，如果我们想更进一层做好扩展，不妨尝试<strong>使用DialogFragment</strong>再做一遍，另外，前面还有提到AlertDialog中使用的<strong>Builder模式</strong>，我们也来做一下，看看效果如何。那么，为什么不更灵活一点儿，使用我们自定义的样式，可以切换ActionSheet风格，比如IOS6和IOS7?<br>　　具体怎么做，来理下思路。首先继承自Fragment，在OnCreateView中实现自定义View，当然，在自定义View中使用我们的自定义属性，控制风格样式，另外呢，定义一个静态Builder类，负责设置数据与交互逻辑，最后通过Argument绑定到Fragment中去，实现最终效果。</p>
+
         
         
         <p class="article-more-link">
           
-            <a href="/2015/01/18/markdown/快速学习markdown/#more">Read More..</a>
+            <a href="/2015/05/20/android_note/UI--仿IOS控件之ActionSheet样式 and more../#more">Read More..</a>
           
        </p>
     </div>
@@ -274,25 +219,48 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/01/18/markdown/markdown简明语法/" title="Markdown 简明语法手册" itemprop="url">Markdown 简明语法手册</a>
+      <a href="/2015/05/15/android_note/Dialog与FragmentDialog源码解析/" title="Dialog与FragmentDialog源码解析" itemprop="url">Dialog与FragmentDialog源码解析</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2015-01-17T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 18 2015</time>
+    <time datetime="2015-05-14T16:00:00.000Z" itemprop="datePublished"> 发表于 5月 15 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>　　本文来自作业部落-在线Markdown编辑阅读器。<a href="https://www.zybuluo.com/mdeditor" target="_blank" rel="external">点击查看</a>。供Markdown初学者学习参考。<br>　　另外特别需说明的一点儿是，对于Makdown语法来说，不同编辑器的渲染都不太一样，如若要发布为hexo网页，请以 hexo 为准。<br>
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/46402845" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/46402845</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">弹出式对话框各种方案</a>   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">Dialog源码解析</a>     从源码上看Dialog与DialogFragment</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　<a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">前一篇</a>写了常用的弹出框的几种实现方式，这里通过源码来简要解析下Dialog的实现原理。后便作为补充会讲下官方提倡的FragmentDialog。</p>
+<hr>
+<h2 id="2-源码解析"><strong>2.源码解析</strong></h2>
+<p>　　通常创建非阻塞式对话框的方式就是使用dialog了，不过在Android 3.0 之后，google更推荐使用新引入的基于Fragment的DialogFragment。这里我们从源码层次来看下详细实现。</p>
+<h3 id="2-1_Dialog">2.1 <strong>Dialog</strong></h3>
+<h4 id="1-DialogInterface">1.DialogInterface</h4>
+<p>　　Dialog对话框实现的接口有DialogInterface,Window.Callback, keyEvent.Callback,OnCreateContextMenuListener，后边几个基本的Activity、View等组件都或多或少实现了，这里侧重讲下Dialog专有的DialogInterface。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DialogInterface</span> </span>{ </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON_POSITIVE = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON_NEGATIVE = -<span class="number">2</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON_NEUTRAL = -<span class="number">3</span>;</div><div class="line">    </div><div class="line">    <span class="annotation">@Deprecated</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON1 = BUTTON_POSITIVE;</div><div class="line">    <span class="annotation">@Deprecated</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON2 = BUTTON_NEGATIVE;</div><div class="line">    <span class="annotation">@Deprecated</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUTTON3 = BUTTON_NEUTRAL;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span>();</div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dismiss</span>();</div><div class="line">    </div><div class="line">    interface OnCancelListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCancel</span>(DialogInterface dialog);</div><div class="line">    }</div><div class="line">    </div><div class="line">    interface OnDismissListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDismiss</span>(DialogInterface dialog);</div><div class="line">    }</div><div class="line"></div><div class="line">    interface OnShowListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onShow</span>(DialogInterface dialog);</div><div class="line">    }</div><div class="line">    </div><div class="line">    interface OnClickListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(DialogInterface dialog, <span class="keyword">int</span> which);</div><div class="line">    }</div><div class="line">   </div><div class="line">    interface OnMultiChoiceClickListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(DialogInterface dialog, <span class="keyword">int</span> which, <span class="keyword">boolean</span> isChecked);</div><div class="line">    }</div><div class="line">    </div><div class="line">    interface OnKeyListener {</div><div class="line">        <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKey</span>(DialogInterface dialog, <span class="keyword">int</span> keyCode, KeyEvent event);</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+
+
+
         
         
         <p class="article-more-link">
           
-            <a href="/2015/01/18/markdown/markdown简明语法/#more">Read More..</a>
+            <a href="/2015/05/15/android_note/Dialog与FragmentDialog源码解析/#more">Read More..</a>
           
        </p>
     </div>
@@ -309,25 +277,48 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/01/11/other/如何参与一个GitHub开源项目/" title="如何参与一个GitHub开源项目" itemprop="url">如何参与一个GitHub开源项目</a>
+      <a href="/2015/05/07/android_note/从仿QQ消息提示框来谈弹出式对话框/" title="从仿QQ消息提示框来谈弹出式对话框" itemprop="url">从仿QQ消息提示框来谈弹出式对话框</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2015-01-11T09:11:54.000Z" itemprop="datePublished"> 发表于 1月 11 2015</time>
+    <time datetime="2015-05-06T16:00:00.000Z" itemprop="datePublished"> 发表于 5月 7 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>　　本文是Github官方给出的参与Github上开源项目的一些指导，对希望加入开源社区的开发者是一个不错的参考。<br>
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45896477</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://www.oschina.net/question/54100_32486" target="_blank" rel="external">自定义弹出式对话框的简单用法</a>    列举各种常见的对话框实现方案</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　android原生控件向来以丑著称(新推出的Material Design当另说)，因此几乎所有的应用都会特殊定制自己的UI样式。而其中弹出式提示框的定制尤为常见，本篇我们将从模仿QQ退出提示框来看一下常见的几种自定义提示框的实现方式。<br>　　这里使用的几种弹出框实现方法概括为以下几种：</p>
+<ol>
+<li><strong>自定义Dialog</strong></li>
+<li><strong>自定义PopupWindow</strong></li>
+<li><strong>自定义Layout View</strong></li>
+<li><strong>Activity的Dialog样式</strong></li>
+<li><strong>FragmentDialog</strong></li>
+</ol>
+<p>　　<em>先看下最终的<strong>效果图</strong>：</em><br><img src="http://img.blog.csdn.net/20150522183827934" alt="弹出式对话框"></p>
+<hr>
+<h2 id="2-实践"><strong>2.实践</strong></h2>
+<p>　　前面提到几种实现方式均可以达到同样的演示效果，但其中又是各有不同。这里先逐一列举各种具体实现，最后加以综述总结和归纳吧。<br>　　在此之前呢，先看一下这里实现的对话框共用布局layout/confirm_dialog.xml 。</p>
+
         
         
         <p class="article-more-link">
           
-            <a href="/2015/01/11/other/如何参与一个GitHub开源项目/#more">Read More..</a>
+            <a href="/2015/05/07/android_note/从仿QQ消息提示框来谈弹出式对话框/#more">Read More..</a>
           
        </p>
     </div>
@@ -344,160 +335,43 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/01/10/android_note/Android基础_介绍/" title="Android基础_介绍" itemprop="url">Android基础_介绍</a>
+      <a href="/2015/05/03/android_note/UI--从学习styleable自定义view属性到一点儿更有意思的尝试/" title="UI--从学习styleable自定义view属性到一点儿更有意思的尝试" itemprop="url">UI--从学习styleable自定义view属性到一点儿更有意思的尝试</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2015-01-09T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    <time datetime="2015-05-02T16:00:00.000Z" itemprop="datePublished"> 发表于 5月 3 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h2 id="1-_3G、4G">1. 3G、4G</h2>
-<pre><code>-<span class="ruby"> 第三代移动通信技术（<span class="number">3</span>rd - <span class="constant">Generation</span>），速率一般在几百<span class="constant">Kbps</span>，较之前的<span class="number">2</span>G和<span class="number">2.5</span>G在数据传输速度上有很大提升。
-</span>-<span class="ruby"> 第四代移动通信技术（<span class="number">4</span>th - <span class="constant">Generation</span>），速度可达到<span class="number">100</span>Mbps以上，几乎可以满足人们的所有传输数据的需求。
-</span>
-目前主流的3G技术标准有三种：
--<span class="ruby"> <span class="constant">WCDMA</span>：全球<span class="number">80</span>%以上的<span class="number">3</span>G网络都是采用此种制式。中国联通运营。<span class="number">186</span>
-</span>-<span class="ruby"> <span class="constant">CDMA2000</span>：目前日韩及北美使用较多。中国电信运营。 <span class="number">189</span>
-</span>-<span class="ruby"> <span class="constant">TD</span>-<span class="constant">SCDMA</span>：中国自主知识产权的<span class="number">3</span>G通信技术。中国移动运营。 <span class="number">188</span> 
-</span>
-目前主流的4G技术为LTE，但还没有被广泛应用：    
-GSM → GPRS → EDGE → WCDMA → HSDPA → HSDPA+ → LTE
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/01/10/android_note/Android基础_介绍/#more">Read More..</a>
-          
-       </p>
-    </div>
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/01/09/android_note/Android动画/" title="Android动画" itemprop="url">Android动画</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
-		
-  <p class="article-time">
-    <time datetime="2015-01-08T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 9 2015</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="1-_AlphaAnimation">1. AlphaAnimation</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">RelativeLayout rl_splash = (RelativeLayout) findViewById(R.id.rl_splash);</div><div class="line"><span class="comment">//播放动画效果</span></div><div class="line">AlphaAnimation animation = <span class="keyword">new</span> AlphaAnimation(<span class="number">1.0</span>f, <span class="number">0.0</span>f);</div><div class="line"><span class="comment">//设置Alpha动画的持续时间</span></div><div class="line">animation.setDuration(<span class="number">2000</span>);</div><div class="line"><span class="comment">//播放Alpha动画</span></div><div class="line">rl_splash.setAnimation(animation);</div></pre></td></tr></table></figure>
-
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45599593" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45599593</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45568653" target="_blank" rel="external">多行文本折叠展开</a>    自定义布局View实现多行文本折叠和展开</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　前面封装view的时候用到了自定义属性，觉得有必要单独讲一下这部分，但是呢，又不想向其他文章一样千篇一律地写这些东西。所以呢，后便会加一些临时的发散思维，引用点有意思的东西。分享东西嘛，随性点儿。<br>　　回归正题，我们想在view中使用自定义属性要怎么做呢？<br>　　其实有如下几点：</p>
+<ol>
+<li><strong>declare-styleable</strong> 在res/values目录下新建xml文件 自定义你的属性</li>
+<li><strong>AttributeSet和TypedArray</strong> 在view中获取这些属性对应的值，设置绑定到view上</li>
+<li><strong>xmlns申明与引用</strong> 在你要使用的地方引入命名空间并使用这些属性，赋值</li>
+</ol>
+<p>　　然后我们来尝试通过这些步骤做些自定义view，同时呢，我期望能方便快捷的绑定一些事件，执行相应操作。尝试来做一下。<br>　　<a href="http://download.csdn.net/detail/u011254308/8701449" target="_blank" rel="external">xml直接定义view和点击事件的demo</a><br>　　<img src="http://img.blog.csdn.net/20150516002127891" alt="xml直接定义view和点击事件的demo"></p>
 
         
         
         <p class="article-more-link">
           
-            <a href="/2015/01/09/android_note/Android动画/#more">Read More..</a>
-          
-       </p>
-    </div>
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/01/08/android_note/ViewGroup/" title="深入理解ViewGroup" itemprop="url">深入理解ViewGroup</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
-		
-  <p class="article-time">
-    <time datetime="2015-01-07T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 8 2015</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　　　深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。</p>
-<h2 id="ViewGroup定义">ViewGroup定义</h2>
-<p>　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。<br>　　其实ViewGroup也就是View的容器。通过ViewGroup.LayoutParams来指定子View的参数。</p>
-<p>　　ViewGroup作为一个容器，为了制定这个容器应有的标准所以为其指定了接口</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewGroup</span> <span class="keyword">extends</span> <span class="title">View</span> <span class="keyword">implements</span> <span class="title">ViewParent</span>, <span class="title">ViewManager</span>  </span>
-</code></pre><p>　　这两个接口这里不研究，如果涉及到的话会带一下。ViewGroup有小4000行代码，下面我们一个模块一个模块分析。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/01/08/android_note/ViewGroup/#more">Read More..</a>
-          
-       </p>
-    </div>
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/01/08/android_note/Android安全退出应用程序/" title="Android安全退出应用程序" itemprop="url">Android安全退出应用程序</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
-		
-  <p class="article-time">
-    <time datetime="2015-01-07T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 8 2015</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="1-_杀死进程。">1. 杀死进程。</h2>
-<pre><code>这种方法是没有效果的只能杀死当前的<span class="escape">`A</span>ctivity<span class="escape">`无</span>法关闭程序，在<span class="number">1.5</span>的时候有用，谷歌设计的时候规定程序不能自杀<span class="escape">`a</span>ndroid.os.Process.killProcess(android.os.Process.myPid())<span class="escape">`.</span>                                 
-</code></pre><h2 id="2-_终止当前正在运行的Java虚拟机，导致程序终止-">2. 终止当前正在运行的Java虚拟机，导致程序终止.</h2>
-<pre><code>这种方法也是没有效果的，因为<span class="escape">`A</span>ndroid<span class="escape">`用</span>的是<span class="escape">`d</span>alvik<span class="escape">`虚</span>拟机
-<span class="escape">`S</span>ystem.exit(<span class="number">0</span>)<span class="comment">;`</span>
-</code></pre><h2 id="3-_强制关闭与该包有关联的一切执行">3. 强制关闭与该包有关联的一切执行</h2>
-<pre><code>这种方法只能杀死别人，无法杀死自己     
-</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);    </div><div class="line">manager.restartPackage(getPackageName());</div><div class="line">同时需要申请权限</div><div class="line">&lt;uses-permission android:name=<span class="string">"android.permission.RESTART_PACKAGES"</span> /&gt;</div></pre></td></tr></table></figure>
-
-<p>既然上面介绍的三种方法都没有效果，那么怎么才能退出应用程序呢？    </p>
-<p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/01/08/android_note/Android安全退出应用程序/#more">Read More..</a>
+            <a href="/2015/05/03/android_note/UI--从学习styleable自定义view属性到一点儿更有意思的尝试/#more">Read More..</a>
           
        </p>
     </div>
@@ -510,7 +384,7 @@ GSM → GPRS → EDGE → WCDMA → HSDPA → HSDPA+ → LTE
 
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -535,7 +409,7 @@ GSM → GPRS → EDGE → WCDMA → HSDPA → HSDPA+ → LTE
 		
 			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>1</sup></a></li>
 		
-			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>7</sup></a></li>
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>18</sup></a></li>
 		
 		</ul>
 </div>
@@ -546,7 +420,7 @@ GSM → GPRS → EDGE → WCDMA → HSDPA → HSDPA+ → LTE
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>5</sup></a></li>
+			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>16</sup></a></li>
 		
 			<li><a href="/tags/Markdown语法/" title="Markdown语法">Markdown语法<sup>3</sup></a></li>
 		

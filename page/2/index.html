@@ -47,11 +47,11 @@
 					 
 						<li><a href="/">主页</a></li>
 					
-						<li><a href="/dj">札记</a></li>
-					
 						<li><a href="/programing_art">编程艺术</a></li>
 					
 						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/dj">札记</a></li>
 					
 						<li><a href="/about">关于</a></li>
 					
@@ -77,26 +77,46 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/12/07/other/Hexo搭建Github博客/" title="Hexo+Github搭建个人博客" itemprop="url">Hexo+Github搭建个人博客</a>
+      <a href="/2015/04/30/android_note/UI--微博（动态）点赞，简单效果中的不简单门道/" title="UI--微博（动态）点赞，简单效果中的不简单门道" itemprop="url">UI--微博（动态）点赞，简单效果中的不简单门道</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2014-12-07T09:11:54.000Z" itemprop="datePublished"> 发表于 12月 7 2014</time>
+    <time datetime="2015-04-29T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 30 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <pre><code>　　一直想搭建一个个人博客，因为个人web技术着实不行，所以总没能如愿。偶然发现github里边有个开源的项目Hexo，可以简易搭建自己的专属博客，遂学着尝试了下。虽然许多功能扩展自己做的不够完善，但总算能看了。这里记录下来，供像我这样的技术小白参考学习。
-</code></pre>
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45850641" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45850641</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="https://github.com/JakeWharton/NineOldAndroids" target="_blank" rel="external">单行文本水平触摸滑动效果</a>   通过EditText实现TextView单行长文本水平滑动效果</li>
+<li><a href="https://github.com/daimajia/AndroidViewAnimations" target="_blank" rel="external">多行文本折叠展开</a>    自定义布局View实现多行文本折叠和展开</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　说起空间动态、微博的点赞效果，网上也是很泛滥，各种实现与效果一大堆。而详细实现的部分，讲述的也是参差不齐，另一方面估计也有很多大侠也不屑一顾，觉得完全没必要单独开篇来写和讲解吧。毕竟，也就是两个view和一些简单的动画效果罢了。<br>　　单若是只讲这些，我自然也是不愿花这番功夫的。虽然自己很菜，可也不甘于太菜。所以偶尔看到些好东西，可以延伸学写下，我还是很情愿拿出来用用，顺带秀一秀逼格什么的。<br>　　不扯太多，先说说今天实现点赞效果用到的自以为不错的两个点：</p>
+<ul>
+<li><strong>Checkable</strong>  用来扩展View实现选中状态切换</li>
+<li><strong>AndroidViewAnimations</strong>  基于nineoldandroids封装的android动画简易类库。究竟有多简单呢，就像这样<blockquote>
+<p>AnimHelper.with(new PulseAnimator()).duration(1000).playOn(imageView);<br> 作用： <em>在imageView上使用PulseAnimator这个动画效果，播放一秒。</em></p>
+</blockquote>
+</li>
+</ul>
+<p>　　当然是从实现角度来看这个库啦，如果仅仅是使用，google/百度一大堆啦。<br>　　<br>结合前两篇富文本折叠展开，加上我们的点赞view <strong>做出的demo整合效果图：</strong><br><img src="http://img.blog.csdn.net/20150519222450167" alt="点赞效果"></p>
+<h2>
         
         
         <p class="article-more-link">
           
-            <a href="/2014/12/07/other/Hexo搭建Github博客/#more">Read More..</a>
+            <a href="/2015/04/30/android_note/UI--微博（动态）点赞，简单效果中的不简单门道/#more">Read More..</a>
           
        </p>
     </div>
@@ -113,25 +133,274 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2013/12/01/other/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2015/04/27/android_note/UI--多行文本折叠展开效果/" title="UI--多行文本折叠展开效果" itemprop="url">UI--多行文本折叠展开效果</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
 		
   <p class="article-time">
-    <time datetime="2013-11-30T16:00:00.000Z" itemprop="datePublished"> 发表于 12月 1 2013</time>
+    <time datetime="2015-04-26T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 27 2015</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>　　Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.<br>
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45568653" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45568653</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45567643" target="_blank" rel="external">单行文本水平触摸滑动效果</a>   通过EditText实现TextView单行长文本水平滑动效果</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45568653" target="_blank" rel="external">多行文本折叠展开</a>    自定义布局View实现多行文本折叠和展开</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2>
+<p>　　经常在APP中能看到有引用文章或大段博文的内容，他们的展示样式也有点儿意思，默认是折叠的，当你点击文章之后它会自动展开。再次点击他又会缩回去。<br>　　网上有找到部分效果，感觉不是很满意。最后自己尝试用 <strong>自定义布局layout</strong> 写了个demo。比较简陋，不过可以用了。有这方面需求的朋友可以稍加改造下。如有更好的创意，也不妨分享一下。<br>　　<br><em>效果图：</em><br><img src="http://img.blog.csdn.net/20150515221330883" alt="多行文本折叠展开"></p>
+<hr>
+<h2 id="2-具体实现"><strong>2.具体实现</strong></h2>
+<p>　　但从实现效果方面来看，只用简单定义必要view即可，后变为了方便扩展使用和挪用，又对整个布局进行封装，方便直接使用。</p>
+<h3 id="2-1_通过多个布局组合实现"><strong><em>2.1 通过多个布局组合实现</em></strong></h3>
+<p>　　第一想法当然是用多个View组合来实现。那么久定义一个LinearLayout布局分别嵌套TextView和ImageView来做。<br>　　<em>大概步骤：</em></p>
+<pre><code>- <span class="keyword">*</span><span class="keyword">*</span>定义布局，垂直的线性LinearLayout布局、TextView和ImageView。<span class="keyword">*</span><span class="keyword">*</span>  在layout中定义基本组件。
+- <span class="keyword">*</span><span class="keyword">*</span>设置TextView的高度为指定行数<span class="keyword">*</span>行高。 <span class="keyword">*</span><span class="keyword">*</span>  不使用maxLine的原因是maxLine会控制显示文本的行数，不方便后边使用动画展开全部内容。因此这里TextView的高度也因该为wrap_content。
+- <span class="keyword">*</span><span class="keyword">*</span>给整个布局添加点击事件，绑定动画。<span class="keyword">*</span><span class="keyword">*</span> 点击时，若TextView未展开则展开至其实际高度，imageView 旋转；否则回缩至 指定行数<span class="keyword">*</span>行高 , imageView 旋转缩回。
+</code></pre><p>　　</p>
+<h4 id="开始编写代码："><em>开始编写代码：</em></h4>
+<p>　　<strong>1.在xml中定义布局:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">LinearLayout</span></span></div><div class="line">       <span class="attribute">android:id</span>=<span class="value">"@+id/description_layout"</span></div><div class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></div><div class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></div><div class="line">       <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span></div><div class="line">       <span class="attribute">android:paddingLeft</span>=<span class="value">"12dip"</span></div><div class="line">       <span class="attribute">android:paddingRight</span>=<span class="value">"12dip"</span></div><div class="line">       <span class="attribute">android:paddingTop</span>=<span class="value">"5dip"</span> &gt;</div><div class="line"></div><div class="line">       <span class="tag">&lt;<span class="title">TextView</span></span></div><div class="line">           <span class="attribute">android:id</span>=<span class="value">"@+id/description_view"</span></div><div class="line">           <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></div><div class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></div><div class="line">           <span class="attribute">android:textColor</span>=<span class="value">"@android:color/black"</span></div><div class="line">           <span class="attribute">android:textSize</span>=<span class="value">"18dip"</span> &gt;</div><div class="line">       <span class="tag">&lt;/<span class="title">TextView</span>&gt;</span></div><div class="line"></div><div class="line">       <span class="tag">&lt;<span class="title">ImageView</span></span></div><div class="line">           <span class="attribute">android:id</span>=<span class="value">"@+id/expand_view"</span></div><div class="line">           <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></div><div class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></div><div class="line">           <span class="attribute">android:layout_gravity</span>=<span class="value">"right"</span></div><div class="line">           <span class="attribute">android:paddingBottom</span>=<span class="value">"5dip"</span></div><div class="line">           <span class="attribute">android:paddingLeft</span>=<span class="value">"5dip"</span></div><div class="line">           <span class="attribute">android:paddingRight</span>=<span class="value">"5dip"</span></div><div class="line">           <span class="attribute">android:paddingTop</span>=<span class="value">"5dip"</span></div><div class="line">           <span class="attribute">android:src</span>=<span class="value">"@drawable/text_ic_expand"</span></div><div class="line">           <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> /&gt;</div><div class="line">   <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+
+
         
         
         <p class="article-more-link">
           
-            <a href="/2013/12/01/other/hello-world/#more">Read More..</a>
+            <a href="/2015/04/27/android_note/UI--多行文本折叠展开效果/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/20/diary/DailyEpitaph/" title="《每日墓志铭》" itemprop="url">《每日墓志铭》</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-20T09:11:54.000Z" itemprop="datePublished"> 发表于 4月 20 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="《每日墓志铭》系列"><a href="/dj/">《每日墓志铭》系列</a></h3>
+<p>　　个人日记。本系列用以记录生活札记和个人所感所悟心得，目的期望能做到吾日三省吾身。文字内容谨代表个人观点，如有鄙陋，欢迎批评指正。</p>
+<h2 id="序言">序言</h2>
+<p>　　<a href="https://github.com/" target="_blank" rel="external">GitHub</a>博客部署有相当长一段时间了，然而忙着各种事由一直没能正式开始自己的码字之路。其中，很有一段时间各种推迟，各种搪塞，浑浑噩噩地过着。与其美名曰是因为写代码，赶进度，学知识，不如说就是一个懒字而已。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/20/diary/DailyEpitaph/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/20/android_note/UI--单行文本水平触摸滑动效果/" title="UI--单行文本水平触摸滑动效果" itemprop="url">UI--单行文本水平触摸滑动效果</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-19T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 20 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="《代码里的世界》_—-UI篇"><strong>《代码里的世界》</strong>  —-<strong><em>UI篇</em></strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45115047</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://#" target="_blank" rel="external">单行文本水平触摸滑动效果</a>   通过EditText实现TextView单行长文本水平滑动效果</li>
+<li><a href="http://#" target="_blank" rel="external">多行文本折叠展开</a>    自定义布局View实现多行文本折叠和展开</li>
+</ul>
+<hr>
+<h3 id="1-初衷"><strong>1.初衷</strong></h3>
+<p>　　最近做应用的时候有用到TextView单行长文本，当文本内容过长时候又想实现触摸水平滑动效果。网上找了很多，都没有看到有效解决方案。<br>　　其中，看到最常见的也是最笨拙滴采用重写TextView并继承实现touch 和 Gesture手势。个人觉得很麻烦。</p>
+<h5 id="_后来经提醒发现了其实最简单的方案：">　　<em>后来经提醒发现了其实最简单的方案：</em></h5>
+<p>　　<strong>直接使用 EditText 就好了。</strong> 因为EditText需要编辑和移动光标的缘故，使得它是可以水平滑动的。因此我们只需要设置其为透明背景，并且不可以获得焦点。</p>
+<p><em>效果图：</em><br><img src="http://img.blog.csdn.net/20150507215849181" alt="单行文本水平滑动"></p>
+<h3 id="2-具体实现"><strong>2.具体实现</strong></h3>
+<p>　　定义EditText，并设置背景透明，不能获得焦点。</p>
+<blockquote>
+<p>android:background=”@android:color/transparent”<br>android:focusable=”false”</p>
+</blockquote>
+<p>（注：不能使用 <strong>editable=“false”</strong>，因为这样就不能编辑滑动。而通过使用 <strong>focusable=”false”</strong> 同样不可编辑同时可以滑动）</p>
+<h4 id="代码示例"><strong>代码示例</strong></h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;EditText</div><div class="line">        android:id=<span class="string">"@+id/tt"</span></div><div class="line">        android:layout_width=<span class="string">"0dip"</span></div><div class="line">        android:layout_height=<span class="string">"wrap_content"</span></div><div class="line">        android:layout_weight=<span class="string">"1"</span></div><div class="line">        android:layout_margin=<span class="string">"15dip"</span></div><div class="line">        android:background=<span class="string">"@android:color/transparent"</span></div><div class="line">        android:focusable=<span class="string">"false"</span></div><div class="line">        android:singleLine=<span class="string">"true"</span></div><div class="line">        android:text=<span class="string">"简易实现 TextView单行文本水平触摸滑动效果。简易实现 TextView单行文本水平触摸滑动效果。简易实现 TextView单行文本水平触摸滑动效果"</span></div><div class="line">        android:textColor=<span class="string">"#000"</span></div><div class="line">        android:textSize=<span class="string">"20dip"</span> /&gt;</div></pre></td></tr></table></figure>
+
+<p> 　　附上下载地址：<br><a href="http://download.csdn.net/detail/u011254308/8667625" target="_blank" rel="external">示例源码下载地址</a></p>
+<h4 id="小感"><strong>小感</strong></h4>
+<p>　　记录下来给大家点儿启示。不必用自以为聪明的方法办最笨的事儿。共勉。</p>
+<hr>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/18/android_note/Android更新Ui进阶精解（二）/" title="Android更新Ui进阶精解（二）" itemprop="url">Android更新Ui进阶精解（二）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-17T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 18 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="《代码里的世界》"><strong>《代码里的世界》</strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p>　　<em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45115047</a></p>
+</blockquote>
+<p><strong>【导航】</strong><br><a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">Android更新Ui的几种方法和见解</a>    android更新ui基本常用方法<br><a href="http://blog.csdn.net/qiaoidea/article/details/45128303" target="_blank" rel="external">Android更新Ui进阶精解（一）</a>   android ui线程检查机制<br><a href="http://blog.csdn.net/qiaoidea/article/details/45135731" target="_blank" rel="external">Android更新Ui进阶精解（二）</a>    android 线程更新UI机制</p>
+<hr>
+<h3 id="1-回顾"><strong><em>1.回顾</em></strong></h3>
+<p>　　<a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">第一篇</a>讲了对Ui线程更新的方法和见解，然后接着讲了<a href="http://blog.csdn.net/qiaoidea/article/details/45128303" target="_blank" rel="external">线程检查机制</a>，这里来详细分析下更新Ui的核心——Android中消息系统模型。当然，这里要讲的其实也已经不再简简单单地是更新Ui的范畴了。不过还是很值得学习和分析一下。另外，其实网上关于这方面的讲解也有很多了，本篇也是综合整理并用自己的理解加以描述和概括。同时也感谢有更高造诣的大大能予以批评指正。</p>
+<h4 id="提炼"><strong>提炼</strong></h4>
+<p>　　Android中的消息机制主要有如下几个要点，这里也着重围绕这些内容来讲解：<br>　　<br> <strong>1. Handler</strong> 调度消息和runnable对象在不同线程中执行相应动作。<br> <strong>2. Looper</strong>消息泵，用来为一个线程开启一个消息循环<br> <strong>3. MessageQueue</strong> 遵循FIFO先进先出规则的消息队列，以链表形式存取Message,供looper提取</p>
+<blockquote>
+<p>（为了深入了解，已从源码从提取这几个类<br>　　<a href="http://download.csdn.net/detail/u011254308/8669983" target="_blank" rel="external">Handler/Looper/MessageQueue/Message .java </a> 方便新手下载查看）</p>
+</blockquote>
+<hr>
+<h3 id="2-分析"><strong><em>2.分析</em></strong></h3>
+<p>　　为了方便分析，借用一下找到的模型图综合看一下：<br>　　<img src="http://img.blog.csdn.net/20150419215459930" alt="消息系统模型"><br>　　首先在一个线程中初始化一个looper并prepare（准备），然后创建该looper对象的处理对象Handler，接着当需要交互变更时，可以在其他线程（或自身线程）中使用handler发消息至该消息队列MessageQueue，最后looper会自动有序抽取消息（没有消息则挂起），交给handler执行消息处理逻辑。<br>　　Orz,我的概念描述还是一塌糊涂，还是转代码说明吧：<br><em>比如我们有个线程专门负责一类处理逻辑,并且只允许该线程来处理这类逻辑,那么我们怎么做到呢？</em></p>
+<ol>
+<li><strong>在一个线程里边定义一个Looper</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Looper.prepare(); <span class="comment">//稍微有点儿多，详细见下文</span></div></pre></td></tr></table></figure>
+
+<p>2.<strong>定义一个处理消息的Handler</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">handler = <span class="keyword">new</span> Handler(){</div><div class="line">		<span class="annotation">@Override</span></div><div class="line">		<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span>(Message msg) {</div><div class="line">			<span class="keyword">super</span>.handleMessage(msg);</div><div class="line">			<span class="comment">//处理逻辑</span></div><div class="line">		}</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>3.<strong>启动looper，并开始工作，轮询消息</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Looper.loop(); <span class="comment">//详细见下文</span></div><div class="line"><span class="comment">//要停止的话，使用Looper.quit();</span></div></pre></td></tr></table></figure>
+
+<p>4.<strong>在其他线程将要处理的数据data或回调对象callback以消息Message模式通过Handler发至该消息队列MessageQueue</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">handler.sendMessage(msg)</div></pre></td></tr></table></figure>
+
+<p>5.<strong>Looper的loop()方法会从消息队列中取到该消息并唤醒处理逻辑</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//即loop()方法中的代码</span></div><div class="line"><span class="keyword">for</span> (;;) { <span class="comment">//显然这个死循环一直在等待消息到来并处理</span></div><div class="line">           Message msg = queue.next(); <span class="comment">// 取一条消息</span></div><div class="line">           <span class="keyword">if</span> (msg == <span class="keyword">null</span>) {</div><div class="line">               <span class="keyword">return</span>;</div><div class="line">           }</div><div class="line">           msg.target.dispatchMessage(msg); <span class="comment">//调用消息绑定的handler执行处理逻辑</span></div><div class="line">           <span class="comment">//other code....</span></div><div class="line">   }</div></pre></td></tr></table></figure>
+
+<p>6.<strong>handler跳转到执行处理逻辑的过程</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span>(Message msg) {</div><div class="line">       <span class="keyword">if</span> (msg.callback != <span class="keyword">null</span>) { <span class="comment">//如果有回调，则调用</span></div><div class="line">           handleCallback(msg);</div><div class="line">       } <span class="keyword">else</span> {</div><div class="line">           <span class="keyword">if</span> (mCallback != <span class="keyword">null</span>) {</div><div class="line">               <span class="keyword">if</span> (mCallback.handleMessage(msg)) {</div><div class="line">                   <span class="keyword">return</span>;</div><div class="line">               }</div><div class="line">           }</div><div class="line">           handleMessage(msg);</div><div class="line">       }</div><div class="line">   }</div><div class="line">   </div><div class="line">   <span class="comment">//调用回调方法</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">handleCallback</span>(Message message) {</div><div class="line">       message.callback.run();</div><div class="line">   }</div></pre></td></tr></table></figure>
+
+
+
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/18/android_note/Android更新Ui进阶精解（二）/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/10/android_note/Android更新Ui进阶精解（一）/" title="Android更新Ui进阶精解（一）" itemprop="url">Android更新Ui进阶精解（一）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-09T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 10 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="《代码里的世界》"><strong>《代码里的世界》</strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p>　　<em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45128303" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45128303</a></p>
+</blockquote>
+<p><strong>【导航】</strong><br><a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">Android更新Ui的几种方法和见解</a>    android更新ui基本常用方法<br><a href="http://blog.csdn.net/qiaoidea/article/details/45128303" target="_blank" rel="external">Android更新Ui进阶精解（一）</a>   android ui线程检查机制<br><a href="http://blog.csdn.net/qiaoidea/article/details/45135731" target="_blank" rel="external">Android更新Ui进阶精解（二）</a>    android 线程更新UI机制</p>
+<hr>
+<h3 id="1-回顾"><strong><em>1.回顾</em></strong></h3>
+<p>　　<a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">前面一篇</a>简单讲了如何快速使用handler更新ui。稍微补充一些：</p>
+<ol>
+<li><strong>更新ui时可以直接使用这种方法，你不须非要再new一个子线程才使用，比如：</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">viewPostBtn.setOnClickListener(<span class="keyword">new</span> OnClickListener() {</div><div class="line">			</div><div class="line">			<span class="annotation">@Override</span></div><div class="line">			<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(View v) {</div><div class="line">				viewPostBtn.post(<span class="keyword">new</span> Runnable() {</div><div class="line">					</div><div class="line">					<span class="annotation">@Override</span></div><div class="line">					<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>() {</div><div class="line">						titleView.setText(<span class="string">"viewPost——Result"</span>);</div><div class="line">					}</div><div class="line">				});</div><div class="line">			}</div><div class="line">		});</div></pre></td></tr></table></figure>
+
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/10/android_note/Android更新Ui进阶精解（一）/#more">Read More..</a>
           
        </p>
     </div>
@@ -144,7 +413,7 @@
 
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
@@ -169,7 +438,7 @@
 		
 			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>1</sup></a></li>
 		
-			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>7</sup></a></li>
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>18</sup></a></li>
 		
 		</ul>
 </div>
@@ -180,7 +449,7 @@
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>5</sup></a></li>
+			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>16</sup></a></li>
 		
 			<li><a href="/tags/Markdown语法/" title="Markdown语法">Markdown语法<sup>3</sup></a></li>
 		

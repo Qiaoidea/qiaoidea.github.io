@@ -1,0 +1,569 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Qiaoidea&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Qiaoidea">
+    
+    <meta name="description" content="Android">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Qiaoidea&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Qiaoidea&#39;s Blog" title="Qiaoidea&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Qiaoidea&#39;s Blog">Qiaoidea&#39;s Blog</a></h1>
+				<h2 class="blog-motto">你必须非常努力，才能看起来毫不费力。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/programing_art">编程艺术</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/dj">札记</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:qiaoidea.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/08/android_note/Android更新Ui的几种方法和见解/" title="Android更新Ui的几种方法和见解" itemprop="url">Android更新Ui的几种方法和见解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-07T16:00:00.000Z" itemprop="datePublished"> 发表于 4月 8 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="《代码里的世界》"><strong>《代码里的世界》</strong></h2>
+<blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p>　　<em>转载请保留出处 by Qiao</em> <a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45115047</a></p>
+</blockquote>
+<h3 id="1-_简述"><strong><em>1. 简述</em></strong></h3>
+<p>　　先贴一个我们刚做Android开发时候最容易遇到的一个错误异常 <strong>AndroidRuntimeException</strong> ：<em>“Only the original thread that created a view hierarchy can touch its views”</em><br>　　具体原因是当我们在对ui做出更改时，Android检查我们当前的操作线程是否为UI线程，若不是即报该异常。（详见 ViewRootImpl类的checkThread方法）。</p>
+<h3 id="2-_方案"><strong><em>2. 方案</em></strong></h3>
+<p>　　那么我们该如何更新Ui呢，这里简要使用和讲述的是Handler。先简述概念：Adroid在运行时会创建一个UiThread的主线程来负责控制UI界面的显示、更新和控件交互。其他线程则通过handler将更新逻辑等消息事件(Message) push到主线程的消息队列(MessageQueue)，最后由主线程有序地处理这些消息事件(handleMessage)，实现对界面的更新和控制。<br>　　本文主要讲述更新UI的方法和使用技巧，关于更新过程的原理内容请关注后边的 <strong><a href="http://#" target="_blank" rel="external">Android更新Ui进阶</a></strong>。<br>　　其中，常用的几种方法简单概括有：</p>
+<ul>
+<li>handler.sendMessage();</li>
+<li>handler.post();</li>
+<li>在activity中可以 runOnUiThread();</li>
+<li>在子view中可以  view.post()</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/08/android_note/Android更新Ui的几种方法和见解/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/02/01/markdown/markdown/" title="Markdown 入门手册" itemprop="url">Markdown 入门手册</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-31T16:00:00.000Z" itemprop="datePublished"> 发表于 2月 1 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h4 id="一-_简单功能">一. 简单功能</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">功能</th>
+<th style="text-align:left">效果</th>
+<th style="text-align:left">Markdown代码</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">粗体</td>
+<td style="text-align:left"><strong>粗体</strong></td>
+<td style="text-align:left"><code>**粗体**</code></td>
+<td style="text-align:left">两边加**</td>
+</tr>
+<tr>
+<td style="text-align:left">斜体</td>
+<td style="text-align:left"><em>斜体</em></td>
+<td style="text-align:left"><code>_斜体_</code></td>
+<td style="text-align:left">两边加_</td>
+</tr>
+<tr>
+<td style="text-align:left">中划线</td>
+<td style="text-align:left"><del>中划线</del></td>
+<td style="text-align:left"><code>~~中划线~~</code></td>
+<td style="text-align:left">两边加~~</td>
+</tr>
+<tr>
+<td style="text-align:left">单行代码</td>
+<td style="text-align:left"><code>Log.i(&quot;Hello World!&quot;)</code></td>
+<td style="text-align:left">`Log.i(“Hello World!”)`</td>
+<td style="text-align:left">两边加`</td>
+</tr>
+<tr>
+<td style="text-align:left">插入图片</td>
+<td style="text-align:left"><img src="http://www.trinea.cn/rss.png" alt="Image"></td>
+<td style="text-align:left"><code>![Image](http://www.trinea.cn/rss.png)</code></td>
+<td style="text-align:left">[] 中间为占位符,() 中间为图片链接</td>
+</tr>
+<tr>
+<td style="text-align:left">链接</td>
+<td style="text-align:left"><a href="http://www.github.com" target="_blank" rel="external">Visit Github</a></td>
+<td style="text-align:left"><code>[Visit Github](http://www.github.com)</code></td>
+<td style="text-align:left">[] 中间为显示文字,() 中间为链接</td>
+</tr>
+</tbody>
+</table>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/02/01/markdown/markdown/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/18/markdown/markdown简明语法/" title="Markdown 简明语法手册" itemprop="url">Markdown 简明语法手册</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-17T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 18 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　本文来自作业部落-在线Markdown编辑阅读器。<a href="https://www.zybuluo.com/mdeditor" target="_blank" rel="external">点击查看</a>。供Markdown初学者学习参考。<br>　　另外特别需说明的一点儿是，对于Makdown语法来说，不同编辑器的渲染都不太一样，如若要发布为hexo网页，请以 hexo 为准。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/01/18/markdown/markdown简明语法/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/18/markdown/快速学习markdown/" title="快速学习Markdown" itemprop="url">快速学习Markdown</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-17T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 18 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　使用Markdown写博客已经三个月了，对这个标记语言很是喜欢。现在流行的教程，要么就是太复杂太难以理解，要么就是太简单太肤浅，稍微高级点的用法没有提及。本文的初衷就是用最容易理解的方式，把Markdown入门到高级用法一一介绍给读者。看完之后，你不仅可以开始使用Markdown写东西，在日常使用中也随时可以打开这篇博客参考各种用法。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/01/18/markdown/快速学习markdown/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/11/other/如何参与一个GitHub开源项目/" title="如何参与一个GitHub开源项目" itemprop="url">如何参与一个GitHub开源项目</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-11T09:11:54.000Z" itemprop="datePublished"> 发表于 1月 11 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　本文是Github官方给出的参与Github上开源项目的一些指导，对希望加入开源社区的开发者是一个不错的参考。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/01/11/other/如何参与一个GitHub开源项目/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/10/android_note/Android基础_介绍/" title="Android基础_介绍" itemprop="url">Android基础_介绍</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://qiaoidea.github.io/about" title="Qiaoidea" target="_blank" itemprop="author">Qiaoidea</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-09T16:00:00.000Z" itemprop="datePublished"> 发表于 1月 10 2015</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="1-_3G、4G">1. 3G、4G</h2>
+<pre><code>-<span class="ruby"> 第三代移动通信技术（<span class="number">3</span>rd - <span class="constant">Generation</span>），速率一般在几百<span class="constant">Kbps</span>，较之前的<span class="number">2</span>G和<span class="number">2.5</span>G在数据传输速度上有很大提升。
+</span>-<span class="ruby"> 第四代移动通信技术（<span class="number">4</span>th - <span class="constant">Generation</span>），速度可达到<span class="number">100</span>Mbps以上，几乎可以满足人们的所有传输数据的需求。
+</span>
+目前主流的3G技术标准有三种：
+-<span class="ruby"> <span class="constant">WCDMA</span>：全球<span class="number">80</span>%以上的<span class="number">3</span>G网络都是采用此种制式。中国联通运营。<span class="number">186</span>
+</span>-<span class="ruby"> <span class="constant">CDMA2000</span>：目前日韩及北美使用较多。中国电信运营。 <span class="number">189</span>
+</span>-<span class="ruby"> <span class="constant">TD</span>-<span class="constant">SCDMA</span>：中国自主知识产权的<span class="number">3</span>G通信技术。中国移动运营。 <span class="number">188</span> 
+</span>
+目前主流的4G技术为LTE，但还没有被广泛应用：    
+GSM → GPRS → EDGE → WCDMA → HSDPA → HSDPA+ → LTE
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/01/10/android_note/Android基础_介绍/#more">Read More..</a>
+          
+       </p>
+    </div>
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5288126184&verifier=4988e869&dpc=1"></iframe>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>3</sup></a></li>
+		
+			<li><a href="/categories/《每日墓志铭》/" title="《每日墓志铭》">《每日墓志铭》<sup>1</sup></a></li>
+		
+			<li><a href="/categories/学习日志/" title="学习日志">学习日志<sup>18</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Android基础/" title="Android基础">Android基础<sup>16</sup></a></li>
+		
+			<li><a href="/tags/Markdown语法/" title="Markdown语法">Markdown语法<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Github/" title="Github">Github<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DailyEpitaph/" title="DailyEpitaph">DailyEpitaph<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ViewGroup/" title="ViewGroup">ViewGroup<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Android基础/" style="font-size: 20.00px;">Android基础</a><a href="/tags/DailyEpitaph/" style="font-size: 10.00px;">DailyEpitaph</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Hexo/" style="font-size: 10.00px;">Hexo</a><a href="/tags/Markdown语法/" style="font-size: 15.00px;">Markdown语法</a><a href="/tags/ViewGroup/" style="font-size: 10.00px;">ViewGroup</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+         
+           <li>
+             
+             	<a href="http://blog.csdn.net/qiaoidea" target="_blank" title="Qiao&#39;s CSDN">Qiao&#39;s CSDN</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://user.qzone.qq.com/378675427 " target="_blank" title="Qiao的QQ空间">Qiao&#39;s QQ</a>
+             
+           </li>
+         
+           <li>
+             
+             	<a href="http://hexo.io " target="_blank" title="Hexo官方网站">Hexo</a>
+             
+           </li>
+         
+     </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 一时不学，差之毫厘； <br/>
+			终日不学，失之千里。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5288126184" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://qiaoidea.github.io/about" target="_blank" title="Qiaoidea">Qiaoidea</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+  </body>
+ </html>

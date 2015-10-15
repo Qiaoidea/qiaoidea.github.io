@@ -1,0 +1,844 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Markdown语法," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="一. 简单功能
+
+
+功能
+效果
+Markdown代码
+备注
+
+
+
+
+粗体
+粗体
+**粗体**
+两边加**
+
+
+斜体
+斜体
+_斜体_
+两边加_
+
+
+中划线
+中划线
+~~中划线~~
+两边加~~
+
+
+单行代码
+Log.i(&amp;quot;Hello World!&amp;quot;)
+`Log.i(“Hello World!”)`
+两边加`
+
+
+插入图片
+
+![Image](http://www.trinea.cn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown 入门手册">
+<meta property="og:url" content="http://yoursite.com/2015/02/01/markdown/markdown/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="一. 简单功能
+
+
+功能
+效果
+Markdown代码
+备注
+
+
+
+
+粗体
+粗体
+**粗体**
+两边加**
+
+
+斜体
+斜体
+_斜体_
+两边加_
+
+
+中划线
+中划线
+~~中划线~~
+两边加~~
+
+
+单行代码
+Log.i(&amp;quot;Hello World!&amp;quot;)
+`Log.i(“Hello World!”)`
+两边加`
+
+
+插入图片
+
+![Image](http://www.trinea.cn">
+<meta property="og:image" content="http://www.trinea.cn/rss.png">
+<meta property="og:updated_time" content="2015-03-15T08:18:09.477Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Markdown 入门手册">
+<meta name="twitter:description" content="一. 简单功能
+
+
+功能
+效果
+Markdown代码
+备注
+
+
+
+
+粗体
+粗体
+**粗体**
+两边加**
+
+
+斜体
+斜体
+_斜体_
+两边加_
+
+
+中划线
+中划线
+~~中划线~~
+两边加~~
+
+
+单行代码
+Log.i(&amp;quot;Hello World!&amp;quot;)
+`Log.i(“Hello World!”)`
+两边加`
+
+
+插入图片
+
+![Image](http://www.trinea.cn">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> Markdown 入门手册 | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Markdown 入门手册
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-02-01T00:00:00+08:00" content="2015-02-01">
+            2015-02-01
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/MarkDown/" itemprop="url" rel="index">
+                  <span itemprop="name">MarkDown</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h4 id="一-_简单功能">一. 简单功能</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">功能</th>
+<th style="text-align:left">效果</th>
+<th style="text-align:left">Markdown代码</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">粗体</td>
+<td style="text-align:left"><strong>粗体</strong></td>
+<td style="text-align:left"><code>**粗体**</code></td>
+<td style="text-align:left">两边加**</td>
+</tr>
+<tr>
+<td style="text-align:left">斜体</td>
+<td style="text-align:left"><em>斜体</em></td>
+<td style="text-align:left"><code>_斜体_</code></td>
+<td style="text-align:left">两边加_</td>
+</tr>
+<tr>
+<td style="text-align:left">中划线</td>
+<td style="text-align:left"><del>中划线</del></td>
+<td style="text-align:left"><code>~~中划线~~</code></td>
+<td style="text-align:left">两边加~~</td>
+</tr>
+<tr>
+<td style="text-align:left">单行代码</td>
+<td style="text-align:left"><code>Log.i(&quot;Hello World!&quot;)</code></td>
+<td style="text-align:left">`Log.i(“Hello World!”)`</td>
+<td style="text-align:left">两边加`</td>
+</tr>
+<tr>
+<td style="text-align:left">插入图片</td>
+<td style="text-align:left"><img src="http://www.trinea.cn/rss.png" alt="Image"></td>
+<td style="text-align:left"><code>![Image](http://www.trinea.cn/rss.png)</code></td>
+<td style="text-align:left">[] 中间为占位符,() 中间为图片链接</td>
+</tr>
+<tr>
+<td style="text-align:left">链接</td>
+<td style="text-align:left"><a href="http://www.github.com" target="_blank" rel="external">Visit Github</a></td>
+<td style="text-align:left"><code>[Visit Github](http://www.github.com)</code></td>
+<td style="text-align:left">[] 中间为显示文字,() 中间为链接</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h4 id="二-_其他功能">二. 其他功能</h4><h5 id="1-_换行">1. 换行</h5><p>在需要换行的地方敲击两次空格和一个回车键即可，如:</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">这是第一行<span class="comment">(空格)</span><span class="comment">(空格)</span><span class="comment">(回车)</span></span><br><span class="line">这是第二行</span><br></pre></td></tr></table></figure>
+<p>Tip: 多条新行都会被视为一行</p>
+<h5 id="2-_标题">2. 标题</h5><p>Markdown 提供了六种规格的标题，分别对应 Html 标签中的<code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>，通过添加不同数量的<code>#</code>字符可以实现不同大小的标题，如:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># 最大的标题(相当于一个<span class="title">&lt;h1&gt;</span>标签)</span></span><br><span class="line"><span class="preprocessor">## 次大的标题(相当于一个<span class="title">&lt;h2&gt;</span>标签)</span></span><br><span class="line">...</span><br><span class="line"><span class="preprocessor">###### 最小的标题(相当于一个<span class="title">&lt;h6&gt;</span>标签)</span></span><br></pre></td></tr></table></figure></p>
+<p>Tip: # 越多，标题越小  </p>
+<h5 id="3-_列表">3. 列表</h5><h6 id="3-1_有序列表">3.1 有序列表</h6><p>数字 + . + 空格即可，以下代码：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 项目<span class="number">1</span>  </span><br><span class="line"><span class="number">2.</span> 项目<span class="number">2</span>  </span><br><span class="line"><span class="number">3.</span> 项目<span class="number">3</span>  </span><br><span class="line">```  </span><br><span class="line">效果为：  </span><br><span class="line"><span class="number">1.</span> 项目<span class="number">1</span>  </span><br><span class="line"><span class="number">2.</span> 项目<span class="number">2</span>  </span><br><span class="line"><span class="number">3.</span> 项目<span class="number">3</span>  </span><br><span class="line"></span><br><span class="line"><span class="preprocessor">###### <span class="number">3.2</span> 无序列表  </span></span><br><span class="line">以 * 和空格开头即可，以下代码:</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>项目1</li>
+<li>项目2</li>
+<li><p>项目3</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">效果为：  </span><br><span class="line">* 项目<span class="number">1</span></span><br><span class="line">* 项目<span class="number">2</span></span><br><span class="line">* 项目<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">###### <span class="number">3.3</span> 子项目表示： </span></span><br><span class="line">子项目缩进一个 tab 并加 * 和 空格表示，以下代码：</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>项目1</p>
+<ul>
+<li>子项目1</li>
+<li>子项目2</li>
+</ul>
+</li>
+<li>项目2<ul>
+<li>子项目1<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">效果为：  </span><br><span class="line"><span class="keyword">*</span> 项目1</span><br><span class="line">    <span class="keyword">*</span> 子项目1</span><br><span class="line">    <span class="keyword">*</span> 子项目2</span><br><span class="line"><span class="keyword">*</span> 项目2</span><br><span class="line">    <span class="keyword">*</span> 子项目1</span><br><span class="line"></span><br><span class="line"><span class="comment">##### 4. 代码块</span></span><br><span class="line">以 \`\`\` 和 \`\`\` 包含，以下代码：  </span><br><span class="line"><span class="variable">&lt;pre&gt;</span><span class="variable">&lt;code&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>def hello():<br>    print ‘Hello World!’<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="title">code</span>&gt;</span><span class="tag">&lt;/<span class="title">pre</span>&gt;</span></span><br><span class="line">效果为：</span><br></pre></td></tr></table></figure></p>
+<p>def hello():<br>    print ‘Hello World!’<br><figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">GFM 扩展了 Markdown 的代码块功能，通过在上面第一个 \<span class="string">`\`</span>\<span class="string">` 后添加语言名称，使不同语言展现不同的代码高亮风格，以下代码:  </span><br><span class="line">&lt;pre&gt;&lt;code&gt;</span><br><span class="line">`</span><span class="string">``</span>java</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args)&#123;</span><br><span class="line">    System.<span class="keyword">out</span>.println(<span class="string">"Hello World!"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><br>效果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Hello World!"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以下代码：  </p>
+<pre><code>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Hello World!'</span></span><br></pre></td></tr></table></figure>
+
+</code></pre>
+
+<p>效果为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Hello World!'</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="5-_表格">5. 表格</h5><p>标准的 Markdown 中并不支持表格，但 GFM 可以，表头前空一行，以 <code>---</code>  做为表头分隔，以 <code>|</code> 做为列分隔，以下代码：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">表头<span class="number">1</span>|表头<span class="number">2</span></span><br><span class="line">---|---</span><br><span class="line">单元格<span class="number">1</span>|单元格<span class="number">2</span></span><br><span class="line">单元格<span class="number">3</span>|单元格<span class="number">4</span></span><br></pre></td></tr></table></figure></p>
+<p>效果为：  </p>
+<table>
+<thead>
+<tr>
+<th>表头1</th>
+<th>表头2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单元格1</td>
+<td>单元格2</td>
+</tr>
+<tr>
+<td>单元格3</td>
+<td>单元格4</td>
+</tr>
+</tbody>
+</table>
+<p>而且还可以通过在表头分隔符中添加 <code>:</code> 来决定单元格的对齐方向，以下代码：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">表头1|表头2|表头3</span><br><span class="line"><span class="attribute">:--|:--:|--:</span></span><br><span class="line">左1|中1|右1</span><br><span class="line">左2|中2|右2</span><br></pre></td></tr></table></figure></p>
+<p>效果为：  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">表头1</th>
+<th style="text-align:center">表头2</th>
+<th style="text-align:right">表头3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">左1</td>
+<td style="text-align:center">中1</td>
+<td style="text-align:right">右1</td>
+</tr>
+<tr>
+<td style="text-align:left">左2</td>
+<td style="text-align:center">中2</td>
+<td style="text-align:right">右2</td>
+</tr>
+</tbody>
+</table>
+<h5 id="6-_特殊字符转义">6. 特殊字符转义</h5><p>如果需要在正文里使用特殊字符的话，可以用 <code>\</code> 来转义<br>最后虽然 GFW 支持 Html 标签，不过本次项目中不允许在 MarkDown 中插入 Html 标签</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Markdown语法/" rel="tag">#Markdown语法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/08/android_note/Android更新Ui的几种方法和见解/" rel="prev">Android更新Ui的几种方法和见解</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/18/markdown/快速学习markdown/" rel="next">快速学习Markdown</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一-_简单功能"><span class="nav-number">1.</span> <span class="nav-text">一. 简单功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二-_其他功能"><span class="nav-number">2.</span> <span class="nav-text">二. 其他功能</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-_换行"><span class="nav-number">2.1.</span> <span class="nav-text">1. 换行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-_标题"><span class="nav-number">2.2.</span> <span class="nav-text">2. 标题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-_列表"><span class="nav-number">2.3.</span> <span class="nav-text">3. 列表</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1_有序列表"><span class="nav-number">2.3.1.</span> <span class="nav-text">3.1 有序列表</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-_表格"><span class="nav-number">2.4.</span> <span class="nav-text">5. 表格</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-_特殊字符转义"><span class="nav-number">2.5.</span> <span class="nav-text">6. 特殊字符转义</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

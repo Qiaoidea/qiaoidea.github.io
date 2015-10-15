@@ -1,0 +1,638 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Github," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="本文是Github官方给出的参与Github上开源项目的一些指导，对希望加入开源社区的开发者是一个不错的参考。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何参与一个GitHub开源项目">
+<meta property="og:url" content="http://yoursite.com/2015/01/11/other/如何参与一个GitHub开源项目/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="本文是Github官方给出的参与Github上开源项目的一些指导，对希望加入开源社区的开发者是一个不错的参考。">
+<meta property="og:image" content="http://cms.csdnimg.cn/article/201404/14/534b717ad0536_middle.jpg?_=31085">
+<meta property="og:image" content="http://cms.csdnimg.cn/article/201404/14/534b71d05b57b.jpg">
+<meta property="og:image" content="http://cms.csdnimg.cn/article/201404/14/534b7235b755f.jpg">
+<meta property="og:image" content="http://cms.csdnimg.cn/article/201404/14/534b7275380df_middle.jpg?_=53854">
+<meta property="og:updated_time" content="2015-01-11T12:58:06.359Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何参与一个GitHub开源项目">
+<meta name="twitter:description" content="本文是Github官方给出的参与Github上开源项目的一些指导，对希望加入开源社区的开发者是一个不错的参考。">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 如何参与一个GitHub开源项目 | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              如何参与一个GitHub开源项目
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-01-11T17:11:54+08:00" content="2015-01-11">
+            2015-01-11
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/学习日志/" itemprop="url" rel="index">
+                  <span itemprop="name">学习日志</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>　　本文是Github官方给出的参与Github上开源项目的一些指导，对希望加入开源社区的开发者是一个不错的参考。<br><a id="more"></a><br>　　最近一年开源项目特别的热，很多技术大会或论坛都以开源项目作为主题进行探讨，可见这是一种趋势。而Github作为开源项目的著名托管地，可谓无人不知，越来越多的个人和公司纷纷加入到Github的大家族里来，为开源尽一份绵薄之力。对于个人来讲，你把自己的项目托管到Github上并不表示你参与了Github开源项目，只能说你开源了自己的项目，可以任别人自由下载。</p>
+<p>　　那么该如何参与Github的开源项目呢？相信很多人都有这方面的疑问，网上 也有一些参差不齐的教程教大家如何“Pull Request”、如何“Commit”等等。但这些教程往往不够全面或不够完全正确，搞不好可能让你陷入一个误区。鉴于此，前几天Github官方团队写了一篇很棒的文章 Contributing to Open Source on GitHub，专业指导大家如何参与Github的开源项目。 下面是 原文的翻译。</p>
+<hr>
+<p>　　参与开源项目的最佳办法就是加入到你正在使用的已有项目上来。Github上有500多万开源项目，涉及到各个领域的技术，像　<a href="https://github.com/sinker/tacofancy" target="_blank" rel="external">recipes</a>, <a href="https://github.com/tobiasahlin/SpinKit" target="_blank" rel="external">HTML/CSS</a>, <a href="https://github.com/sferik/t" target="_blank" rel="external">Ruby</a>, <a href="https://github.com/dfm/emcee" target="_blank" rel="external">Astrophysics</a>等等。该指南将涵盖你在一个典型的项目中可能出现的事情以及如何为开源项目作出贡献。</p>
+<p>##找项目<br>　　我们推荐你从已正在使用的或感兴趣的项目开始。这里有几个很棒的地方供你参考：</p>
+<ul>
+<li><a href="https://github.com/explore" target="_blank" rel="external">GitHub Explore</a> :受欢迎和热门的项目。</li>
+<li><a href="https://github.com/stars?direction=desc&amp;sort=created" target="_blank" rel="external">GitHub Stars</a>：被其他人star过的项目（指的是你自己库的项目）。 </li>
+<li><a href="https://github.com/showcases" target="_blank" rel="external">GitHub Showcases</a>：一个能搜索相关库的方法。</li>
+<li><a href="http://news.layervault.com/" target="_blank" rel="external">LayerVault News</a>：前端和设计相关的项目。<br><img src="http://cms.csdnimg.cn/article/201404/14/534b717ad0536_middle.jpg?_=31085" alt="项目示例"><br>##一个典型的项目<br>　　下面是一些你在Github开源项目中可能遇到的因素。<br>###The Community（社区）<br>　　项目通常会有一个社区维护，由不同角色（正规或非正规）的其他用户组成：</li>
+<li>所有者（Owner）：即创建该项目且在他们Github账户上有该项目的用户或组织。 </li>
+<li>维护者和协作者（Maintainers and Collaborators）： 致力于一个项目并促进该项目发展的用户。通常所有者和维护者是同一个用户或组织，他们对项目库都有写的权限。 </li>
+<li>贡献者（Contributors）：每一个对该项目发出过pull request并合并到项目中的用户都是贡献者。</li>
+<li>社区成员（Community Members）：即那些经常使用且非常关心该项目的用户，他们在讨论功能特征和pull request上非常活跃。<br>###The Docs（文档）<br>　　一般项目中都有的文件。</li>
+<li>Readme：几乎所有的Github项目都包含一个README.md文件。readme提供了该项目的一个概览及关于如何使用、构建甚至如何贡献于一个项目的相关细节。</li>
+<li>Contributing：项目和项目维护者不同，所以每个项目所期望的作贡献的最佳方法也会有所不同。一定要注意一个标注为CONTRIBUTING的文档，Contributing文档详细描述了一个项目的维护者希望看到贡献的补丁或功能应该符合怎样的规格。这可能包含要写什么测试，代码语法规范或补丁集中的区域。</li>
+<li>License：一个LICENSE文件当然就是该项目的许可证了。一个开源项目的license会告诉用户他们能做和不能做的（例如使用、修改、重新发布），及告诉贡献者他们允许其他人做的。有许多的办法对开源项目加上许可证，你可以在 choosealicense.com读到更多的关于每个许可证的含义。</li>
+<li>Documentation and Wikis：许多大型项目有的不只有一个readme来指导人么如何使用他们的项目。在这种情况下你通常能够发现一个指向库中名为“docs”的另一个文件或文件夹的链接。<br><img src="http://cms.csdnimg.cn/article/201404/14/534b71d05b57b.jpg" alt="文档"><br>　　另外，该库也可能使用Github wiki来代替文档。<br><img src="http://cms.csdnimg.cn/article/201404/14/534b7235b755f.jpg" alt=""><br>##贡献于一个项目<br>　　既然你已经找到了理解该项目的相关资料，下面你就可以采取一些行动了。<br>###建立一个话题<br>　　如果你发现了你正在使用的项目中的一个bug（但是你不知道怎么去修复它），或对文档有不解或对项目有疑问 — 那么创建一个话题吧！这非常容易且一般你不管创建什么话题，你都可能不是唯一一个出现该问题的人，所以其他人可能会发现你的话题很有帮助。关于更多的话题介绍，请查看我们的 <a href="http://guides.github.com/overviews/issues" target="_blank" rel="external">Issues guide</a>。<br>###话题专业提示</li>
+<li>在建话题之前检查已有的话题：话题重复对双方都无利，所以搜索整个正开放和已关闭的话题以检查你遇到的问题是否已经有人解决了。 </li>
+<li>务必对自己的问题有清晰的认识：期望的结果是什么？然而却发生了什么？ 详细描述其他人如何重现该问题。</li>
+<li>在像<a href="http://jsfiddle.net/" target="_blank" rel="external"> JSFiddle</a>或 <a href="http://codepen.io/" target="_blank" rel="external">CodePen</a>类似的平台上重现该问题并给出问题demo的链接。 </li>
+<li>包含一些系统相关的细节，比如用的什么浏览器、库或操作系统及版本号。<br>在你的话题或在<a href="http://gist.github.com/" target="_blank" rel="external"> Gist</a>里贴出你的错误输出或日志。如果在话题里贴出来，请用三个反引号``` 包围起来使得能够良好的呈现给大家。<br>###Pull Request<br>　　如果你能够修复bug或自己添加功能 — 太棒了，请发一个pull request吧！确保你已经读过任何关于contributing的文档，且需要理解license以及已经签过CLA（如果需要的话）。一旦你提交了一个pull request，维护者就会将你的分支与已有的分支作比较来决定是否要合并（即pull in）你作的改动。<br>###Pull Request专业提示</li>
+<li><a href="http://guides.github.com/overviews/forking/" target="_blank" rel="external">Fork</a> 该项目库及将它clone到本地。通过添加为远程的方式在本地连接到原来的‘upstream’库。经常从‘upstream’库pull in改动以保持库最新，这样当你提交pull request时，就不大可能发生合并冲突了。点<a href="https://help.github.com/articles/syncing-a-fork" target="_blank" rel="external"> 这里</a>看更多的指导细节。 </li>
+<li>为你的编辑单独建立一个<a href="http://guides.github.com/overviews/flow/" target="_blank" rel="external">分支</a> 。</li>
+<li>务必清楚所出现的问题以及如何重现该问题或为什么你的功能有帮助。然后同样的要清楚做一些改变有哪些步骤。 </li>
+<li>最好测试一下。在任何已有的测试（如果存在）上运行你所做的改动并在必要时创建新的测试。不管测试存不存在，都要确保你的改动不会破坏已有的项目。 </li>
+<li>如果你的改动包含了HTML/CSS方面的不同，那么请包含改动前和改动后的截图。将你的图片拖放到你pull request的正文里。 </li>
+<li>尽你所能的在项目的风格上多做努力。这可能意味着使用不同于你自己Github库中采用的缩进，分号或注释，但是这让维护者更容易合并，也让其他人更容易理解和以后的维护。<br><img src="http://cms.csdnimg.cn/article/201404/14/534b7275380df_middle.jpg?_=53854" alt=""><br>###开放的Pull Requests<br>　　一旦你打开一个pull request，就会有一个讨论，围绕你提出的改变作出探讨。其他的贡献者和用户可能会参与进来，但最终由维护者做决定。你可能会被要求对你的pull request做一些改变，如果这样，请给你的分支添加更多的commit并push它们 — 它们将自动的加入到已有的pull request里。<br>　　如果你的pull request被合并了——太好了！如果没被合并的话，也没什么大不了的，也许这不是项目维护者所期望看到的改动，亦或者他们已经致力于该bug或功能。这种情况有可能发生，所以我们的建议是：对收到的结果做出反馈，进一步努力然后再次pull request出去— 或者创建你自己的开源项目。</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Github/" rel="tag">#Github</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/01/18/markdown/markdown简明语法/" rel="prev">Markdown 简明语法手册</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/10/android_note/Android基础_介绍/" rel="next">Android基础_介绍</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

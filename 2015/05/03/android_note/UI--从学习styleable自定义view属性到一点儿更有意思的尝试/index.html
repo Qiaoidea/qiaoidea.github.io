@@ -1,0 +1,765 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Android基础," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45599593
+
+【导航】
+
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述　　前面封装view的时候用到了自定义属性，觉得有必要单独讲一下这部分，但是呢，又不想向其他文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI--从学习styleable自定义view属性到一点儿更有意思的尝试">
+<meta property="og:url" content="http://yoursite.com/2015/05/03/android_note/UI--从学习styleable自定义view属性到一点儿更有意思的尝试/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45599593
+
+【导航】
+
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述　　前面封装view的时候用到了自定义属性，觉得有必要单独讲一下这部分，但是呢，又不想向其他文">
+<meta property="og:image" content="http://img.blog.csdn.net/20150516002127891">
+<meta property="og:updated_time" content="2015-06-29T13:31:48.190Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UI--从学习styleable自定义view属性到一点儿更有意思的尝试">
+<meta name="twitter:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45599593
+
+【导航】
+
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述　　前面封装view的时候用到了自定义属性，觉得有必要单独讲一下这部分，但是呢，又不想向其他文">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> UI--从学习styleable自定义view属性到一点儿更有意思的尝试 | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              UI--从学习styleable自定义view属性到一点儿更有意思的尝试
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-05-03T00:00:00+08:00" content="2015-05-03">
+            2015-05-03
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/学习日志/" itemprop="url" rel="index">
+                  <span itemprop="name">学习日志</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="《代码里的世界》_—UI篇"><strong>《代码里的世界》</strong>  —<strong><em>UI篇</em></strong></h2><blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45599593" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45599593</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45568653" target="_blank" rel="external">多行文本折叠展开</a>    自定义布局View实现多行文本折叠和展开</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2><p>　　前面封装view的时候用到了自定义属性，觉得有必要单独讲一下这部分，但是呢，又不想向其他文章一样千篇一律地写这些东西。所以呢，后便会加一些临时的发散思维，引用点有意思的东西。分享东西嘛，随性点儿。<br>　　回归正题，我们想在view中使用自定义属性要怎么做呢？<br>　　其实有如下几点：</p>
+<ol>
+<li><strong>declare-styleable</strong> 在res/values目录下新建xml文件 自定义你的属性</li>
+<li><strong>AttributeSet和TypedArray</strong> 在view中获取这些属性对应的值，设置绑定到view上</li>
+<li><strong>xmlns申明与引用</strong> 在你要使用的地方引入命名空间并使用这些属性，赋值</li>
+</ol>
+<p>　　然后我们来尝试通过这些步骤做些自定义view，同时呢，我期望能方便快捷的绑定一些事件，执行相应操作。尝试来做一下。<br>　　<a href="http://download.csdn.net/detail/u011254308/8701449" target="_blank" rel="external">xml直接定义view和点击事件的demo</a><br>　　<img src="http://img.blog.csdn.net/20150516002127891" alt="xml直接定义view和点击事件的demo"></p>
+<a id="more"></a>
+<hr>
+<h2 id="2-实践"><strong>2.实践</strong></h2><p>　　其实自定义view的属性算是比较常见的，想来想去却没想到什么比较好写的view。就拿最常见的设置选项来说吧，我希望直接通过简单的xml配置就可以设置其字体大小颜色内容，图标和点击触发的事件。</p>
+<h3 id="2-1定义属性"><strong>2.1</strong>定义属性</h3><p>　　在res/values目录下新建一个attrs.xml的<resource>文件，利用declare-styleable定义我们的属性样式。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">declare-styleable</span> <span class="attribute">name</span>=<span class="value">"RowItem"</span>&gt;</span><span class="comment">&lt;!-- 样式名为RowItem--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"textSize"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"textColor"</span> <span class="attribute">format</span>=<span class="value">"color"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"text"</span> <span class="attribute">format</span>=<span class="value">"string"</span> /&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"textStyle"</span>&gt;</span> <span class="comment">&lt;!-- text样式（粗体/斜体）--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">flag</span> <span class="attribute">name</span>=<span class="value">"blod"</span> <span class="attribute">value</span>=<span class="value">"1"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">flag</span> <span class="attribute">name</span>=<span class="value">"italic"</span> <span class="attribute">value</span>=<span class="value">"2"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">attr</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"icon"</span> <span class="attribute">format</span>=<span class="value">"reference"</span>/&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"position"</span> &gt;</span> <span class="comment">&lt;!-- 该行所处位置--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">enum</span> <span class="attribute">name</span>=<span class="value">"single"</span> <span class="attribute">value</span>=<span class="value">"-1"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">enum</span> <span class="attribute">name</span>=<span class="value">"top"</span> <span class="attribute">value</span>=<span class="value">"0"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">enum</span> <span class="attribute">name</span>=<span class="value">"middle"</span> <span class="attribute">value</span>=<span class="value">"1"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">enum</span> <span class="attribute">name</span>=<span class="value">"bottom"</span> <span class="attribute">value</span>=<span class="value">"2"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">attr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"action"</span> <span class="attribute">format</span>=<span class="value">"string"</span> /&gt;</span><span class="comment">&lt;!-- 执行动作--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">declare-styleable</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">resources</span>&gt;</span></span><br></pre></td></tr></table></figure></resource></p>
+<p>简单讲解下其中，</p>
+<ul>
+<li><strong>标签declare-styleable的name属性</strong> ：代表了接下来定义的属性的所属控件<em>（只是用来区分不同declare-styleable的代号而且，不一定非要和属性相关的控件的名称一致）</em></li>
+<li><p><strong>标签attr就是用来的定义具体的属性</strong>，name代表属性名，format代表属性的类型。</p>
+</li>
+<li><p><strong><em>Attrs.xml文件中属性类型format值的格式</em></strong></p>
+<ul>
+<li><p><strong>引用型reference</strong></p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “background” format = “reference” /&gt;<br>使用:<br>tools:background = “@drawable/图片ID”</p>
+</blockquote>
+</li>
+<li><p><strong>颜色型color</strong></p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “textColor” format = “color” /&gt;<br>使用：<br>tools:textColor = “#ffffff”</p>
+</blockquote>
+</li>
+<li><p>布尔型boolean</p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “focusable” format = “boolean” /&gt;<br>使用：tools: focusable = “true”</p>
+</blockquote>
+</li>
+<li><p>尺寸型dimension</p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “layout_width” format = “dimension” /&gt;<br>使用：<br>tools: layout_width = “42dip”</p>
+</blockquote>
+</li>
+<li><p>浮点型float</p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “fromAlpha” format = “float” /&gt;<br>使用：tools: fromAlpha = “1.0”</p>
+</blockquote>
+</li>
+<li><p>整型integer</p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “frameDuration” format = “integer” /&gt;<br>使用：<br>tools: frameDuration = “100”</p>
+</blockquote>
+</li>
+<li><p>字符串string</p>
+<blockquote>
+<p>定义：<br> &lt; attr name = “apiKey” format = “string” /&gt;<br>使用：<br>tools: apiKey = “dsegergegasefwg”</p>
+</blockquote>
+</li>
+<li><p>百分数fraction</p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “pivotX” format = “fraction” /&gt;<br>使用：<br>tools: pivotx = “200%”</p>
+</blockquote>
+</li>
+<li><p>枚举型enum：</p>
+<blockquote>
+<p>定义：<br>&lt; attr name=”orientation”&gt;<br>　　&lt; enum name=”horizontal” value=”0” /&gt;<br>　　&lt; enum name=”vertical” value=”1” /&gt;<br>&lt; /attr&gt;<br>使用：<br>android:orientation = “vertical”</p>
+</blockquote>
+</li>
+<li><p>标志位、位或运算，格式如下：</p>
+<blockquote>
+<p>定义：<br>&lt; attr name=”windowSoftInputMode”&gt;<br>　　&lt; flag name = “stateUnspecified” value = “0” /&gt;<br>　　&lt; flag name = “stateUnchanged” value = “1” /&gt;<br>　　&lt; flag name = “adjustUnspecified” value = “0x00” /&gt;<br>　　&lt; flag name = “adjustResize” value = “0x10” /&gt;<br>&lt; /attr&gt;<br>使用：<br>android:windowSoftInputMode = “stateUnspecified | stateUnchanged | stateHidden”&gt;</p>
+</blockquote>
+</li>
+<li><p>属性定义可以指定多种类型：</p>
+<blockquote>
+<p>定义：<br>&lt; attr name = “background” format = “reference|color” /&gt;<br>使用：<br>android:background = “@drawable/图片ID|#00FF00”</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2_View中使用自定义属性"><strong>2.2</strong> View中使用自定义属性</h3><p>　　View的默认构造方法里有 <strong>XXX(Context context,  AttributeSet attrs)</strong> ,而这个 <strong><em>AttributeSet</em></strong> 参数即为属性集合，我们可以利用 <strong><em>TypedArray</em></strong> 来获取我们想要的属性。<br>　　可以看我这里自定义的View类<strong>RowItem</strong>，它获取自定义属性的方法为<strong>initWithAttrs</strong>。它通过这个方法获取最终的属性值的过程：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initWithAttrs</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		TypedArray a = context.obtainStyledAttributes(attrs,  </span><br><span class="line">                R.styleable.RowItem);  </span><br><span class="line">		textColor = a.getColor(R.styleable.RowItem_textColor,  </span><br><span class="line">				defaultTextColor);  </span><br><span class="line">		textStyle = a.getColor(R.styleable.RowItem_textStyle,  </span><br><span class="line">				-<span class="number">1</span>);  </span><br><span class="line">		textSize = a.getDimensionPixelSize(R.styleable.RowItem_textSize, defaultTextSize);</span><br><span class="line">		text = a.getString(R.styleable.RowItem_text);</span><br><span class="line">		icon = a.getDrawable(R.styleable.RowItem_icon);</span><br><span class="line">		position = a.getInt(R.styleable.RowItem_position, defaultPosition);</span><br><span class="line">		<span class="keyword">if</span>(icon == <span class="keyword">null</span>)&#123;</span><br><span class="line">			icon = getResources().getDrawable(defaultIconId);</span><br><span class="line">		&#125;</span><br><span class="line">		action = a.getString(R.styleable.RowItem_action);</span><br><span class="line">		a.recycle();</span><br><span class="line">		initViews();<span class="comment">//利用属性值设置绑定View</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　先通过context.obtainStyledAttributes()方法将attrs.xml中定义的属性与AttributeSet 关联起来并映射到 TypedArray a，然后通过 a.getXXX()来获取相应属性，第二个参数为取不到时的默认值。最后用a.recycle()来回收释放。<br>　　详细讲下怎个自定义View。转回我们的自定义RowItem内部，来看一下View的实现。先定义了一个ImageVIew和TextView，然后定义对应的属性和默认值：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RowItem</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> ImageView iconView;</span><br><span class="line">	<span class="keyword">protected</span> TextView contentView;</span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	*对应自定义属性</span><br><span class="line">	*/</span></span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">int</span> textColor;</span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">int</span> textStyle;</span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">float</span> textSize;</span><br><span class="line">	<span class="keyword">protected</span> String text;</span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">int</span> position;</span><br><span class="line">	<span class="keyword">protected</span> Drawable icon;</span><br><span class="line">	<span class="keyword">protected</span> String action;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	*默认属性属性</span><br><span class="line">	*/</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> defaultTextColor = Color.BLACK;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> defaultTextSize = <span class="number">12</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> defaultPosition = -<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> defaultIconId = R.drawable.ic_launcher;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//构造方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">RowItem</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context);</span><br><span class="line">		initWithAttrs(context,<span class="keyword">null</span>);<span class="comment">//null则用默认属性值初始化</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//带AttributeSet 的构造方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">RowItem</span><span class="params">(Context context,  AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">		initWithAttrs(context,attrs);<span class="comment">//初始化自定义属性</span></span><br><span class="line">		bindListener();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//...其他代码</span></span><br></pre></td></tr></table></figure></p>
+<pre><code>可以看到，两个构造方法都使用了<span class="function"><span class="title">initWithAttrs</span><span class="params">()</span></span>方法，设置绑定属性值，第一个构造方法中attrs为null则意味着使用默认值。在初始化了view的属性值之后，在方法最后一段，调用了<span class="function"><span class="title">initViews</span><span class="params">()</span></span>来初始化view：
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用获取的属性值来设置view</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initViews</span><span class="params">()</span></span>&#123;</span><br><span class="line">		View root = LayoutInflater.from(getContext()).inflate(R.layout.row_item, RowItem.<span class="keyword">this</span>);</span><br><span class="line">		iconView = (ImageView) findViewById(R.id.item_image);</span><br><span class="line">		contentView = (TextView) findViewById(R.id.item_tv);</span><br><span class="line">		</span><br><span class="line">		iconView.setImageDrawable(icon);</span><br><span class="line">		<span class="keyword">if</span>(!TextUtils.isEmpty(text))</span><br><span class="line">			contentView.setText(text);</span><br><span class="line">		contentView.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);</span><br><span class="line">		contentView.setTextColor(textColor);</span><br><span class="line">		contentView.setTypeface(<span class="keyword">null</span>, textStyle);</span><br><span class="line">		root.setBackgroundResource(getBackGroundResource(position));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	*根据当前rowItem位置来返回相应的背景(其实我们可以直接在xml中设置rowitem背景，这里只是用于演示使用枚举型常量定义的属性)</span><br><span class="line">	*/</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getBackGroundResource</span><span class="params">(<span class="keyword">int</span> position2)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">switch</span>(position)&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">return</span> R.drawable.top_item_click_bg;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">			<span class="keyword">return</span> R.drawable.middle_item_click_bg;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">			<span class="keyword">return</span> R.drawable.bottom_item_click_bg;</span><br><span class="line">		<span class="keyword">default</span>:	</span><br><span class="line">			<span class="keyword">return</span> R.drawable.single_item_click_bg;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>　　整个自定义view的过程就讲完了。另外，细心地朋友会发现在第二个构造方法中使用了bindListener()来绑定点击事件，这里用的的是view的属性参数action,当用户点击这个view之后我们根据action来映射执行相应动作。它具体干嘛了我们后边再说，这里先继续将我们的自定义view RowItem。</p>
+<h3 id="2-3在layout的xml文件中使用自定义属性设置属性值"><strong>2.3</strong>在layout的xml文件中使用自定义属性设置属性值</h3><p>　　使用的时候，直接在xml中引入这个view，不过在此之前，要先引入命名空间。xmlns表示xml 的 namespace。后边跟的名字可以自定，以便后便使用。这里使用demo</p>
+<ul>
+<li><p><strong>自动引用</strong> 使用res-auto</p>
+<blockquote>
+<p>xmlns:demo=”<a href="http://schemas.android.com/apk/res-auto" target="_blank" rel="external">http://schemas.android.com/apk/res-auto</a>“</p>
+</blockquote>
+</li>
+<li><p>引用指定包名</p>
+<blockquote>
+<p>xmlns:demo=”<a href="http://schemas.android.com/apk/res/com.qiao.demo" target="_blank" rel="external">http://schemas.android.com/apk/res/com.qiao.demo</a>“</p>
+</blockquote>
+<p>　　然后我们就可以引入自定义属性了</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--使用 demo开头的即为自定义属性，--&gt;</span><br><span class="line"> &lt;com.qiao.demo.RowItem </span><br><span class="line">       android:layout_width="match_parent"</span><br><span class="line">       android:layout_height="wrap_content"</span><br><span class="line">       android:layout_marginTop="20dip"</span><br><span class="line">       demo:position="single"  &lt;!- 其中 申明为enum枚举类可以选一--&gt;</span><br><span class="line">       demo:text="测试选项"</span><br><span class="line">       demo:textSize="12dip" </span><br><span class="line">       demo:textStyle="blod|italic" &lt;!- 而使用flag位的可以组合使用--&gt;</span><br><span class="line">       demo:icon="@android:drawable/btn_star"</span><br><span class="line">       app:action="TestAction"/&gt;</span><br></pre></td></tr></table></figure>
+<p>　　在activity里边就可以直接使用像使用TextView之类的空间一样使用 RowItem 了,当然也可以获取和设置相应属性了。到这里我们的自定义view也Ok了。然后呢，我们也可以直接通过setOnClickListener来设置绑定Rowitem点击事件。<br>　　但追求更简单的我们，当然期望<strong><em>直接指定view的点击处理方法的函数了</em></strong>。</p>
+</li>
+</ul>
+<hr>
+<h2 id="3-有意思的尝试"><strong>3.有意思的尝试</strong></h2><p>　　前面预留了一个action属性值，当然，意味着我们想直接在xml中指定我们的自定义view点击后想要执行的操作方法了。这里呢，我们尝试使用反射来找到类里边预定义好的处理方法，而具体执行什么处理方法，在于我们action里边的关键字。<br>　　说的很抽象，不要紧，我们看那段bindLinstener()的代码。</p>
+<h3 id="3-1尝试bindLinstener()"><strong>3.1尝试bindLinstener()</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">bindListener</span><span class="params">()</span> </span>&#123;		</span><br><span class="line">		<span class="keyword">if</span>(TextUtils.isEmpty(action)) <span class="keyword">return</span>; <span class="comment">//如果没有执行动作则返回，否则设置点击事件</span></span><br><span class="line">		setOnClickListener(<span class="keyword">new</span> OnClickListener() &#123; </span><br><span class="line">			<span class="keyword">private</span> Method mHandler; <span class="comment">//Method处理方法</span></span><br><span class="line">			</span><br><span class="line">			<span class="annotation">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">				<span class="keyword">if</span> (mHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">	                    <span class="comment">/**</span><br><span class="line">	                    * 尝试从context中获取包含关键字为 action（）参数为View的方法</span><br><span class="line">	                    * 这里的context就是添加整个自定义view的activity，所以</span><br><span class="line">	                    * 我们要获取Method方法其实就是 </span><br><span class="line">	                    * 在activity中找到action（View view）这样的public方法</span><br><span class="line">	                    * 不清楚的可以查阅class的getMethod方法</span><br><span class="line">	                    */</span></span><br><span class="line">                        mHandler = getContext().getClass().getMethod(action,</span><br><span class="line">                                View.class);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">	                    <span class="comment">//处理异常</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">	                <span class="comment">//传入参数RowItem.this,执行这个方法</span></span><br><span class="line">                    mHandler.invoke(getContext(), RowItem.<span class="keyword">this</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">	                    <span class="comment">//处理异常</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">	                    <span class="comment">//处理异常</span></span><br><span class="line">                &#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>　　这里使用了<strong>java映射</strong>，有疑问的朋友自行谷歌/百度。简明扼要说下，如果action的值不为空，(比如为 clickAction)，那么我们会在activity中查找 public XX clickAction(View view)这个方法，然后执行这个方法。<br>　　这个过程是，首先实例化一个类，取得方法getMethod，然后执行invoke()。<br>　　然后，在我们的activity中定义相应的public 执行方法比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">	<span class="comment">//其他代码</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestAction</span><span class="params">(View view)</span></span>&#123;</span><br><span class="line">		Toast.makeText(getApplicationContext(), <span class="string">"TestAction"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后，我们就可以在xml的view中使用action属性设置处理点击事件的方法</p>
+<blockquote>
+<p>demo:action=”TestAction”/&gt;<br>整段代码<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">com.qiao.demo.RowItem</span> </span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">       <span class="attribute">android:layout_marginTop</span>=<span class="value">"20dip"</span></span><br><span class="line">       <span class="attribute">demo:position</span>=<span class="value">"single"</span></span><br><span class="line">       <span class="attribute">demo:text</span>=<span class="value">"测试选项"</span></span><br><span class="line">       <span class="attribute">demo:textSize</span>=<span class="value">"12dip"</span> </span><br><span class="line">       <span class="attribute">demo:textStyle</span>=<span class="value">"blod|italic"</span></span><br><span class="line">       <span class="attribute">demo:icon</span>=<span class="value">"@android:drawable/btn_star"</span></span><br><span class="line">       <span class="attribute">demo:action</span>=<span class="value">"TestAction"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>　　最后，运行测试。点击该item，弹出Toast，大功告成。<br>　　这里只举了一个例子一个方法来绑定action。当我们有很多个rowitem时候，每个item点击执行不同的动作，然后这些item又有各种变化可能，我们就不放采用这种方式，简单快速的绑定方法和事件，省去多余的findView等繁琐操作。</p>
+<h3 id="3-2回头看android本身提供方法"><strong>3.2回头看android本身提供方法</strong></h3><p>　　透露一下，其实这种用法android本身就有提供，每个view都可以在xml设置onClick参数，它对应的属性也是点击执行相应动作。</p>
+<blockquote>
+<p>android:onClick=”TestAction”</p>
+</blockquote>
+<p>适用于所有view，就比如TextView<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">TextView</span></span><br><span class="line">       <span class="attribute">android:id</span>=<span class="value">"@+id/textView1"</span></span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">       <span class="attribute">android:text</span>=<span class="value">"测试点击事件"</span></span><br><span class="line">       <span class="attribute">android:onClick</span>=<span class="value">"TestAction"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>　　然后同样在 activity重定义public void TestAction(View view)方法，运行，点击textView，是不是也同样弹出了toast？<br>　　我们来看View内部这部分实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> R.styleable.View_onClick:</span><br><span class="line">                    <span class="keyword">if</span> (context.isRestricted()) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"The android:onClick attribute cannot "</span></span><br><span class="line">                                + <span class="string">"be used within a restricted context"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">final</span> String handlerName = a.getString(attr);</span><br><span class="line">                    <span class="keyword">if</span> (handlerName != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        setOnClickListener(<span class="keyword">new</span> OnClickListener() &#123;</span><br><span class="line">                            <span class="keyword">private</span> Method mHandler;</span><br><span class="line"></span><br><span class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">                                <span class="keyword">if</span> (mHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">                                    <span class="keyword">try</span> &#123;</span><br><span class="line">                                        mHandler = getContext().getClass().getMethod(handlerName,</span><br><span class="line">                                                View.class);</span><br><span class="line">                                    &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">                                        <span class="keyword">int</span> id = getId();</span><br><span class="line">                                        String idText = id == NO_ID ? <span class="string">""</span> : <span class="string">" with id '"</span></span><br><span class="line">                                                + getContext().getResources().getResourceEntryName(</span><br><span class="line">                                                    id) + <span class="string">"'"</span>;</span><br><span class="line">                                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Could not find a method "</span> +</span><br><span class="line">                                                handlerName + <span class="string">"(View) in the activity "</span></span><br><span class="line">                                                + getContext().getClass() + <span class="string">" for onClick handler"</span></span><br><span class="line">                                                + <span class="string">" on view "</span> + View.<span class="keyword">this</span>.getClass() + idText, e);</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125;</span><br><span class="line"></span><br><span class="line">                                <span class="keyword">try</span> &#123;</span><br><span class="line">                                    mHandler.invoke(getContext(), View.<span class="keyword">this</span>);</span><br><span class="line">                                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Could not execute non "</span></span><br><span class="line">                                            + <span class="string">"public method of the activity"</span>, e);</span><br><span class="line">                                &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">                                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Could not execute "</span></span><br><span class="line">                                            + <span class="string">"method of the activity"</span>, e);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure></p>
+<p>　　哈哈，其实就是我前面讲的那部分通过自定义view属性并绑定事件。<br>　　但实际开发中，通常我们会封装好一个类，专门负责相关处理逻辑，然后给外部调用。这样是为了使业务逻辑跟界面UI层剥离开来，达到松耦合，以便于后边维护和变更。<br>　　那么，如果我期望将处理点击事件的逻辑单独包装成一个hanlderAction（处理事件类），然后在这个view中通过action参数来调用对应方法，又该怎么实现呢？</p>
+<ul>
+<li><p>静态方法<br>　　一般不需要传参或者只用来变更一个属性值等可以使用静态方法类，执行处理相关逻辑。为了避免每次都通过映射去查找这个静态方法，这里使用了一个map记录保存之前调用过的方法，提高效率。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestActionInvoker</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, Method&gt; methodMap = <span class="keyword">new</span> HashMap&lt;String, Method&gt;();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">tryInvoke</span><span class="params">(String method)</span></span>&#123;</span><br><span class="line">		Method mHandler = methodMap.get(method);</span><br><span class="line">		<span class="keyword">if</span> (mHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                mHandler = TestActionInvoker.class.getMethod(method);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">                Log.e(<span class="string">"NoSuchMethodException"</span>, <span class="string">"Could not find a method "</span> +</span><br><span class="line">                		method + <span class="string">" in the class "</span></span><br><span class="line">                        + TestActionInvoker.class + <span class="string">" for onClick handler"</span></span><br><span class="line">                        + <span class="string">" on view "</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	mHandler.invoke(TestActionInvoker.class);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">        	Log.e(<span class="string">"IllegalAccessException"</span>, <span class="string">"Could not execute non "</span></span><br><span class="line">                    + <span class="string">"public method of the class"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">        	Log.e(<span class="string">"InvocationTargetException"</span>, <span class="string">"Could not execute "</span></span><br><span class="line">                    + <span class="string">"method of the class"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">TestAction</span><span class="params">()</span></span>&#123;</span><br><span class="line">		Log.i(<span class="string">"TestAction"</span>, <span class="string">"myInvoker"</span>);<span class="comment">//这里只是简单的打印日志</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用类的静态对象，调用含参方法</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class ActionInvoker &#123;</span><br><span class="line">	private static ActionInvoker instance;</span><br><span class="line">	private static Map&lt;String, Method&gt; methodMap = new HashMap&lt;String, Method&gt;();</span><br><span class="line">	</span><br><span class="line">	private ActionInvoker() &#123;&#125;</span><br><span class="line">	</span><br><span class="line">	public static void invoke(Context context,String method)&#123;</span><br><span class="line">		if(instance == null)&#123;</span><br><span class="line">			synchronized (ActionInvoker.class) &#123;</span><br><span class="line">				if(instance == null)</span><br><span class="line">					instance = new ActionInvoker();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		instance.tryInvoke(context, method);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public void tryInvoke(Context context,String method)&#123;</span><br><span class="line">		Method mHandler = methodMap.get(method);</span><br><span class="line">		if (mHandler == null) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                mHandler = instance.getClass().getMethod(method,Context.class);</span><br><span class="line">            &#125; catch (NoSuchMethodException e) &#123;</span><br><span class="line">                Log.e("NoSuchMethodException", "Could not find a method " +</span><br><span class="line">                		method + " in the class "</span><br><span class="line">                        + getClass() + " for onClick handler"</span><br><span class="line">                        + " on view ");</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">        	mHandler.invoke(instance,context);</span><br><span class="line">        &#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">        	Log.e("IllegalAccessException", "Could not execute non "</span><br><span class="line">                    + "public method of the class");</span><br><span class="line">        &#125; catch (InvocationTargetException e) &#123;</span><br><span class="line">        	Log.e("InvocationTargetException", "Could not execute "</span><br><span class="line">                    + "method of the class");</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void TestAction(Context context)&#123;</span><br><span class="line">		Toast.makeText(context, "TestAction", Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void startActivity(Context context)&#123;</span><br><span class="line">		Toast.makeText(context, "startActivity", Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">```　</span><br><span class="line">	使用单例模式初始化全局唯一对象，提供对外传参方法。详细扩展及应用就看你了。</span><br><span class="line">　　</span><br><span class="line">### **3.1一些更有意思的讲述**</span><br><span class="line">　　上边这些具体有甚用处呢，且听我后边慢慢为你道来。</span><br><span class="line">　　通常有些页面的配置菜单会发生频繁变更，有时候是一级菜单有时候是二级菜单，而且样式不便，对应的位置和执行动作也会变化。这样就给开发带来不少麻烦。所以呢，我们可以简单的封装，然后定义一个属性对象，直接使用数组列表来初始化这么一个页面，当然前提是自己有另外封装了处理逻辑。举个伪代码小例子。</span><br><span class="line">``` java</span><br><span class="line">//属性对象类</span><br><span class="line">ItemAttrs&#123;</span><br><span class="line">	attr1；</span><br><span class="line">	attr2；</span><br><span class="line">	attr3；</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//在界面定义个List</span><br><span class="line">List&lt;ItemAttrs&gt; list;</span><br><span class="line"></span><br><span class="line">//按照list产生界面</span><br><span class="line">new RowItem();</span><br><span class="line">rowitem.bind(lit.get(i)) //绑定到rowitem相关属性，产生界面和点击事件</span><br><span class="line"></span><br><span class="line">//处理逻辑类</span><br><span class="line">ItemAttrs&#123;</span><br><span class="line">	action1()；</span><br><span class="line">	action2()；</span><br><span class="line">	action3()；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　这样你的界面就完全由list来控制，这个界面可以是在打包配置的一个xml里，也可以是有在线获取的json产生。你完全可以用你最方便的场景动态产生这个界面。</p>
+<p>最后，附上前面所讲的示例源码：<br>　　<a href="http://download.csdn.net/detail/u011254308/8701449" target="_blank" rel="external"><strong><em>点击下载示例源码</em></strong></a></p>
+<h2 id="">　　</h2></span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android基础/" rel="tag">#Android基础</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/05/07/android_note/从仿QQ消息提示框来谈弹出式对话框/" rel="prev">从仿QQ消息提示框来谈弹出式对话框</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/30/android_note/UI--微博（动态）点赞，简单效果中的不简单门道/" rel="next">UI--微博（动态）点赞，简单效果中的不简单门道</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#《代码里的世界》_—UI篇"><span class="nav-number">1.</span> <span class="nav-text">《代码里的世界》  —UI篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概述"><span class="nav-number">2.</span> <span class="nav-text">1.概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-实践"><span class="nav-number">3.</span> <span class="nav-text">2.实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1定义属性"><span class="nav-number">3.1.</span> <span class="nav-text">2.1定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2_View中使用自定义属性"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 View中使用自定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3在layout的xml文件中使用自定义属性设置属性值"><span class="nav-number">3.3.</span> <span class="nav-text">2.3在layout的xml文件中使用自定义属性设置属性值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-有意思的尝试"><span class="nav-number">4.</span> <span class="nav-text">3.有意思的尝试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1尝试bindLinstener()"><span class="nav-number">4.1.</span> <span class="nav-text">3.1尝试bindLinstener()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2回头看android本身提供方法"><span class="nav-number">4.2.</span> <span class="nav-text">3.2回头看android本身提供方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">5.</span> <span class="nav-text">　　</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

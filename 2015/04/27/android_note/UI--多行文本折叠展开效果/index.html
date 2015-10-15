@@ -1,0 +1,691 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Android基础," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45568653
+
+【导航】
+
+单行文本水平触摸滑动效果   通过EditText实现TextView单行长文本水平滑动效果
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI--多行文本折叠展开效果">
+<meta property="og:url" content="http://yoursite.com/2015/04/27/android_note/UI--多行文本折叠展开效果/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45568653
+
+【导航】
+
+单行文本水平触摸滑动效果   通过EditText实现TextView单行长文本水平滑动效果
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述">
+<meta property="og:image" content="http://img.blog.csdn.net/20150515221330883">
+<meta property="og:updated_time" content="2015-06-29T13:31:13.707Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UI--多行文本折叠展开效果">
+<meta name="twitter:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45568653
+
+【导航】
+
+单行文本水平触摸滑动效果   通过EditText实现TextView单行长文本水平滑动效果
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> UI--多行文本折叠展开效果 | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              UI--多行文本折叠展开效果
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-04-27T00:00:00+08:00" content="2015-04-27">
+            2015-04-27
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/学习日志/" itemprop="url" rel="index">
+                  <span itemprop="name">学习日志</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="《代码里的世界》_—UI篇"><strong>《代码里的世界》</strong>  —<strong><em>UI篇</em></strong></h2><blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45568653" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45568653</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45567643" target="_blank" rel="external">单行文本水平触摸滑动效果</a>   通过EditText实现TextView单行长文本水平滑动效果</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45568653" target="_blank" rel="external">多行文本折叠展开</a>    自定义布局View实现多行文本折叠和展开</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2><p>　　经常在APP中能看到有引用文章或大段博文的内容，他们的展示样式也有点儿意思，默认是折叠的，当你点击文章之后它会自动展开。再次点击他又会缩回去。<br>　　网上有找到部分效果，感觉不是很满意。最后自己尝试用 <strong>自定义布局layout</strong> 写了个demo。比较简陋，不过可以用了。有这方面需求的朋友可以稍加改造下。如有更好的创意，也不妨分享一下。<br>　　<br><em>效果图：</em><br><img src="http://img.blog.csdn.net/20150515221330883" alt="多行文本折叠展开"></p>
+<hr>
+<h2 id="2-具体实现"><strong>2.具体实现</strong></h2><p>　　但从实现效果方面来看，只用简单定义必要view即可，后变为了方便扩展使用和挪用，又对整个布局进行封装，方便直接使用。</p>
+<h3 id="2-1_通过多个布局组合实现"><strong><em>2.1 通过多个布局组合实现</em></strong></h3><p>　　第一想法当然是用多个View组合来实现。那么久定义一个LinearLayout布局分别嵌套TextView和ImageView来做。<br>　　<em>大概步骤：</em></p>
+<pre><code>- <span class="keyword">*</span><span class="keyword">*</span>定义布局，垂直的线性LinearLayout布局、TextView和ImageView。<span class="keyword">*</span><span class="keyword">*</span>  在layout中定义基本组件。
+- <span class="keyword">*</span><span class="keyword">*</span>设置TextView的高度为指定行数<span class="keyword">*</span>行高。 <span class="keyword">*</span><span class="keyword">*</span>  不使用maxLine的原因是maxLine会控制显示文本的行数，不方便后边使用动画展开全部内容。因此这里TextView的高度也因该为wrap_content。
+- <span class="keyword">*</span><span class="keyword">*</span>给整个布局添加点击事件，绑定动画。<span class="keyword">*</span><span class="keyword">*</span> 点击时，若TextView未展开则展开至其实际高度，imageView 旋转；否则回缩至 指定行数<span class="keyword">*</span>行高 , imageView 旋转缩回。
+</code></pre><p>　　</p>
+<h4 id="开始编写代码："><em>开始编写代码：</em></h4><p>　　<strong>1.在xml中定义布局:</strong><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">       <span class="attribute">android:id</span>=<span class="value">"@+id/description_layout"</span></span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">       <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span></span><br><span class="line">       <span class="attribute">android:paddingLeft</span>=<span class="value">"12dip"</span></span><br><span class="line">       <span class="attribute">android:paddingRight</span>=<span class="value">"12dip"</span></span><br><span class="line">       <span class="attribute">android:paddingTop</span>=<span class="value">"5dip"</span> &gt;</span></span><br><span class="line"></span><br><span class="line">       <span class="tag">&lt;<span class="title">TextView</span></span><br><span class="line">           <span class="attribute">android:id</span>=<span class="value">"@+id/description_view"</span></span><br><span class="line">           <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:textColor</span>=<span class="value">"@android:color/black"</span></span><br><span class="line">           <span class="attribute">android:textSize</span>=<span class="value">"18dip"</span> &gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="title">TextView</span>&gt;</span></span><br><span class="line"></span><br><span class="line">       <span class="tag">&lt;<span class="title">ImageView</span></span><br><span class="line">           <span class="attribute">android:id</span>=<span class="value">"@+id/expand_view"</span></span><br><span class="line">           <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:layout_gravity</span>=<span class="value">"right"</span></span><br><span class="line">           <span class="attribute">android:paddingBottom</span>=<span class="value">"5dip"</span></span><br><span class="line">           <span class="attribute">android:paddingLeft</span>=<span class="value">"5dip"</span></span><br><span class="line">           <span class="attribute">android:paddingRight</span>=<span class="value">"5dip"</span></span><br><span class="line">           <span class="attribute">android:paddingTop</span>=<span class="value">"5dip"</span></span><br><span class="line">           <span class="attribute">android:src</span>=<span class="value">"@drawable/text_ic_expand"</span></span><br><span class="line">           <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>　　<strong>2.首先在activity中定义并初始化这些view：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">	TextView descriptionView;</span><br><span class="line">	View layoutView ,expandView; <span class="comment">//LinearLayout布局和ImageView</span></span><br><span class="line">	<span class="keyword">int</span> maxDescripLine = <span class="number">3</span>; <span class="comment">//TextView默认最大展示行数</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//在OnCreate中初始化</span></span><br><span class="line">	&#123;</span><br><span class="line">		layoutView = findViewById(R.id.description_layout);</span><br><span class="line">		descriptionView = (TextView)findViewById(R.id.description_view);</span><br><span class="line">		expandView = findViewById(R.id.expand_view);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　<strong>3.然后设置textview显示文本，再根据默认展示行数设置其高度，并根据其是否已完全显示（当前展示行数是否大于等于实际行数）来判断需不需要点击更多按钮。</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置文本</span></span><br><span class="line">descriptionView.setText(getText(R.string.content));</span><br><span class="line"></span><br><span class="line"><span class="comment">//descriptionView设置默认显示高度</span></span><br><span class="line">descriptionView.setHeight(descriptionView.getLineHeight() * maxDescripLine);</span><br><span class="line"><span class="comment">//根据高度来判断是否需要再点击展开</span></span><br><span class="line">descriptionView.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">		</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			expandView.setVisibility(descriptionView.getLineCount() &gt; maxDescripLine ? View.VISIBLE : View.GONE);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>　　因为textView设置的是wrap_content，所以会显示实际高度和行数，这里根据maxDescripLine来设置其高度。<br>　　看了最后一行代码可能有人会问？<strong>ImageView （点击展开更多）是否应该显示 的判断逻辑为什么要放在post方法里边呢？</strong> 这是由于在OnCreate方法中定义设置的textView不会马上渲染并显示，所以textview的getLineCount()获取到的值一般都为零，因此使用post会在其绘制完成后来对ImageView进行显示控制。<br>　　ps: 感觉我描述不清的朋友可以看下<strong>stackoverflow 上的讲解 </strong> <a href="http://stackoverflow.com/questions/11467632/how-to-use-getlinecount-in-textview-android" target="_blank" rel="external">how to use getlinecount() in textview android.</a> </p>
+<p>　　<strong>4.给layoutView设置点击事件。</strong><br>　　给ImageView定义一个RotateAnimation的旋转动画，在旋转过程中根据旋转百分比进度控制textView高度，进而达到我们想要的效果。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">	layoutView.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">			boolean isExpand;//是否已展开的状态</span><br><span class="line"></span><br><span class="line">			@Override</span><br><span class="line">			public void onClick(View v) &#123;</span><br><span class="line">				isExpand = !isExpand;</span><br><span class="line">				descriptionView.clearAnimation();//清楚动画效果</span><br><span class="line">				final int deltaValue;//默认高度，即前边由maxLine确定的高度</span><br><span class="line">				final int startValue = descriptionView.getHeight();//起始高度</span><br><span class="line">				int durationMillis = 350;//动画持续时间</span><br><span class="line">				if (isExpand) &#123;</span><br><span class="line">					/**</span><br><span class="line">					* 折叠动画</span><br><span class="line">					* 从实际高度缩回起始高度</span><br><span class="line">					*/</span><br><span class="line">					deltaValue = descriptionView.getLineHeight() * descriptionView.getLineCount() - startValue;</span><br><span class="line">					RotateAnimation animation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);</span><br><span class="line">					animation.setDuration(durationMillis);</span><br><span class="line">					animation.setFillAfter(true);</span><br><span class="line">					expandView.startAnimation(animation);</span><br><span class="line">				&#125; else &#123;</span><br><span class="line">					/**</span><br><span class="line">					* 展开动画</span><br><span class="line">					* 从起始高度增长至实际高度</span><br><span class="line">					*/</span><br><span class="line">					deltaValue = descriptionView.getLineHeight() * maxDescripLine - startValue;</span><br><span class="line">					RotateAnimation animation = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);</span><br><span class="line">					animation.setDuration(durationMillis);</span><br><span class="line">					animation.setFillAfter(true);</span><br><span class="line">					expandView.startAnimation(animation);</span><br><span class="line">				&#125;</span><br><span class="line">				Animation animation = new Animation() &#123;</span><br><span class="line">					protected void applyTransformation(float interpolatedTime, Transformation t) &#123; //根据ImageView旋转动画的百分比来显示textview高度，达到动画效果</span><br><span class="line">						descriptionView.setHeight((int) (startValue + deltaValue * interpolatedTime));</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;;</span><br><span class="line">				animation.setDuration(durationMillis);</span><br><span class="line">				descriptionView.startAnimation(animation);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">　　至此，通过布局已经实现了我们想要的效果。具体代码参见[代码示例][3] 的第一部分。</span><br><span class="line">　　当然，我们可以这样使用，但是每次都这么重写未免显得有些麻烦。因此有必要把他写成一个**单独控件**，方便我们以后的开袋即食。废话不多说，上菜。</span><br><span class="line"></span><br><span class="line">### ***2.2 通过自定义View组合封装***	</span><br><span class="line">　　这个view的布局结构并不打算使用xml来定义layout，直接定义一个继承LinearLayout的MoreTextView类.这个类里边添加TextView和ImageView。</span><br><span class="line">####  **1.使用styleable自定义View属性**</span><br><span class="line">　　为了后边能够方便的在xml布局中使用MoreTextView这个自定义View，类似通过</span><br><span class="line">&gt;  android：text = "XXX"</span><br><span class="line">&gt;  android：textSize = "XXX"</span><br><span class="line"></span><br><span class="line">这样快捷的绑定文本内容和设置字体大小等属性，我们可以通过 ***declare-styleable***在values文件下的xml中自定义我们想要的属性，并在View中获取和使用。[详细使用declare-styleable的内容][5]会在后边补充，这里简要说下。</span><br><span class="line">　　比如，MoreTextView应该有的基本属性,像 文本字体大小(textSize)、颜色(textColor)和文本内容（text），还有默认显示行数(maxLine)等几种属性。我们要想像TextView一样直接在xml中设置绑定，可以这样做。</span><br><span class="line">　　首先在values目录下新建个attrs.xml(名字随意),并定义MoreTextView这些属性。</span><br><span class="line">``` xml</span><br><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line">&lt;resources&gt;</span><br><span class="line">    &lt;declare-styleable name="MoreTextStyle"&gt;</span><br><span class="line">        &lt;attr name="textSize" format="dimension"/&gt;</span><br><span class="line">        &lt;attr name="textColor" format="color"/&gt;</span><br><span class="line">        &lt;attr name="maxLine" format="integer" /&gt;</span><br><span class="line">        &lt;attr name="text" format="string" /&gt;</span><br><span class="line">    &lt;/declare-styleable&gt;</span><br><span class="line">&lt;/resources&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-自定义MoreTextView并获取这些属性的值"><strong>2.自定义MoreTextView并获取这些属性的值</strong></h4><p>　　上边定义了这些属性，就等于允许我们在xml中使用</p>
+<blockquote>
+<p> more：text = “XXX”<br> more：textSize = “XXX”<br> more : textColor = “XXX”<br> more : maxLine = “XXX”<br>　　　　　　　　　　　　<em>(注： more这个关键字可以随意)</em></p>
+</blockquote>
+<p>这样直接设置属性值。那么具体怎么取值，我们稍后来讲。<br>　　<strong><em>（1）定义MoreTextView的属性：</em></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MoreTextView</span> <span class="keyword">extends</span> <span class="title">LinearLayout</span></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> TextView contentView; <span class="comment">//文本正文</span></span><br><span class="line">	<span class="keyword">protected</span> ImageView expandView; <span class="comment">//展开按钮</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//对应styleable中的属性</span></span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">int</span> textColor; </span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">float</span> textSize;</span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">int</span> maxLine;</span><br><span class="line">	<span class="keyword">protected</span> String text;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//默认属性值</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> defaultTextColor = Color.BLACK;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> defaultTextSize = <span class="number">12</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> defaultLine = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//....实现部分略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　<strong><em>（2）MoreTextView的构造方法：</em></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MoreTextView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(context, attrs);</span><br><span class="line">	initalize(); </span><br><span class="line">	initWithAttrs(context, attrs); </span><br><span class="line">	bindListener();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这三个方法简单说明下：</p>
+<ul>
+<li><em>initalize()</em>　　初始化并添加View。初始化TextView和ImageView,并添加到MoretextView中去。</li>
+<li><em>initWithAttrs(context, attrs)</em>　　取值并设置。利用attrs从xml布局中取我们配置好的text/textSize/textColor/maxLine等属性的属性值，并设置到View上去。</li>
+<li><em>bindListener()</em>　　绑定点击事件并设置动画。 给当前MoreTextView设置点击事件，实现点击折叠和展开。</li>
+</ul>
+<p>各个方法的具体实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化并添加View</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initalize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		setOrientation(VERTICAL); <span class="comment">//设置垂直布局</span></span><br><span class="line">		setGravity(Gravity.RIGHT); <span class="comment">//右对齐</span></span><br><span class="line">		<span class="comment">//初始化textView并添加</span></span><br><span class="line">		contentView = <span class="keyword">new</span> TextView(getContext());</span><br><span class="line">		addView(contentView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);</span><br><span class="line">		<span class="comment">//初始化ImageView并添加</span></span><br><span class="line">		expandView = <span class="keyword">new</span> ImageView(getContext());</span><br><span class="line">		<span class="keyword">int</span> padding = dip2px(getContext(), <span class="number">5</span>);</span><br><span class="line">		expandView.setPadding(padding, padding, padding, padding);</span><br><span class="line">		expandView.setImageResource(R.drawable.text_ic_expand);</span><br><span class="line">		LinearLayout.LayoutParams llp = <span class="keyword">new</span> LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);</span><br><span class="line">		addView(expandView, llp);</span><br></pre></td></tr></table></figure></p>
+<p>　　取值并设置这部分有必要将一下。我们利用TypedArray从定义的styleable中取出属性值，赋给我们定义好的类的属性变量。记得取完之后调用recycle()回收释放。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initWithAttrs</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		TypedArray a = context.obtainStyledAttributes(attrs,  </span><br><span class="line">                R.styleable.MoreTextStyle);  </span><br><span class="line">		<span class="keyword">int</span> textColor = a.getColor(R.styleable.MoreTextStyle_textColor,  </span><br><span class="line">				defaultTextColor);  <span class="comment">//取颜色值，默认defaultTextColor</span></span><br><span class="line">		textSize = a.getDimensionPixelSize(R.styleable.MoreTextStyle_textSize, defaultTextSize);<span class="comment">//取颜字体大小，默认defaultTextSize</span></span><br><span class="line">		maxLine = a.getInt(R.styleable.MoreTextStyle_maxLine, defaultLine);<span class="comment">//取颜显示行数，默认defaultLine</span></span><br><span class="line">		text = a.getString(R.styleable.MoreTextStyle_text);<span class="comment">//取文本内容</span></span><br><span class="line">		</span><br><span class="line">	<span class="comment">//绑定到textView	bindTextView(textColor,textSize,maxLine,text);</span></span><br><span class="line">		</span><br><span class="line">		a.recycle();<span class="comment">//回收释放</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//绑定到textView	</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">bindTextView</span><span class="params">(<span class="keyword">int</span> color,<span class="keyword">float</span> size,<span class="keyword">final</span> <span class="keyword">int</span> line,String text)</span></span>&#123;</span><br><span class="line">		contentView.setTextColor(color);</span><br><span class="line">		contentView.setTextSize(TypedValue.COMPLEX_UNIT_PX,size);</span><br><span class="line">		contentView.setText(text);</span><br><span class="line">		contentView.setHeight(contentView.getLineHeight() * line);</span><br><span class="line">		post(<span class="keyword">new</span> Runnable() &#123;<span class="comment">//前面已讲，不再赘述</span></span><br><span class="line">			</span><br><span class="line">			<span class="annotation">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">				expandView.setVisibility(contentView.getLineCount() &gt; line ? View.VISIBLE : View.GONE);</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">``` </span><br><span class="line">最后设置点击事件。</span><br><span class="line">``` java</span><br><span class="line">	<span class="comment">//点击展开与折叠，不再赘述</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">bindListener</span><span class="params">()</span></span>&#123;</span><br><span class="line">		setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">			<span class="keyword">boolean</span> isExpand;</span><br><span class="line"></span><br><span class="line">			<span class="annotation">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">				isExpand = !isExpand;</span><br><span class="line">				contentView.clearAnimation();</span><br><span class="line">				<span class="keyword">final</span> <span class="keyword">int</span> deltaValue;</span><br><span class="line">				<span class="keyword">final</span> <span class="keyword">int</span> startValue = contentView.getHeight();</span><br><span class="line">				<span class="keyword">int</span> durationMillis = <span class="number">350</span>;</span><br><span class="line">				<span class="keyword">if</span> (isExpand) &#123;</span><br><span class="line">					deltaValue = contentView.getLineHeight() * contentView.getLineCount() - startValue;</span><br><span class="line">					RotateAnimation animation = <span class="keyword">new</span> RotateAnimation(<span class="number">0</span>, <span class="number">180</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>);</span><br><span class="line">					animation.setDuration(durationMillis);</span><br><span class="line">					animation.setFillAfter(<span class="keyword">true</span>);</span><br><span class="line">					expandView.startAnimation(animation);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					deltaValue = contentView.getLineHeight() * maxLine - startValue;</span><br><span class="line">					RotateAnimation animation = <span class="keyword">new</span> RotateAnimation(<span class="number">180</span>, <span class="number">0</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>);</span><br><span class="line">					animation.setDuration(durationMillis);</span><br><span class="line">					animation.setFillAfter(<span class="keyword">true</span>);</span><br><span class="line">					expandView.startAnimation(animation);</span><br><span class="line">				&#125;</span><br><span class="line">				Animation animation = <span class="keyword">new</span> Animation() &#123;</span><br><span class="line">					<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">applyTransformation</span><span class="params">(<span class="keyword">float</span> interpolatedTime, Transformation t)</span> </span>&#123;</span><br><span class="line">						contentView.setHeight((<span class="keyword">int</span>) (startValue + deltaValue * interpolatedTime));</span><br><span class="line">					&#125;</span><br><span class="line"></span><br><span class="line">				&#125;;</span><br><span class="line">				animation.setDuration(durationMillis);</span><br><span class="line">				contentView.startAnimation(animation);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另外，定义几个方法方便外部调用（获取文本TextView，直接设置文本内容），同时还定义了一个dip转像素的静态方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> TextView <span class="title">getTextView</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> contentView;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setText</span><span class="params">(CharSequence charSequence)</span></span>&#123;</span><br><span class="line">	contentView.setText(charSequence);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dip2px</span><span class="params">(Context context, <span class="keyword">float</span> dipValue)</span></span>&#123;              </span><br><span class="line">       <span class="keyword">final</span> <span class="keyword">float</span> scale = context.getResources().getDisplayMetrics().density;                   </span><br><span class="line">       <span class="keyword">return</span> (<span class="keyword">int</span>)(dipValue * scale + <span class="number">0.5f</span>);           </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　其实到这里，我们的自定义多文本折叠展开MoreTextView已经完成了。如何使用呢？</p>
+<ul>
+<li><p>在layout/xx.xml中使用<br>要想方便的使用我们刚刚的自定义属性来定义值，记得在xml namespace中定义应用：</p>
+<blockquote>
+<p>自动引用命名空间res-auto<br>xmlns:more=”<a href="http://schemas.android.com/apk/res-auto" target="_blank" rel="external">http://schemas.android.com/apk/res-auto</a>“<br>或者 直接定义包名<br>xmlns:more=”<a href="http://schemas.android.com/apk/res/com.qiao.moretext" target="_blank" rel="external">http://schemas.android.com/apk/res/com.qiao.moretext</a>“</p>
+</blockquote>
+<p>命名空间后边跟的 more即下边你要使用自定义属性的开头部分。<br>比如我们的activity_main.xml</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"</span><br><span class="line">xmlns:more="http://schemas.android.com/apk/res/com.qiao.moretext"</span><br><span class="line">    android:id="@+id/root"</span><br><span class="line">    android:layout_width="match_parent"</span><br><span class="line">    android:layout_height="match_parent"</span><br><span class="line">    android:background="@android:color/white"</span><br><span class="line">    android:orientation="vertical" &gt;</span><br><span class="line">	 </span><br><span class="line">	 &lt;com.qiao.moretext.MoreTextView</span><br><span class="line">        android:layout_width="match_parent"</span><br><span class="line">        android:layout_height="wrap_content"</span><br><span class="line">        android:layout_margin="5dip" </span><br><span class="line">        more:textColor="@android:color/black"</span><br><span class="line">        more:textSize="18dip"</span><br><span class="line">        more:maxLine="3"</span><br><span class="line">        more:text="@string/content"/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在java中直接定义使用<br>由于上边定义MoreTextView只定义了一种构造方法 <strong>MoreTextView(Context context, AttributeSet attrs)</strong>  ，所以使用时，也只能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MoreTextView content = <span class="keyword">new</span> MoreTextView(MainActivity.<span class="keyword">this</span>, <span class="keyword">null</span>);</span><br><span class="line">content.setText(getText(R.string.content));</span><br><span class="line"><span class="comment">//然后addview到你要添加的地方</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>　　当然，聪明如你，可肯定知道怎么定义另外的构造方法来简单实用啦。<br>　　–&gt;<br>　　MoreTextView(Context context){<br>    　　　　//使用默认值直接初始化<br>    　　　　bindTextView()；<br>　　}</p>
+<hr>
+<h2 id="3-综述"><strong>3.综述</strong></h2><p>　　综上呢，我们已经完成了所要实现的功能，作为UI呢，他可能会有些简陋，但作为一个demo起到示范作用已经够了。后边我们可能会考虑把它作为微博的一个listitem做成列表一样，并加入点赞等功能。有兴趣不妨做一下咯。。<br>　　<a href="http://download.csdn.net/detail/u011254308/8667625" target="_blank" rel="external">源码示例下载地址</a></p>
+<h2 id="">　　</h2></span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android基础/" rel="tag">#Android基础</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/30/android_note/UI--微博（动态）点赞，简单效果中的不简单门道/" rel="prev">UI--微博（动态）点赞，简单效果中的不简单门道</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/20/diary/DailyEpitaph/" rel="next">《每日墓志铭》</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#《代码里的世界》_—UI篇"><span class="nav-number">1.</span> <span class="nav-text">《代码里的世界》  —UI篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概述"><span class="nav-number">2.</span> <span class="nav-text">1.概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-具体实现"><span class="nav-number">3.</span> <span class="nav-text">2.具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1_通过多个布局组合实现"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 通过多个布局组合实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开始编写代码："><span class="nav-number">3.1.1.</span> <span class="nav-text">开始编写代码：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-自定义MoreTextView并获取这些属性的值"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.自定义MoreTextView并获取这些属性的值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-综述"><span class="nav-number">4.</span> <span class="nav-text">3.综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">5.</span> <span class="nav-text">　　</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

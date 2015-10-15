@@ -1,0 +1,695 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Android基础," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/46608385
+
+【导航】
+
+弹出式对话框各种方案   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI--学习模仿QQ未读提醒拖拽删除">
+<meta property="og:url" content="http://yoursite.com/2015/06/11/android_note/UI--学习模仿QQ未读提醒拖拽删除/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/46608385
+
+【导航】
+
+弹出式对话框各种方案   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）">
+<meta property="og:image" content="http://img.blog.csdn.net/20150623174455621">
+<meta property="og:image" content="http://img.blog.csdn.net/20150623215125224">
+<meta property="og:updated_time" content="2015-06-29T13:20:05.518Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UI--学习模仿QQ未读提醒拖拽删除">
+<meta name="twitter:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/46608385
+
+【导航】
+
+弹出式对话框各种方案   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> UI--学习模仿QQ未读提醒拖拽删除 | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              UI--学习模仿QQ未读提醒拖拽删除
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-06-11T00:00:00+08:00" content="2015-06-11">
+            2015-06-11
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/学习日志/" itemprop="url" rel="index">
+                  <span itemprop="name">学习日志</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="《代码里的世界》_—UI篇"><strong>《代码里的世界》</strong>  —<strong><em>UI篇</em></strong></h2><blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/46608385" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/46608385</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/45896477" target="_blank" rel="external">弹出式对话框各种方案</a>   从仿QQ消息提示框来谈弹出式对话框的实现方式 （Dialog，PopupWind，自定义View，Activity，FragmentDialog）</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46402845" target="_blank" rel="external">Dialog源码解析</a>     从源码上看Dialog与DialogFragment</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46417747" target="_blank" rel="external">仿IOS ActionSheet</a>     两种方式实现ActionSheet底部弹出菜单效果</li>
+<li><a href="http://blog.csdn.net/qiaoidea/article/details/46417747" target="_blank" rel="external">QQ未读提醒拖拽删除</a>  触摸事件监听与控件位置变换</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2><p>　　作为一款优秀的社交聊天软件，QQ始终保持着优秀的交互与设计，同时引领不少新时尚与标准规范，而它同时也有一些人性化的设计颇值得为人称道。今天要提到的是<strong>QQ消息未读拖拽清除</strong>（一键退朝”，“一键清除未读”，“一键下班”）的功能。具体细节参考 <a href="http://www.zhihu.com/question/26382740" target="_blank" rel="external"><strong>知乎:一键消除红点功能是怎么想出来的？</strong></a>当然，得益于诸位大大的各种尝试，小弟也稍加模仿修改了一个类似的Demo.这里展示下我们最后实现的各种样式及效果图：<br>　　<br>　　<img src="http://img.blog.csdn.net/20150623174455621" alt="QQ未读提醒拖拽删除效果图"><br>　　<br>　　(注：部分设计思想借鉴 <a href="http://blog.csdn.net/chenupt/article/details/41478303" target="_blank" rel="external">chenupt</a>的博文，不过其部分细节和实用性不够友善，拖动区域小，移除效果不随手指移动等原因，特作修缮并加一个人理解稍作补充。)<br>　　<a href="http://download.csdn.net/detail/u011254308/8831829" target="_blank" rel="external"><strong>示例源码</strong></a> 已更新上传,包涵了滑动切换fragment和底部tab变色效果。具体实现方案鸿神已经提过，有兴趣的点个赞我后边再另开一篇仔细啰嗦下。</p>
+<a id="more"></a>
+<hr>
+<h2 id="2-设计实现"><strong>2.设计实现</strong></h2><p>　　具体原理分析请看前边贴的知乎原文，实现的话稍作讲解下吧。<br>　　先贴老图：<br>　　<img src="http://img.blog.csdn.net/20150623215125224" alt="贝塞尔曲线模型"><br>　　1.以未读消息原图中心为原点，计算p1~p4四点坐标，根据未读红点和手势拖动点间的距离来判断红点的消除与回弹。<br>　　2.初始化消除动画view，关联到指定未读view并绑定拖动事件，根据手势位置更新图片坐标。<br>　　3.判断是否超出最大距离，并根据连接/断开状态来处理手势释放事件，看是否需要消除view。<br>　　4.在上述各状态时绑定相应事件。<br>　　<br>　　貌似很多同学更关注如何使用，因此从本篇开始优先讲引入与使用。</p>
+<h3 id="2-1如何使用">2.1如何使用</h3><ul>
+<li><h4 id="导入_示例源码">导入 <a href="http://download.csdn.net/detail/u011254308/8831829" target="_blank" rel="external"><strong>示例源码</strong></a></h4><p>1.直接导入tipsview至项目作为库/（或直接引入到自己项目）<br>  （1）Android Studio 在项目 build.gradle 中配置</p>
+<blockquote>
+<p> compile project(“:tipsview”)</p>
+</blockquote>
+<p>  （2）eclipse 直接 add library（或在 project.properties 配置）</p>
+<blockquote>
+<p> android.library.reference.1=../tipsview</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><h4 id="使用">使用</h4>1.将TipsView添加至layout.xml 布局最顶层</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">code.qiao.com.tipsview.TipsView</span></span><br><span class="line">        <span class="attribute">android:id</span>=<span class="value">"@+id/tip"</span></span><br><span class="line">        <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">        <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 或者<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rootView.addView(tipview, LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);</span><br></pre></td></tr></table></figure></p>
+<p>2.关联至指定可拖动view,并实现拖动响应事件<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">tipsView.attach(targetView, <span class="keyword">new</span> TipsView.Listener()&#123;</span><br><span class="line">               <span class="annotation">@Override</span></span><br><span class="line">               <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                   targetView.setVisibility(View.INVISIBLE);</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               <span class="annotation">@Override</span></span><br><span class="line">               <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               <span class="annotation">@Override</span></span><br><span class="line">               <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                   targetView.setVisibility(View.VISIBLE);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;);</span><br></pre></td></tr></table></figure></p>
+<p><strong>如果是添加在listView等有触摸事件处理作为子view的地方，记得在onStart()方法中调用</strong><br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当requestDisallowInterceptTouchEvent 参数为true的时候 它不会拦截其子控件的 触摸事件</span></span><br><span class="line">listView.requestDisallowInterceptTouchEvent(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="方法说明"><strong>方法说明</strong></h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//缺省方法</span></span><br><span class="line"><span class="function"><span class="title">attach</span><span class="params">(final View attachView, Listener listener)</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">attach</span><span class="params">(final View attachView, final Func&lt;View&gt; copyViewCreator, final Listener listener)</span></span></span><br></pre></td></tr></table></figure>
+<p><em>其中</em>，</p>
+<ul>
+<li><strong>View attachView</strong> 为点击拖动目标view，比如显示消息未读的view</li>
+<li><strong>Func<view> copyViewCreator</view></strong> 点击拖动时候显示的View,缺省方法默认显示被拖动view本身，当然可以返回其他view，比如选中弹出另外一个view样式。</li>
+</ul>
+<blockquote>
+<p>重写invoke()方法返回拖动显示的view</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> TipsView.Func&lt;View&gt;() &#123;</span><br><span class="line">       <span class="annotation">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> View <span class="title">invoke</span><span class="params">()</span> </span>&#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">null</span>;<span class="comment">//返回要显示view</span></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Listener listener</strong> 点击拖动开始，完成（即消除），取消事件接口<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">new</span> <span class="tag">TipsView</span><span class="class">.Listener</span>()&#123;</span><br><span class="line">                <span class="variable">@Override</span></span><br><span class="line">                public void <span class="function">onStart</span>() &#123;</span><br><span class="line">                          <span class="comment">//开始拖动</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="variable">@Override</span></span><br><span class="line">                public void <span class="function">onComplete</span>() &#123;</span><br><span class="line">                         <span class="comment">//拖动并移除后</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="variable">@Override</span></span><br><span class="line">                public void <span class="function">onCancel</span>() &#123;</span><br><span class="line">                       <span class="comment">//拖动取消</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>实现上述接口便可以达到类似QQ拖动清除效果。</p>
+<h3 id="2-2_详细实现">2.2 详细实现</h3><p>　　整个View大概用了不到300行代码，原理除了计算和利用贝塞尔曲线绘制拖拽效果外，并无什么特别复杂的逻辑。这里从源码层面简要走一遍。</p>
+<h4 id="1-全局变量参数">1.全局变量参数</h4><p>　　定义记录各个位置的坐标点 ，初始化画笔，半径和view ，并设置状态值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TipsView</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span> </span>&#123;</span><br><span class="line">	<span class="comment">//默认半径</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_RADIUS = <span class="number">20</span>; </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//画笔与路径</span></span><br><span class="line">    <span class="keyword">private</span> Paint paint;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//当前拖动位置</span></span><br><span class="line">    <span class="keyword">float</span> x = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">float</span> y = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//贝塞尔曲线的操作点</span></span><br><span class="line">    <span class="keyword">float</span> anchorX = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//相对于view起点</span></span><br><span class="line">    <span class="keyword">float</span> startX = <span class="number">500</span>;</span><br><span class="line">    <span class="keyword">float</span> startY = <span class="number">100</span>;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//相对于屏幕的起点位置</span></span><br><span class="line">    <span class="keyword">float</span> thisX = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">float</span> thisY = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">float</span> radius = DEFAULT_RADIUS;<span class="comment">//当前半径</span></span><br><span class="line">	</span><br><span class="line">    <span class="keyword">boolean</span> isTrigger, isTouch;<span class="comment">//是否触发消失动画，是否手势触摸状态</span></span><br><span class="line">	</span><br><span class="line">    ImageView exploredImageView;<span class="comment">//带有消失动画效果的imageview</span></span><br><span class="line">    View tipImageView; <span class="comment">//可拖动的View</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//。。。</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="2-初始化">2.初始化</h4><p>　　因为是显示在最顶层，用于展示拖动View,所以初始化时候设置背景透明，并设置画笔和添加带有消失动画效果的imageview（默认不可见）。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">TipsView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">super</span>(context);</span><br><span class="line">      init();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">TipsView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">super</span>(context, attrs);</span><br><span class="line">      init();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">TipsView</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">      init();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="comment">//透明背景</span></span><br><span class="line">      setBackgroundColor(Color.TRANSPARENT);</span><br><span class="line">      path = <span class="keyword">new</span> Path();<span class="comment">//轨迹</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//初始化画笔</span></span><br><span class="line">      paint = <span class="keyword">new</span> Paint();</span><br><span class="line">      paint.setAntiAlias(<span class="keyword">true</span>);</span><br><span class="line">      paint.setStyle(Paint.Style.FILL_AND_STROKE);</span><br><span class="line">      paint.setStrokeWidth(<span class="number">2</span>);</span><br><span class="line">      paint.setColor(<span class="number">0xffed5050</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//添加消失效果的View</span></span><br><span class="line">      LayoutParams params = <span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);</span><br><span class="line">      exploredImageView = <span class="keyword">new</span> ImageView(getContext());</span><br><span class="line">      exploredImageView.setLayoutParams(params);</span><br><span class="line">      exploredImageView.setImageResource(R.drawable.tips_bubble);</span><br><span class="line">      exploredImageView.setVisibility(View.INVISIBLE);</span><br><span class="line">      addView(exploredImageView);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-计算和绘制">3.计算和绘制</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">calculate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//计算两点（拖动位置和起点）距离，得到当前圆点半径</span></span><br><span class="line">        <span class="keyword">float</span> distance = (<span class="keyword">float</span>) Math.sqrt(Math.pow(y - startY, <span class="number">2</span>) + Math.pow(x - startX, <span class="number">2</span>));</span><br><span class="line">        radius = -distance / <span class="number">15</span> + DEFAULT_RADIUS;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (radius &lt; <span class="number">7</span>) &#123; <span class="comment">//当半径小于指定值时候触发消除动画</span></span><br><span class="line">            isTrigger = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            isTrigger = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span><br><span class="line">		*近似地将两个圆起始半径设置相等，简单地求与圆心线垂直的线和圆的相交的四个点</span><br><span class="line">		*/</span></span><br><span class="line">        <span class="keyword">float</span> offsetX = (<span class="keyword">float</span>) (radius * Math.sin(Math.atan((y - startY) / (x - startX))));</span><br><span class="line">        <span class="keyword">float</span> offsetY = (<span class="keyword">float</span>) (radius * Math.cos(Math.atan((y - startY) / (x - startX))));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> x1 = startX - offsetX;</span><br><span class="line">        <span class="keyword">float</span> y1 = startY + offsetY;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> x2 = x - offsetX;</span><br><span class="line">        <span class="keyword">float</span> y2 = y + offsetY;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> x3 = x + offsetX;</span><br><span class="line">        <span class="keyword">float</span> y3 = y - offsetY;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> x4 = startX + offsetX;</span><br><span class="line">        <span class="keyword">float</span> y4 = startY - offsetY;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//计算轨迹</span></span><br><span class="line">        path.reset();</span><br><span class="line">        path.moveTo(x1, y1);</span><br><span class="line">        path.quadTo(anchorX, anchorY, x2, y2); <span class="comment">//贝塞尔曲线</span></span><br><span class="line">        path.lineTo(x3, y3); <span class="comment">//直线</span></span><br><span class="line">        path.quadTo(anchorX, anchorY, x4, y4); </span><br><span class="line">        path.lineTo(x1, y1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        calculate();<span class="comment">//计算轨迹</span></span><br><span class="line">        <span class="keyword">if</span> (isTrigger || !isTouch || tipImageView == <span class="keyword">null</span>) &#123; <span class="comment">//断开或手势释放或展示view为空均只绘制透明图层</span></span><br><span class="line">            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.OVERLAY);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">//绘制透明图层后，接着绘制轨迹，并在起点和当前手势位置绘制两个圆</span></span><br><span class="line">            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.OVERLAY);</span><br><span class="line">            canvas.drawPath(path, paint); </span><br><span class="line">            canvas.drawCircle(startX, startY, radius, paint);</span><br><span class="line">            canvas.drawCircle(x, y, radius, paint);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-关联到目标view（可拖动view）和绑定事件">4.关联到目标view（可拖动view）和绑定事件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//缺省方法，默认使用目标view作为可拖动view</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">attach</span><span class="params">(<span class="keyword">final</span> View attachView, Listener listener)</span> </span>&#123;</span><br><span class="line">       attach(attachView, </span><br><span class="line">       <span class="keyword">new</span> Func&lt;View&gt;() &#123; <span class="comment">//返回拖动时候显示的view</span></span><br><span class="line">           <span class="annotation">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> View <span class="title">invoke</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               Bitmap bm = view2Bitmap(attachView);</span><br><span class="line">               ImageView iv = <span class="keyword">new</span> ImageView(getContext());</span><br><span class="line">               iv.setImageBitmap(bm);</span><br><span class="line">               <span class="keyword">return</span> iv;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;, listener);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//目标view，拖动时候展示的view（可定制）和监听事件</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">attach</span><span class="params">(<span class="keyword">final</span> View attachView, <span class="keyword">final</span> Func&lt;View&gt; copyViewCreator, <span class="keyword">final</span> Listener listener)</span> </span>&#123;</span><br><span class="line">       attachView.setOnTouchListener(<span class="keyword">new</span> OnTouchListener() &#123;</span><br><span class="line">        </span><br><span class="line">           <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123; <span class="comment">//初始化</span></span><br><span class="line">            <span class="comment">/**</span><br><span class="line">            *获取目标view在屏幕中位置 和 可展示区域（TipView）在屏幕位置</span><br><span class="line">            *从而得到目标在展示区域的位置startX 和startY</span><br><span class="line">            */</span></span><br><span class="line">               <span class="keyword">int</span>[] attachLocation = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>];</span><br><span class="line">               attachView.getLocationOnScreen(attachLocation);</span><br><span class="line">               <span class="keyword">int</span>[] thisLocation = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>];</span><br><span class="line">               TipsView.<span class="keyword">this</span>.getLocationOnScreen(thisLocation);</span><br><span class="line">			</span><br><span class="line">			<span class="comment">//得到目标view在展示区域中的位置</span></span><br><span class="line">               startX = attachLocation[<span class="number">0</span>] - thisLocation[<span class="number">0</span>] + attachView.getWidth() / <span class="number">2</span>;</span><br><span class="line">               startY = attachLocation[<span class="number">1</span>] - thisLocation[<span class="number">1</span>] + attachView.getHeight() / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">//当前手势位置即起点</span></span><br><span class="line">               x = startX;</span><br><span class="line">               y = startY;</span><br><span class="line"></span><br><span class="line">               tipImageView = copyViewCreator.invoke(); <span class="comment">//得到拖动时候要展示的View</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">//添加到展示区域中</span></span><br><span class="line">               tipImageView.setLayoutParams(<span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span><br><span class="line">               TipsView.<span class="keyword">this</span>.addView(tipImageView);</span><br><span class="line">               tipImageView.measure(<span class="number">0</span>,<span class="number">0</span>);<span class="comment">//由于刚添加并没有测量和绘制，会导致娶不到高宽，影响展示view（中心与起点对齐），所以先进行一次测量</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">//绘制展示的view位置中心与起点重合</span></span><br><span class="line">               tipImageView.setX(startX - tipImageView.getMeasuredWidth() / <span class="number">2</span>);</span><br><span class="line">               tipImageView.setY(startY - tipImageView.getMeasuredHeight() / <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">               <span class="keyword">if</span> (listener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                   listener.onStart(); <span class="comment">//触发开始拖动事件</span></span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">destory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               TipsView.<span class="keyword">this</span>.removeView(tipImageView); <span class="comment">//移除拖动展示的view</span></span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="annotation">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouch</span><span class="params">(View v, MotionEvent event)</span> </span>&#123; <span class="comment">//触摸事件监听</span></span><br><span class="line">               <span class="keyword">if</span> (event.getAction() == MotionEvent.ACTION_DOWN) &#123; <span class="comment">//按下</span></span><br><span class="line">                   init(); <span class="comment">//初始化</span></span><br><span class="line">                   isTouch = <span class="keyword">true</span>;</span><br><span class="line">                   <span class="keyword">int</span>[] location = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>]; </span><br><span class="line">                   TipsView.<span class="keyword">this</span>.getLocationOnScreen(location);</span><br><span class="line">                   <span class="comment">//相对于屏幕的起点位置</span></span><br><span class="line">                   thisX = location[<span class="number">0</span>];</span><br><span class="line">                   thisY = location[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">                   invalidate(); <span class="comment">//重绘</span></span><br><span class="line">                   <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="comment">//如果isTouch为false，不处理触摸事件</span></span><br><span class="line">               <span class="keyword">if</span> (!isTouch)</span><br><span class="line">                   <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">               <span class="keyword">if</span> (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) &#123; <span class="comment">//手势移开或取消</span></span><br><span class="line">                   isTouch = <span class="keyword">false</span>; </span><br><span class="line">                   destory(); <span class="comment">//移除展示view</span></span><br><span class="line"></span><br><span class="line">                   <span class="keyword">if</span> (isTrigger) &#123;  <span class="comment">//触发了消失动画</span></span><br><span class="line">                       postDelayed(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                           <span class="annotation">@Override</span></span><br><span class="line">                           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                               isTrigger = <span class="keyword">false</span>;</span><br><span class="line">                               <span class="keyword">if</span> (listener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                                   listener.onComplete();<span class="comment">//调用移除完成事件</span></span><br><span class="line">                               &#125;</span><br><span class="line">                           &#125;</span><br><span class="line">                       &#125;, <span class="number">1000</span>);</span><br><span class="line">                       </span><br><span class="line">                       <span class="comment">//在手势释放处显示移除效果的View</span></span><br><span class="line">                       exploredImageView.setX(x - exploredImageView.getWidth() / <span class="number">2</span>);</span><br><span class="line">                       exploredImageView.setY(y - exploredImageView.getHeight() / <span class="number">2</span>);</span><br><span class="line">                       exploredImageView.setVisibility(View.VISIBLE);</span><br><span class="line">					</span><br><span class="line">					<span class="comment">//取得移除效果view的帧动画背景，播放消失动画</span></span><br><span class="line">					exploredImageView.setImageResource(R.drawable.tips_bubble);</span><br><span class="line">                       ((AnimationDrawable) exploredImageView.getDrawable()).stop();</span><br><span class="line">                       ((AnimationDrawable) exploredImageView.getDrawable()).start();</span><br><span class="line">                   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                       <span class="keyword">if</span> (listener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                           listener.onCancel();</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">/**</span><br><span class="line">			* 获取当前位置和起点的中间点为贝塞尔曲线的操作点</span><br><span class="line">			*/</span></span><br><span class="line">               anchorX = (event.getRawX() - thisX + startX) / <span class="number">2</span>;</span><br><span class="line">               anchorY = (event.getRawY() - thisY + startY) / <span class="number">2</span>;</span><br><span class="line">               x = event.getRawX() - thisX;</span><br><span class="line">               y = event.getRawY() - thisY;</span><br><span class="line">			</span><br><span class="line">			<span class="comment">//在当前位置绘制展示view</span></span><br><span class="line">               tipImageView.setX(x - tipImageView.getWidth() / <span class="number">2</span>);</span><br><span class="line">               tipImageView.setY(y - tipImageView.getHeight() / <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">               invalidate();</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="5-返回展示View的接口_和_拖动监听事件接口">5.返回展示View的接口 和 拖动监听事件接口</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Func</span>&lt;<span class="title">Tresult</span>&gt; </span>&#123;</span><br><span class="line">      <span class="function">Tresult <span class="title">invoke</span><span class="params">()</span></span>; <span class="comment">//返回类型为Tresult的对象实例 </span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">interface</span> <span class="title">Listener</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">onCancel</span><span class="params">()</span></span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>　　通过位置记录和绘制view,根据手势时间来计算和改变view的状态。其中有三个view，分别对应：</p>
+<ul>
+<li><strong>attachView</strong> 目标view，该view可被拖动（比如未读消息数view）</li>
+<li><strong>tipImageView</strong>  拖动时候显示的view，比如点击未读红点拖动和显示的却是蓝色气泡等（默认显示原目标view）</li>
+<li><p><strong>exploredImageView</strong> 移除时候负责显示带动画效果的view</p>
+<p>以上就是我们的TipsView简易包装。</p>
+</li>
+</ul>
+<hr>
+<h2 id="3-综述总结"><strong>3.综述总结</strong></h2><p>　　如果单单只是在目标view的父view区域拖动该未读图标，大可不必在根布局里添加一个顶层view。但是如果我们想要实现目标view全屏任意位置拖动，就需要额外模拟一个填充View，隐藏掉原来的view，达到全屏幕拖动的效果。<br>　　需要说明的一点，在有些时候，比如listview或者scrollView等布局下，我们会发现无法拖动目标view,这是因为这些父容器有拦截触摸滑动事件。所以我们必须在<strong>onStart()</strong>监听事件接口中设置</p>
+<blockquote>
+<p>//当requestDisallowInterceptTouchEvent 参数为true的时候 它不会拦截其子控件的 触摸事件<br>requestDisallowInterceptTouchEvent(true);</p>
+</blockquote>
+<p>实现目标view的触摸事件有效。</p>
+<p>　　<em>注: 请在布局根视图添加TipView，并保持在最顶层。他将决定你的拖动范围。</em><br>　　<em>注: 请在布局根视图添加TipView，并保持在最顶层。他将决定你的拖动范围。</em></p>
+<p>　　最后，附上代码下载地址：<br>　　<a href="http://download.csdn.net/detail/u011254308/8831829" target="_blank" rel="external">示例demo源码下载地址</a> （资源上传较慢，如果不可用，试试<a href="https://github.com/Qiaoidea/QQTipsView" target="_blank" rel="external">这里</a>）</p>
+<hr>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android基础/" rel="tag">#Android基础</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/05/android_note/关于Google 搜索，你应该知道的梯子/" rel="next">关于Google 搜索，你应该知道的梯子</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#《代码里的世界》_—UI篇"><span class="nav-number">1.</span> <span class="nav-text">《代码里的世界》  —UI篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概述"><span class="nav-number">2.</span> <span class="nav-text">1.概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-设计实现"><span class="nav-number">3.</span> <span class="nav-text">2.设计实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1如何使用"><span class="nav-number">3.1.</span> <span class="nav-text">2.1如何使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#导入_示例源码"><span class="nav-number">3.1.1.</span> <span class="nav-text">导入 示例源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">3.1.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法说明"><span class="nav-number">3.1.3.</span> <span class="nav-text">方法说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2_详细实现"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 详细实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-全局变量参数"><span class="nav-number">3.2.1.</span> <span class="nav-text">1.全局变量参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-初始化"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-计算和绘制"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.计算和绘制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-关联到目标view（可拖动view）和绑定事件"><span class="nav-number">3.2.4.</span> <span class="nav-text">4.关联到目标view（可拖动view）和绑定事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-返回展示View的接口_和_拖动监听事件接口"><span class="nav-number">3.2.5.</span> <span class="nav-text">5.返回展示View的接口 和 拖动监听事件接口</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-综述总结"><span class="nav-number">4.</span> <span class="nav-text">3.综述总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

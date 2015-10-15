@@ -1,0 +1,841 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Android基础,ViewGroup," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。
+##ViewGroup定义　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。　　其实ViewGroup也就是View的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解ViewGroup">
+<meta property="og:url" content="http://yoursite.com/2015/01/08/android_note/ViewGroup/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。
+##ViewGroup定义　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。　　其实ViewGroup也就是View的">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/125949-482795777110f5df.png">
+<meta property="og:updated_time" content="2015-01-11T13:45:32.556Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解ViewGroup">
+<meta name="twitter:description" content="深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。
+##ViewGroup定义　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。　　其实ViewGroup也就是View的">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 深入理解ViewGroup | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              深入理解ViewGroup
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-01-08T00:00:00+08:00" content="2015-01-08">
+            2015-01-08
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/学习日志/" itemprop="url" rel="index">
+                  <span itemprop="name">学习日志</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>　　　　深入到ViewGroup内部，了解ViewGroup的工作，同时会阐述更多有关于View的相关知识。以便为以后能灵活的使用自定义空间打更进一步的基础。</p>
+<p>##ViewGroup定义<br>　　 一个ViewGroup是一个可以包含子View的容器，是布局文件和View容器的基类。在这个类里定义了ViewGroup.LayoutParams类，这个类是布局参数的子类。<br>　　其实ViewGroup也就是View的容器。通过ViewGroup.LayoutParams来指定子View的参数。</p>
+<p>　　ViewGroup作为一个容器，为了制定这个容器应有的标准所以为其指定了接口</p>
+<pre><code>public <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewGroup</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">View</span> <span class="title">implements</span> <span class="title">ViewParent</span>, <span class="title">ViewManager</span>  </span>
+</code></pre><p>　　这两个接口这里不研究，如果涉及到的话会带一下。ViewGroup有小4000行代码，下面我们一个模块一个模块分析。</p>
+<a id="more"></a>
+<h2 id="ViewGroup容器">ViewGroup容器</h2><p>　　　ViewGroup是一个容器，其采用一个数组来存储这些子View：</p>
+<pre><code><span class="comment">// Child views of this ViewGroup    </span>
+<span class="keyword">private</span> View[] mChildren;  
+</code></pre><p>　　由于是通过一个数组来存储View数据的，所以对于ViewGroup来说其必须实现增、删、查的算法。下面我们就来看看其内部实现。</p>
+<p>###<strong>１.　添加View的算法</strong></p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">boolean</span> addViewInLayout(View child, <span class="keyword">int</span> <span class="keyword">index</span>, LayoutParams params) {   
+    <span class="keyword">return</span> addViewInLayout(child, <span class="keyword">index</span>, params, <span class="keyword">false</span>);   
+}   
+<span class="keyword">protected</span> <span class="keyword">boolean</span> addViewInLayout(View child, <span class="keyword">int</span> <span class="keyword">index</span>, LayoutParams params,   
+        <span class="keyword">boolean</span> preventRequestLayout) {   
+    child.mParent = <span class="keyword">null</span>;   
+    addViewInner(child, <span class="keyword">index</span>, params, preventRequestLayout);   
+    child.mPrivateFlags = (child.mPrivateFlags &amp; ~DIRTY_MASK) | DRAWN;   
+    <span class="keyword">return</span> <span class="keyword">true</span>;   
+}   
+<span class="keyword">private</span> <span class="keyword">void</span> addViewInner(View child, <span class="keyword">int</span> <span class="keyword">index</span>, LayoutParams params,   
+        <span class="keyword">boolean</span> preventRequestLayout) {   
+    ...   
+    addInArray(child, <span class="keyword">index</span>);   
+    ...   
+}   
+<span class="keyword">private</span> <span class="keyword">void</span> addInArray(View child, <span class="keyword">int</span> <span class="keyword">index</span>) {   
+...   
+}  
+</code></pre><p>　　上面四个方法就是添加View的核心算法的封装，它们是层层调用的关系。而我们通常调用的addView就是最终通过上面那个来最终达到添加到ViewGroup中的。</p>
+<p>####<em><strong>１．１ addViewInner方法：</strong></em><br>　　1.　<strong>首先是对子View是否已经包含到一个父容器中</strong>，主要的防止添加一个已经有父容器的View，因为添加一个拥有父容器的View时会碰到各种问题。比如记录本身父容器算法的问题、本身被多个父容器包含时更新的处理等等一系列的问题都会出现。</p>
+<pre><code><span class="keyword">if</span> (child.getParent() != <span class="literal">null</span>) {   
+        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"The specified child already has a parent. "</span> +   
+                <span class="string">"You must call removeView() on the child's parent first."</span>);   
+    }  
+</code></pre><p>　　2.　<strong>然后就是对子View布局参数的处理</strong><br>　　3.　<strong>调用addInArray来添加View</strong><br>　　4.　<strong>父View为当前的ViewGroup</strong><br>　　5.　<strong>焦点的处理</strong><br>　　6.　<strong>当前View的AttachInfo信息</strong>，这个信息是用来在窗口处理中用的。Android的窗口系统就是用过AttachInfo来判断View的所属窗口的，这个了解下就行。详细信息设计到Android框架层的一些东西。</p>
+<pre><code>AttachInfo ai = mAttachInfo;   
+    <span class="keyword">if</span> (ai != <span class="keyword">null</span>) {   
+        <span class="keyword">boolean</span> lastKeepOn = ai.mKeepScreenOn;   
+        ai.mKeepScreenOn = <span class="keyword">false</span>;   
+        child.dispatchAttachedToWindow(mAttachInfo, (mViewFlags&amp;VISIBILITY_MASK));   
+        <span class="keyword">if</span> (ai.mKeepScreenOn) {   
+            needGlobalAttributesUpdate(<span class="keyword">true</span>);   
+        }   
+        ai.mKeepScreenOn = lastKeepOn;   
+    }  
+</code></pre><p>　　7.　<strong>View树改变的监听</strong></p>
+<pre><code><span class="keyword">if</span> (mOnHierarchyChangeListener != <span class="literal">null</span>) { 
+        mOnHierarchyChangeListener.onChildViewAdded(<span class="keyword">this</span>, child); 
+}
+</code></pre><p>　　8.　<strong>子View中的mViewFlags的设置</strong></p>
+<pre><code><span class="keyword">if</span> ((child<span class="variable">.mViewFlags</span> &amp; DUPLI<span class="built_in">CATE_PARENT_STATE</span>) == DUPLI<span class="built_in">CATE_PARENT_STATE</span>) { 
+       mGroupFlags |= FLAG_NOTIFY_CHILDREN_ON_DRAWABLE_STATE_CHANGE; 
+   }
+</code></pre><p>####<em><strong>１．2  addInArray方法：</strong></em><br>　　 这个里面的实现主要是有个知识点，以前也没用过arraycopy，这里具体实现就不多加描述了。</p>
+<pre><code>System.arraycopy(children, <span class="number">0</span>, mChildren, <span class="number">0</span>, <span class="keyword">index</span>); 
+System.arraycopy(children, <span class="keyword">index</span>, mChildren, <span class="keyword">index</span> + <span class="number">1</span>, <span class="keyword">count</span> - <span class="keyword">index</span>);
+</code></pre><p>###<strong>２.　移除View</strong><br>　　 移除View的几种方式：</p>
+<ul>
+<li><p><strong>移除指定的View</strong></p>
+</li>
+<li><p><strong>移除从指定位置的View</strong></p>
+</li>
+<li><p><strong>移除从指定位置开始的多个View</strong></p>
+</li>
+<li><p><strong>移除所有的View</strong></p>
+<p>　　其中具体涉及到的方法就有好多了，不过最终对要删除的子View中所做的无非就是下列的事情：</p>
+</li>
+<li><p><strong>如果拥有焦点则清除焦点</strong></p>
+</li>
+<li><p><strong>将要删除的View从当前的window中解除关系</strong></p>
+</li>
+<li><p><strong>设置View树改变的事件监听，我们可以通过监听OnHierarchyChangeListener事件来进行一些相应的处理</strong></p>
+</li>
+<li><p><strong>从父容器的子容器数组中删除</strong></p>
+<p>　　具体的内容这里就不一一贴出来了，大家回头看看源码就可以了。</p>
+</li>
+</ul>
+<p>###<strong>３.　查询</strong><br>　　 这个就简单了，就是直接从数组中取出就可以了：</p>
+<pre><code><span class="keyword">public</span> View getChildAt(<span class="keyword">int</span> <span class="keyword">index</span>) { 
+   <span class="keyword">try</span> { 
+        <span class="keyword">return</span> mChildren[<span class="keyword">index</span>]; 
+    } <span class="keyword">catch</span> (IndexOutOfBoundsException ex) { 
+        <span class="keyword">return</span> <span class="keyword">null</span>; 
+    } 
+}
+</code></pre><p>　　分析到这儿，其实我们已经相当于分析了ViewGroup四分之一的代码了，＠＿＠。</p>
+<p>##onFinishInflate<br>　　我们一般使用View的流程是在onCreate中使用setContentView来设置要显示Layout文件或直接创建一个View，在当设置了ContentView之后系统会对这个View进行解析，然后回调当前视图View中的onFinishInflate方法。只有解析了这个View我们才能在这个View容器中获取到拥有Id的组件，同样因为系统解析完View之后才会调用onFinishInflate方法，所以我们自定义组件时可以onFinishInflate方法中获取指定子View的引用。</p>
+<p>##测量组件<br>　　 在ViewGroup中提供了测量子组件的三个方法。<br> 　　<strong>1、measureChild(View, int, int)，为子组件添加Padding  </strong></p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">void</span> measureChild(View child, <span class="built_in">int</span> parentWidthMeasureSpec,   
+        <span class="built_in">int</span> parentHeightMeasureSpec) {   
+    <span class="keyword">final</span> LayoutParams lp = child.getLayoutParams();   
+
+    <span class="keyword">final</span> <span class="built_in">int</span> childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,   
+            mPaddingLeft + mPaddingRight, lp.<span class="variable">width</span>);   
+    <span class="keyword">final</span> <span class="built_in">int</span> childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,   
+            mPaddingTop + mPaddingBottom, lp.<span class="variable">height</span>);   
+
+    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);   
+}  
+</code></pre><p> 　　<strong>2、measureChildren(int, int)根据指定的高和宽来测量所有子View中显示参数非GONE的组件。  </strong></p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">void</span> measureChildren(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec) {   
+    <span class="keyword">final</span> <span class="keyword">int</span> <span class="keyword">size</span> = mChildrenCount;   
+    <span class="keyword">final</span> View[] children = mChildren;   
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">size</span>; ++i) {   
+        <span class="keyword">final</span> View child = children[i];   
+        <span class="keyword">if</span> ((child.mViewFlags &amp; VISIBILITY_MASK) != GONE) {   
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);   
+        }   
+    }   
+}  
+</code></pre><p> 　　<strong>3、measureChildWithMargins(View, int, int, int, int)测量指定的子组件，为子组件添加Padding和Margin。</strong></p>
+<pre><code> <span class="keyword">protected</span> <span class="keyword">void</span> measureChildWithMargins(View child,   
+        <span class="built_in">int</span> parentWidthMeasureSpec, <span class="built_in">int</span> widthUsed,   
+        <span class="built_in">int</span> parentHeightMeasureSpec, <span class="built_in">int</span> heightUsed) {   
+    <span class="keyword">final</span> MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();   
+
+    <span class="keyword">final</span> <span class="built_in">int</span> childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,   
+            mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin   
+                    + widthUsed, lp.<span class="variable">width</span>);   
+    <span class="keyword">final</span> <span class="built_in">int</span> childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,   
+            mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin   
+                    + heightUsed, lp.<span class="variable">height</span>);   
+
+    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);   
+}  
+</code></pre><p>　　上面三个方法都是为子组件设置了布局参数。最终调用的方法是子组件的measure方法。在View中我们知道这个调用实际上就是设置了子组件的布局参数并且调用onMeasure方法，最终设置了View测量后的高度和宽度。</p>
+<p>##onLayout<br>　　这个函数是一个抽象函数，要求实现ViewGroup的函数必须实现这个函数，这也就是ViewGroup是一个抽象函数的原因。因为各种组件实现的布局方式不一样，而onLayout是必须被重载的函数。</p>
+<pre><code><span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, 
+        <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span></span>; 
+</code></pre><p>我们回头来看View中layout方法： </p>
+<pre><code><span class="keyword">public</span> <span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">layout</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>{ 
+    <span class="keyword">boolean</span> changed = setFrame(l, t, r, b); 
+    <span class="keyword">if</span> (changed || (mPrivateFlags &amp; LAYOUT_REQUIRED) == LAYOUT_REQUIRED) { 
+        <span class="keyword">if</span> (ViewDebug.TRACE_HIERARCHY) { 
+            ViewDebug.trace(<span class="keyword">this</span>, ViewDebug.HierarchyTraceType.ON_LAYOUT); 
+        } 
+
+        onLayout(changed, l, t, r, b); 
+        mPrivateFlags &amp;= ~LAYOUT_REQUIRED; 
+    } 
+    mPrivateFlags &amp;= ~FORCE_LAYOUT; 
+}
+</code></pre><p>　　 在这个方法中调用了setFrame方法，这个方法是用来设置View中的上下左右边距用的</p>
+<pre><code><span class="keyword">protected</span> <span class="function"><span class="keyword">boolean</span> <span class="title">setFrame</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span> </span>{  
+    <span class="keyword">boolean</span> changed = <span class="keyword">false</span>;  
+    <span class="comment">//.......  </span>
+    <span class="keyword">if</span> (mLeft != left || mRight != right || mTop != top || mBottom != bottom) {  
+        changed = <span class="keyword">true</span>;  
+
+        <span class="comment">// Remember our drawn bit  </span>
+        <span class="keyword">int</span> drawn = mPrivateFlags &amp; DRAWN;  
+
+        <span class="comment">// Invalidate our old position  </span>
+        invalidate();  
+
+
+        <span class="keyword">int</span> oldWidth = mRight - mLeft;  
+        <span class="keyword">int</span> oldHeight = mBottom - mTop;  
+
+        mLeft = left;  
+        mTop = top;  
+        mRight = right;  
+        mBottom = bottom;  
+
+        mPrivateFlags |= HAS_BOUNDS;  
+
+        <span class="keyword">int</span> newWidth = right - left;  
+        <span class="keyword">int</span> newHeight = bottom - top;  
+
+        <span class="keyword">if</span> (newWidth != oldWidth || newHeight != oldHeight) {  
+            onSizeChanged(newWidth, newHeight, oldWidth, oldHeight);  
+        }  
+
+        <span class="keyword">if</span> ((mViewFlags &amp; VISIBILITY_MASK) == VISIBLE) {  
+            <span class="comment">// If we are visible, force the DRAWN bit to on so that  </span>
+            <span class="comment">// this invalidate will go through (at least to our parent).  </span>
+            <span class="comment">// This is because someone may have invalidated this view  </span>
+            <span class="comment">// before this call to setFrame came in, therby clearing  </span>
+            <span class="comment">// the DRAWN bit.  </span>
+            mPrivateFlags |= DRAWN;  
+            invalidate();  
+        }  
+
+        <span class="comment">// Reset drawn bit to original value (invalidate turns it off)  </span>
+        mPrivateFlags |= drawn;  
+
+        mBackgroundSizeChanged = <span class="keyword">true</span>;  
+    }  
+    <span class="keyword">return</span> changed;  
+}  
+<span class="comment">//我们可以看到如果新的高度和宽度改变之后会调用重新设置View的四个参数：  </span>
+<span class="comment">//protected int mLeft;  </span>
+<span class="comment">//protected int mRight;  </span>
+<span class="comment">//protected int mTop;  </span>
+<span class="comment">//protected int mBottom;  </span>
+<span class="comment">//这四个参数指定了View将要布局的位置。而绘制的时候是通过这四个参数来绘制，所以我们在View中调用layout方法可以实现指定子View中布局。</span>
+</code></pre><p>##ViewGroup的绘制<br>　　ViewGroup的绘制实际上是调用的dispatchDraw，绘制时需要考虑动画问题，而动画的实现实际上就通过dispatchDraw来实现的。<br>　　 我们不用理会太多的细节，直接看其绘制子组件调用的是drawChild方法，这个里面具体的东西就多了，涉及到动画效果的处理，如果有机会的话再写，我们只要知道这个方法的功能就行。<br>　　这里有个demo贴出其中的代码大家可以测试下。</p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="title">ViewGroup01</span><span class="params">(Context context)</span>    
+</span>{    
+<span class="keyword">super</span>(context);    
+Button mButton = <span class="keyword">new</span> Button(context);    
+mButton.setText(<span class="string">"测试"</span>);    
+addView(mButton);    
+}    
+
+<span class="annotation">@Override</span>  
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span>    
+</span>{    
+View v = getChildAt(<span class="number">0</span>);    
+<span class="keyword">if</span>(v != <span class="keyword">null</span>)    
+    {    
+    v.layout(<span class="number">120</span>, <span class="number">120</span>, <span class="number">250</span>, <span class="number">250</span>);    
+    }    
+}  
+
+<span class="annotation">@Override</span>  
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">dispatchDraw</span><span class="params">(Canvas canvas)</span>    
+</span>{    
+<span class="keyword">super</span>.dispatchDraw(canvas);    
+View v = getChildAt(<span class="number">0</span>);    
+<span class="keyword">if</span>(v != <span class="keyword">null</span>)    
+    {    
+    drawChild(canvas, v, getDrawingTime());    
+    }    
+}    
+</code></pre><p>##效果图片</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/125949-482795777110f5df.png" alt="9201345467167.png"></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android基础/" rel="tag">#Android基础</a>
+          
+            <a href="/tags/ViewGroup/" rel="tag">#ViewGroup</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/01/09/android_note/Android动画/" rel="prev">Android动画</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/08/android_note/Android安全退出应用程序/" rel="next">Android安全退出应用程序</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ViewGroup容器"><span class="nav-number">1.</span> <span class="nav-text">ViewGroup容器</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

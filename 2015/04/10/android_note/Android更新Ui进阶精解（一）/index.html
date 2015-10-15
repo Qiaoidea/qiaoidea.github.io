@@ -1,0 +1,657 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Android基础," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="《代码里的世界》
+用文字札记描绘自己 android学习之路
+　　转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45128303
+
+【导航】Android更新Ui的几种方法和见解    android更新ui基本常用方法Android更新Ui进阶精解（一）   android ui线程检查机制Android更新Ui进阶精解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android更新Ui进阶精解（一）">
+<meta property="og:url" content="http://yoursite.com/2015/04/10/android_note/Android更新Ui进阶精解（一）/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="《代码里的世界》
+用文字札记描绘自己 android学习之路
+　　转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45128303
+
+【导航】Android更新Ui的几种方法和见解    android更新ui基本常用方法Android更新Ui进阶精解（一）   android ui线程检查机制Android更新Ui进阶精解">
+<meta property="og:updated_time" content="2015-06-29T13:29:15.301Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android更新Ui进阶精解（一）">
+<meta name="twitter:description" content="《代码里的世界》
+用文字札记描绘自己 android学习之路
+　　转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45128303
+
+【导航】Android更新Ui的几种方法和见解    android更新ui基本常用方法Android更新Ui进阶精解（一）   android ui线程检查机制Android更新Ui进阶精解">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> Android更新Ui进阶精解（一） | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Android更新Ui进阶精解（一）
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-04-10T00:00:00+08:00" content="2015-04-10">
+            2015-04-10
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/学习日志/" itemprop="url" rel="index">
+                  <span itemprop="name">学习日志</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="《代码里的世界》"><strong>《代码里的世界》</strong></h2><blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p>　　<em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45128303" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45128303</a></p>
+</blockquote>
+<p><strong>【导航】</strong><br><a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">Android更新Ui的几种方法和见解</a>    android更新ui基本常用方法<br><a href="http://blog.csdn.net/qiaoidea/article/details/45128303" target="_blank" rel="external">Android更新Ui进阶精解（一）</a>   android ui线程检查机制<br><a href="http://blog.csdn.net/qiaoidea/article/details/45135731" target="_blank" rel="external">Android更新Ui进阶精解（二）</a>    android 线程更新UI机制</p>
+<hr>
+<h3 id="1-回顾"><strong><em>1.回顾</em></strong></h3><p>　　<a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">前面一篇</a>简单讲了如何快速使用handler更新ui。稍微补充一些：</p>
+<ol>
+<li><strong>更新ui时可以直接使用这种方法，你不须非要再new一个子线程才使用，比如：</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">viewPostBtn.setOnClickListener(<span class="keyword">new</span> OnClickListener() &#123;</span><br><span class="line">			</span><br><span class="line">			<span class="annotation">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">				viewPostBtn.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">					</span><br><span class="line">					<span class="annotation">@Override</span></span><br><span class="line">					<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">						titleView.setText(<span class="string">"viewPost——Result"</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<a id="more"></a>
+<ol>
+<li><strong>这几种方法可以同样延伸到很多类似的反不同意义的用法，比如</strong><br><strong><em>sendMessage()可以延伸的方法</em></strong></li>
+<li>sendMessageAtTime(Message msg, long uptimeMillis)在指定时间uptimeMillis时发送消息msg；</li>
+<li>sendMessageDelayed(Message msg, long delayMillis)延迟delayMillis时间后发送消息msg</li>
+<li>sendEmptyMessage(int what) 发送一个指定类型what的空消息；</li>
+<li>sendEmptyMessageAtTime(int what, long uptimeMillis)在指定时间uptimeMillis时发送一条指定类型what的空消息；</li>
+<li>sendEmptyMessageDelayed(int what, long delayMillis)延迟delayMillis时间后发送一条指定类型what的空消息；</li>
+<li><p>sendMessageAtFrontOfQueue(Message msg)在消息队列头（优先）发送这条消息msg；</p>
+<p><strong><em>同样，post()可以延伸的方法</em></strong></p>
+</li>
+<li>postAtTime(Runnable r, long uptimeMillis)</li>
+<li>postAtTime(Runnable r, Object token, long uptimeMillis)</li>
+<li>postDelayed(Runnable r, long delayMillis)</li>
+<li>postAtFrontOfQueue(Runnable r)<br>请自行查阅相应方法，这里不予一一列出。<h3 id="2-原理–源码分析"><strong><em>2.原理–源码分析</em></strong></h3>　　首先说<a href="http://blog.csdn.net/qiaoidea/article/details/45115047" target="_blank" rel="external">上篇</a>的第一个问题，android在生成页面的同时生成一个ViewRootImpl的对象，这个对象负责检查checkThread线程是否是在主ｕｉ线程，当我们尝试使用非ｕｉ线程更新视图时，checkThread则抛出异常。
+　　<h4 id="1-_先看看负责检查线程的ViewRootImpl这段逻辑"><strong>1. 先看看负责检查线程的ViewRootImpl这段逻辑</strong></h4></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SuppressWarnings</span>(&#123;<span class="string">"EmptyCatchBlock"</span>, <span class="string">"PointlessBooleanExpression"</span>&#125;)  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewRootImpl</span> <span class="keyword">implements</span> <span class="title">ViewParent</span>,  </span><br><span class="line">        <span class="title">View</span>.<span class="title">AttachInfo</span>.<span class="title">Callbacks</span>, <span class="title">HardwareRenderer</span>.<span class="title">HardwareDrawCallbacks</span> </span>&#123;  </span><br><span class="line">    <span class="comment">// other code..</span></span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">checkThread</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span> (mThread != Thread.currentThread()) &#123;  </span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> CalledFromWrongThreadException(  </span><br><span class="line">                    <span class="string">"Only the original thread that created a view hierarchy can touch its views."</span>);  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// other code..</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 　<em>好吧，为什么要这样？</em> 　引用一段比较合理解释：<br> 　<strong>“那么为什么Android要求只能在UI主线程中更改View呢？这就要说到Android的单线程模型了，因为如果支持多线程修改View的话，由此产生的线程同步和线程安全问题将是非常繁琐的，所以Android直接就定死了，View的操作必须在UI线程，从而简化了系统设计。”</strong>
+ 　</p>
+<h4 id="2-_再看看视图创建时候是何时添加了这个检查对象的"><strong>2. 再看看视图创建时候是何时添加了这个检查对象的</strong></h4><p>　　我们从activity创建说起，首先获取一个窗口管理器WindowManager，然后设置并初始化其container。接着通过activity得到根视图DecorView(FramLayout)，最后将DecorView添加到 activity的ViewManager 中去，而这个ViewManager 在addView时候就会生成一个ViewRootImpl对象。说这么多感觉表述不清楚，更容易犯糊涂了。 看代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">* 以下方法是在调用activity Resume时候执行</span><br><span class="line">* <span class="doctag">@ActivityClientRecord</span> r 记录activity相关状态及参数</span><br><span class="line">*/</span></span><br><span class="line"> <span class="keyword">if</span> (r.window == <span class="keyword">null</span> &amp;&amp; !a.mFinished &amp;&amp; willBeVisible) &#123;  </span><br><span class="line">				 <span class="comment">//获取根视图DecorView</span></span><br><span class="line">                r.window = r.activity.getWindow();  </span><br><span class="line">                View decor = r.window.getDecorView();  </span><br><span class="line">                decor.setVisibility(View.INVISIBLE);</span><br><span class="line">                <span class="comment">//获取并添加至ViewManager   </span></span><br><span class="line">                ViewManager wm = a.getWindowManager();  </span><br><span class="line">                WindowManager.LayoutParams l = r.window.getAttributes();  </span><br><span class="line">                a.mDecor = decor;  </span><br><span class="line">                l.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;  </span><br><span class="line">                l.softInputMode |= forwardBit;  </span><br><span class="line">                <span class="keyword">if</span> (a.mVisibleFromClient) &#123;  </span><br><span class="line">                    a.mWindowAdded = <span class="keyword">true</span>;  </span><br><span class="line">                    wm.addView(decor, l);  </span><br><span class="line">                &#125;  </span><br><span class="line">  </span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后更新和显示activity ,调用了r.activity.makeVisible()方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!r.activity.mFinished &amp;&amp; willBeVisible  </span><br><span class="line">                   &amp;&amp; r.activity.mDecor != <span class="keyword">null</span> &amp;&amp; !r.hideForNow) &#123;  </span><br><span class="line">               <span class="comment">//判断配置等是否需要更新view最后调用wm.updateViewLayout(decor, l); 方法，略过。。。 </span></span><br><span class="line">               <span class="comment">//最后显示activity</span></span><br><span class="line">               r.activity.mVisibleFromServer = <span class="keyword">true</span>;  </span><br><span class="line">               mNumVisibleActivities++;  </span><br><span class="line">               <span class="keyword">if</span> (r.activity.mVisibleFromClient) &#123;  </span><br><span class="line">                   r.activity.makeVisible();  <span class="comment">//显示</span></span><br><span class="line">               &#125;  </span><br><span class="line">           &#125;</span><br></pre></td></tr></table></figure></p>
+<p>再看activity的makeVisible()方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">makeVisible</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">       <span class="keyword">if</span> (!mWindowAdded) &#123;  </span><br><span class="line">           ViewManager wm = getWindowManager();  </span><br><span class="line">           wm.addView(mDecor, getWindow().getAttributes());  <span class="comment">//注意这里。。</span></span><br><span class="line">           mWindowAdded = <span class="keyword">true</span>;  </span><br><span class="line">       &#125;  </span><br><span class="line">       mDecor.setVisibility(View.VISIBLE);  </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个 ViewManager 的addview方法正是关键，它将添加我们提到的ViewRootImpl，其具体实现可以看WindowManagerGlobal：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//主要展示添加ViewRootImpl的过程，其他代码略</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">WindowManagerGlobal</span> </span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addView</span><span class="params">(View view, ViewGroup.LayoutParams params,  </span><br><span class="line">            Display display, Window parentWindow)</span> </span>&#123; </span><br><span class="line">        ViewRootImpl root;  </span><br><span class="line">  </span><br><span class="line">        <span class="keyword">synchronized</span> (mLock) &#123; </span><br><span class="line">  </span><br><span class="line">            root = <span class="keyword">new</span> ViewRootImpl(view.getContext(), display);  </span><br><span class="line">  </span><br><span class="line">            mRoots.add(root);  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> 　　至此，我们大略知道了ui线程是在何时对更新过程和加以控制检查，并了解了检查的内部原理。<br> 　　看到这里很多小伙伴们肯定会不满了，你他瞄不是说讲解handler更新Ui的原理吗，净扯这些有屁用呢！额，由于篇幅限制，这段放在下一篇<a href="http://blog.csdn.net/qiaoidea/article/details/45135731" target="_blank" rel="external">Android更新Ui进阶精解（二）</a> 讲解。咱线继续上一话题：<br> 　　<strong>那么，我们真的就不能在子线程里更新Ui了吗？</strong>显然不是，基于前面讲解的部分，既然是在onResume时候生成检查ViewRootImpl对象，所以我们其实可以在oncreate里更新Ui，比如<br> 　　<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//onCreate调用这段</span></span><br><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;  </span><br><span class="line">         <span class="annotation">@Override</span>  </span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">             titleView.setText(<span class="string">"OtherThread"</span>);  </span><br><span class="line">         &#125;  </span><br><span class="line">     &#125;).start();</span><br></pre></td></tr></table></figure></p>
+<p>当然，你是不能这样用的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> 　　<span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;  </span><br><span class="line">    <span class="annotation">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">try</span> &#123;  </span><br><span class="line">            Thread.sleep(<span class="number">200</span>);  <span class="comment">//睡了就再起不来了</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;  </span><br><span class="line">            e.printStackTrace();  </span><br><span class="line">        &#125;  </span><br><span class="line">        titleView.setText(<span class="string">"OtherThread"</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure></p>
+<p><em>但是为什么我我们又能在OnResume里这么用？</em><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">super</span>.onResume();  </span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;  </span><br><span class="line">            <span class="annotation">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">                titleView.setText(<span class="string">"OtherThread"</span>);  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;).start();  </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>爱哥说是因为消息队列Message Queue在接收和处理过程并非立即的，需要一个过程。（这一部分我大爱哥 <a href="http://blog.csdn.net/aigestudio/article/details/43449123" target="_blank" rel="external">爱哥 –非UI线程更新UI</a> 其实有精讲，大家不妨看一下。）其实我觉得不妨可以大胆猜想，只要view是在渲染到视图之前，我们都是可以通过其他线程来更改的。大家有空可以研究下。</p>
+<p>–</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android基础/" rel="tag">#Android基础</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/18/android_note/Android更新Ui进阶精解（二）/" rel="prev">Android更新Ui进阶精解（二）</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/08/android_note/Android更新Ui的几种方法和见解/" rel="next">Android更新Ui的几种方法和见解</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#《代码里的世界》"><span class="nav-number">1.</span> <span class="nav-text">《代码里的世界》</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-回顾"><span class="nav-number">1.1.</span> <span class="nav-text">1.回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-原理–源码分析"><span class="nav-number">1.2.</span> <span class="nav-text">2.原理–源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-_先看看负责检查线程的ViewRootImpl这段逻辑"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 先看看负责检查线程的ViewRootImpl这段逻辑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-_再看看视图创建时候是何时添加了这个检查对象的"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 再看看视图创建时候是何时添加了这个检查对象的</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

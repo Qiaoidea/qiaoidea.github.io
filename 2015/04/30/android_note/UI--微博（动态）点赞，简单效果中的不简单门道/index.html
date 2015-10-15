@@ -1,0 +1,685 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Android基础," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45850641
+
+【导航】
+
+单行文本水平触摸滑动效果   通过EditText实现TextView单行长文本水平滑动效果
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI--微博（动态）点赞，简单效果中的不简单门道">
+<meta property="og:url" content="http://yoursite.com/2015/04/30/android_note/UI--微博（动态）点赞，简单效果中的不简单门道/index.html">
+<meta property="og:site_name" content="Qiao's Blog">
+<meta property="og:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45850641
+
+【导航】
+
+单行文本水平触摸滑动效果   通过EditText实现TextView单行长文本水平滑动效果
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述">
+<meta property="og:image" content="http://img.blog.csdn.net/20150519222450167">
+<meta property="og:image" content="http://img.blog.csdn.net/20150520151443213">
+<meta property="og:updated_time" content="2015-06-29T13:31:28.317Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UI--微博（动态）点赞，简单效果中的不简单门道">
+<meta name="twitter:description" content="《代码里的世界》  —UI篇
+用文字札记描绘自己 android学习之路
+转载请保留出处 by Qiaohttp://blog.csdn.net/qiaoidea/article/details/45850641
+
+【导航】
+
+单行文本水平触摸滑动效果   通过EditText实现TextView单行长文本水平滑动效果
+多行文本折叠展开    自定义布局View实现多行文本折叠和展开
+
+
+1.概述">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> UI--微博（动态）点赞，简单效果中的不简单门道 | Qiao's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Qiao's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-note">
+          <a href="/dj" rel="section">
+            <i class="menu-item-icon icon-next-note"></i> <br />
+            menu.note
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              UI--微博（动态）点赞，简单效果中的不简单门道
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-04-30T00:00:00+08:00" content="2015-04-30">
+            2015-04-30
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/学习日志/" itemprop="url" rel="index">
+                  <span itemprop="name">学习日志</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="《代码里的世界》_—UI篇"><strong>《代码里的世界》</strong>  —<strong><em>UI篇</em></strong></h2><blockquote>
+<p>用文字札记描绘自己 android学习之路</p>
+<p><em>转载请保留出处 by Qiao</em><br><a href="http://blog.csdn.net/qiaoidea/article/details/45850641" target="_blank" rel="external">http://blog.csdn.net/qiaoidea/article/details/45850641</a></p>
+</blockquote>
+<p><strong>【导航】</strong></p>
+<ul>
+<li><a href="https://github.com/JakeWharton/NineOldAndroids" target="_blank" rel="external">单行文本水平触摸滑动效果</a>   通过EditText实现TextView单行长文本水平滑动效果</li>
+<li><a href="https://github.com/daimajia/AndroidViewAnimations" target="_blank" rel="external">多行文本折叠展开</a>    自定义布局View实现多行文本折叠和展开</li>
+</ul>
+<hr>
+<h2 id="1-概述"><strong>1.概述</strong></h2><p>　　说起空间动态、微博的点赞效果，网上也是很泛滥，各种实现与效果一大堆。而详细实现的部分，讲述的也是参差不齐，另一方面估计也有很多大侠也不屑一顾，觉得完全没必要单独开篇来写和讲解吧。毕竟，也就是两个view和一些简单的动画效果罢了。<br>　　单若是只讲这些，我自然也是不愿花这番功夫的。虽然自己很菜，可也不甘于太菜。所以偶尔看到些好东西，可以延伸学写下，我还是很情愿拿出来用用，顺带秀一秀逼格什么的。<br>　　不扯太多，先说说今天实现点赞效果用到的自以为不错的两个点：</p>
+<ul>
+<li><strong>Checkable</strong>  用来扩展View实现选中状态切换</li>
+<li><strong>AndroidViewAnimations</strong>  基于nineoldandroids封装的android动画简易类库。究竟有多简单呢，就像这样<blockquote>
+<p>AnimHelper.with(new PulseAnimator()).duration(1000).playOn(imageView);<br> 作用： <em>在imageView上使用PulseAnimator这个动画效果，播放一秒。</em></p>
+</blockquote>
+</li>
+</ul>
+<p>　　当然是从实现角度来看这个库啦，如果仅仅是使用，google/百度一大堆啦。<br>　　<br>结合前两篇富文本折叠展开，加上我们的点赞view <strong>做出的demo整合效果图：</strong><br><img src="http://img.blog.csdn.net/20150519222450167" alt="点赞效果"></p>
+<h2 id="<!-more->"><a id="more"></a></h2><h2 id="2-从实现看门道"><strong>2.从实现看门道</strong></h2><p>　　其实从效果看无非就是点击切换图片，并添加一些简单动画效果而已，确实没什么难度。这里是因为引入了两个不错的新内容，使用下，权当新手尝鲜。</p>
+<h3 id="2-1_Checkable接口实现CheckedImageView">2.1 Checkable接口实现<strong>CheckedImageView</strong></h3><p>　　系统本身提供了android.widget.Checkable这样一个接口，方便我们继承实现View的选中和取消的状态。看下这个类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Checkable</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 设置view的选中状态</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setChecked</span><span class="params">(<span class="keyword">boolean</span> checked)</span></span>;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 当前view是否被选中</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isChecked</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     *改变view的选中状态到相反的状态</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">toggle</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　通常这个接口用来帮助我们快速实现view的可选效果，增加了选中和取消两种状态和切换方法。另外为了方便View在状态改变时候快速地变看到效果（更背景或图片)，我们可以直接通过selector控制图片，而其本身并不会自动改变drawable状态，因此这里还有必要重写drawableStateChanged<br>方法。我们先以定义一个通用的CheckedImageView为例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CheckedImageView</span> <span class="keyword">extends</span> <span class="title">ImageView</span> <span class="keyword">implements</span> <span class="title">Checkable</span></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">boolean</span> isChecked;<span class="comment">//选中状态</span></span><br><span class="line">	<span class="keyword">protected</span> OnCheckedChangeListener onCheckedChangeListener;<span class="comment">//状态改变事件监听</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span>[] CHECKED_STATE_SET = &#123; android.R.attr.state_checked &#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CheckedImageView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context);</span><br><span class="line">		initialize();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CheckedImageView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs);</span><br><span class="line">		initialize();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		isChecked = <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isChecked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> isChecked;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setChecked</span><span class="params">(<span class="keyword">boolean</span> isChecked)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.isChecked != isChecked) &#123;</span><br><span class="line">			<span class="keyword">this</span>.isChecked = isChecked;</span><br><span class="line">			refreshDrawableState();</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span> (onCheckedChangeListener != <span class="keyword">null</span>) &#123;</span><br><span class="line">				onCheckedChangeListener.onCheckedChanged(<span class="keyword">this</span>, isChecked);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">toggle</span><span class="params">()</span> </span>&#123;<span class="comment">//改变状态</span></span><br><span class="line">		setChecked(!isChecked);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//初始DrawableState时候为它添加一个CHECKED_STATE，ImageView本身是没有这个状态的</span></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span>[] onCreateDrawableState(<span class="keyword">int</span> extraSpace) &#123;</span><br><span class="line">		<span class="keyword">int</span>[] states = <span class="keyword">super</span>.onCreateDrawableState(extraSpace + <span class="number">1</span>);</span><br><span class="line">		<span class="keyword">if</span> (isChecked()) &#123;</span><br><span class="line">			mergeDrawableStates(states, CHECKED_STATE_SET);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> states;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//当view的选中状态被改变的时候通知ImageView改变背景或内容，这个view会自动在drawable状态集中选择与当前状态匹配的图片</span></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">drawableStateChanged</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>.drawableStateChanged();</span><br><span class="line">		Drawable drawable = getDrawable();</span><br><span class="line">		<span class="keyword">if</span> (drawable != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">int</span>[] myDrawableState = getDrawableState();</span><br><span class="line">			drawable.setState(myDrawableState);</span><br><span class="line">			invalidate();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//设置状态改变监听事件</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnCheckedChangeListener</span><span class="params">(OnCheckedChangeListener onCheckedChangeListener)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.onCheckedChangeListener = onCheckedChangeListener;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//当选中状态改变时监听接口触发该事件</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnCheckedChangeListener</span> </span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCheckedChanged</span><span class="params">(CheckedImageView checkedImgeView, <span class="keyword">boolean</span> isChecked)</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　这是一个通用的可被选中ImageView,当点击之后被选中，再次点击则取消。而其背景/内容也会随之改变。比如下图所示效果：<br>　　<img src="http://img.blog.csdn.net/20150520151443213" alt="可被选中图片"><br>　　<br>　　从代码上看，我们本身并没有直接定义当view点击之后,调用setImage()或者setBackground()来改变内容，而是通过使用View本身的DrawableState来绘制和更改，查找与它对应匹配的图片，而这些状态所对应的图片，都预先在selector中配置好。关于selector这里不做介绍，自行查阅学习。<br>　　<br>　　既然提到selector,<em>顺带提下之前遇到的坑，关于他的匹配原则。比如下边这样一个selector：</em><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line">&lt;selector xmlns:android="http://schemas.android.com/apk/res/android"&gt;</span><br><span class="line">    &lt;item android:state_pressed="true" android:drawable="@drawable/icon_pressed"&gt;&lt;/item&gt;</span><br><span class="line">    &lt;item android:state_checked="true" android:drawable="@drawable/icon_checked"&gt;&lt;/item&gt;</span><br><span class="line">    &lt;item android:drawable="@drawable/icon_normal"&gt;&lt;/item&gt;</span><br><span class="line">&lt;/selector&gt;</span><br></pre></td></tr></table></figure></p>
+<p>　　当view同时有上边两个状态(如state_pressed和state_checked)的时候，view优先显示第一个状态时候的图片（icon_pressed）。这是因为它是由上到下有序查找的，当找到第一个状态与他定义的所相符所在行时，就优先显示这行的图片。所以当我们将最后一行</p>
+<blockquote>
+<p>&lt; item android:drawable=”@drawable/icon_normal”&gt;&lt; /item&gt;</p>
+</blockquote>
+<p>放在第一行时，无论是否选中状态或按下状态，都显示的是icon_normal。初学者一定要注意，我当初就因为这个原因耗费了很多时间查找缘由。</p>
+<p>　　回到我们的点赞实现。这里实现的点赞View <strong>PraiseView</strong> 包含了一个 CheckedImageView 和一个 TextView ,点赞之后，ImageView会放大回缩并弹出一个TextView”+1”的动画效果。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PraiseView</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span> <span class="keyword">implements</span> <span class="title">Checkable</span></span>&#123;<span class="comment">//同样继承Checkable</span></span><br><span class="line">	<span class="keyword">protected</span> OnPraisCheckedListener praiseCheckedListener;</span><br><span class="line">	<span class="keyword">protected</span> CheckedImageView imageView; <span class="comment">//点赞图片</span></span><br><span class="line">	<span class="keyword">protected</span> TextView textView; <span class="comment">//+1</span></span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">int</span> padding;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">PraiseView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context);</span><br><span class="line">		initalize();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">PraiseView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs);</span><br><span class="line">		initalize();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initalize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		setClickable(<span class="keyword">true</span>);</span><br><span class="line">		imageView = <span class="keyword">new</span> CheckedImageView(getContext());</span><br><span class="line">		imageView.setImageResource(R.drawable.blog_praise_selector);</span><br><span class="line">		FrameLayout.LayoutParams flp = <span class="keyword">new</span> LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,Gravity.CENTER);</span><br><span class="line">		addView(imageView, flp);</span><br><span class="line"></span><br><span class="line">		textView = <span class="keyword">new</span> TextView(getContext());</span><br><span class="line">		textView.setTextSize(<span class="number">10</span>);</span><br><span class="line">		textView.setText(<span class="string">"+1"</span>);</span><br><span class="line">		textView.setTextColor(Color.parseColor(<span class="string">"#A24040"</span>));</span><br><span class="line">		textView.setGravity(Gravity.CENTER);</span><br><span class="line">		addView(textView, flp);</span><br><span class="line">		textView.setVisibility(View.GONE);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">performClick</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		checkChange();</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">super</span>.performClick();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">toggle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		checkChange();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setChecked</span><span class="params">(<span class="keyword">boolean</span> isCheacked)</span> </span>&#123;</span><br><span class="line">		imageView.setChecked(isCheacked);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">checkChange</span><span class="params">()</span> </span>&#123;<span class="comment">//点击切换状态</span></span><br><span class="line">		<span class="keyword">if</span> (imageView.isChecked) &#123;</span><br><span class="line">			imageView.setChecked(<span class="keyword">false</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			imageView.setChecked(<span class="keyword">true</span>);</span><br><span class="line">			textView.setVisibility(View.VISIBLE);</span><br><span class="line">			<span class="comment">//放大动画</span></span><br><span class="line">			AnimHelper.with(<span class="keyword">new</span> PulseAnimator()).duration(<span class="number">1000</span>).playOn(imageView);</span><br><span class="line">			<span class="comment">//飘 “+1”动画</span></span><br><span class="line">			AnimHelper.with(<span class="keyword">new</span> SlideOutUpAnimator()).duration(<span class="number">1000</span>).playOn(textView);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//调用点赞事件</span></span><br><span class="line">		<span class="keyword">if</span> (praiseCheckedListener != <span class="keyword">null</span>) &#123;</span><br><span class="line">			praiseCheckedListener.onPraisChecked(imageView.isChecked);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isChecked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> imageView.isChecked;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnPraisCheckedListener</span><span class="params">(OnPraisCheckedListener praiseCheckedListener)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.praiseCheckedListener = praiseCheckedListener;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnPraisCheckedListener</span></span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">void</span> <span class="title">onPraisChecked</span><span class="params">(<span class="keyword">boolean</span> isChecked)</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　过于自定的View大概就这么多了，Checkable这个小巧方便的类，不知道你会用了没。至于上边用到的两个动画效果集：</p>
+<blockquote>
+<p>AnimHelper.with(new PulseAnimator()).duration(1000).playOn(imageView);<br>AnimHelper.with(new SlideOutUpAnimator()).duration(1000).playOn(textView);</p>
+</blockquote>
+<p>感觉封装的挺简洁实用，所以很有必要学习分析一下。</p>
+<h3 id="2-2_动画库的封装和快速框架">2.2 <strong>动画库的封装和快速框架</strong></h3><p>　　提到动画，Android本身自带的动画类Animation已经做到支持3.0及以上了，虽然也做了很好的封装，但是做起复杂动画来还是不够像上边那样简洁。在关于动画兼容方面，github上的大牛Jake Wharton又做了一套动画开源库<a href="https://github.com/JakeWharton/NineOldAndroids" target="_blank" rel="external">NineOldAndroids</a>，效果很好而且支持3.0级以前的版本，确实很值得称赞。而在此基础上，有很多高手又做了二次封装，实现了复杂动画，同时保证方便简洁，而且通用性和扩展性更高。我们这里的动画使用的就是这样一个简单的封装。<br>　　比如，要在XXView上时用XXAnimator这样的动画，持续Duration秒。就这么一行代码：</p>
+<blockquote>
+<p>AnimHelper.with(new SlideOutUpAnimator()).duration(1000).playOn(textView);</p>
+</blockquote>
+<p>　　来看一下基于NineOldAndroids的ViewAnimations具体实现。</p>
+<h4 id="1-_首先定义一个基本动画效果类BaseViewAnimator">1. <strong>首先定义一个基本动画效果类BaseViewAnimator</strong></h4><p>　　这个BaseViewAnimator动画类使用一个动画集合AnimatorSet，包装成单个动画类似的用法，并定义了一个abstract方法prepare()：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseViewAnimator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> DURATION = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> AnimatorSet mAnimatorSet;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">long</span> mDuration = DURATION;</span><br><span class="line"></span><br><span class="line">	&#123;</span><br><span class="line">		mAnimatorSet = <span class="keyword">new</span> AnimatorSet();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">(View target)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> BaseViewAnimator <span class="title">setTarget</span><span class="params">(View target)</span> </span>&#123;</span><br><span class="line">		reset(target);</span><br><span class="line">		prepare(target);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">animate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		start();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * reset the view to default status</span><br><span class="line">	 *</span><br><span class="line">	 * <span class="doctag">@param</span> target</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reset</span><span class="params">(View target)</span> </span>&#123;</span><br><span class="line">		ViewHelper.setAlpha(target, <span class="number">1</span>);</span><br><span class="line">		ViewHelper.setScaleX(target, <span class="number">1</span>);</span><br><span class="line">		ViewHelper.setScaleY(target, <span class="number">1</span>);</span><br><span class="line">		ViewHelper.setTranslationX(target, <span class="number">0</span>);</span><br><span class="line">		ViewHelper.setTranslationY(target, <span class="number">0</span>);</span><br><span class="line">		ViewHelper.setRotation(target, <span class="number">0</span>);</span><br><span class="line">		ViewHelper.setRotationY(target, <span class="number">0</span>);</span><br><span class="line">		ViewHelper.setRotationX(target, <span class="number">0</span>);</span><br><span class="line">		ViewHelper.setPivotX(target, target.getMeasuredWidth() / <span class="number">2.0f</span>);</span><br><span class="line">		ViewHelper.setPivotY(target, target.getMeasuredHeight() / <span class="number">2.0f</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * start to animate</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		mAnimatorSet.setDuration(mDuration);</span><br><span class="line">		mAnimatorSet.start();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> BaseViewAnimator <span class="title">setDuration</span><span class="params">(<span class="keyword">long</span> duration)</span> </span>&#123;</span><br><span class="line">		mDuration = duration;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> BaseViewAnimator <span class="title">setStartDelay</span><span class="params">(<span class="keyword">long</span> delay)</span> </span>&#123;</span><br><span class="line">		getAnimatorAgent().setStartDelay(delay);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getStartDelay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> mAnimatorSet.getStartDelay();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> BaseViewAnimator <span class="title">addAnimatorListener</span><span class="params">(AnimatorListener l)</span> </span>&#123;</span><br><span class="line">		mAnimatorSet.addListener(l);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span></span>&#123;</span><br><span class="line">		mAnimatorSet.cancel();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isRunning</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> mAnimatorSet.isRunning();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isStarted</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> mAnimatorSet.isStarted();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeAnimatorListener</span><span class="params">(AnimatorListener l)</span> </span>&#123;</span><br><span class="line">		mAnimatorSet.removeListener(l);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeAllListener</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		mAnimatorSet.removeAllListeners();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> BaseViewAnimator <span class="title">setInterpolator</span><span class="params">(Interpolator interpolator)</span> </span>&#123;</span><br><span class="line">		mAnimatorSet.setInterpolator(interpolator);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getDuration</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> mDuration;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> AnimatorSet <span class="title">getAnimatorAgent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> mAnimatorSet;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> 　　复杂动画效果基类BaseViewAnimator使用一个AnimatorSet集合来添加各种动画 ,并绑定到目标targetView ,使用 <strong>prepare(View target)</strong> 的abstract方法供其子类实现具体的动画效果。 
+　　</p>
+<h4 id="2-_其次基于这个类实现我们的各种动画效果XXAnimator">2. <strong>其次基于这个类实现我们的各种动画效果XXAnimator</strong></h4><p> 　当我们要实现具体的动画效果时，可以直接继承这个类并实现prepaer方法。比如这里定义的上划消失SlideOutUpAnimator 和放大回缩动画PulseAnimator<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">*上划消失（飘+1）</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SlideOutUpAnimator</span> <span class="keyword">extends</span> <span class="title">BaseViewAnimator</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">(View target)</span> </span>&#123;</span><br><span class="line">        ViewGroup parent = (ViewGroup)target.getParent();</span><br><span class="line">        getAnimatorAgent().playTogether(</span><br><span class="line">                ObjectAnimator.ofFloat(target, <span class="string">"alpha"</span>, <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">                ObjectAnimator.ofFloat(target,<span class="string">"translationY"</span>,<span class="number">0</span>,-parent.getHeight()/<span class="number">2</span>)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">*放大效果</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PulseAnimator</span> <span class="keyword">extends</span> <span class="title">BaseViewAnimator</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">(View target)</span> </span>&#123;</span><br><span class="line">        getAnimatorAgent().playTogether(</span><br><span class="line">                ObjectAnimator.ofFloat(target, <span class="string">"scaleY"</span>, <span class="number">1</span>, <span class="number">1.2f</span>, <span class="number">1</span>),</span><br><span class="line">                ObjectAnimator.ofFloat(target, <span class="string">"scaleX"</span>, <span class="number">1</span>, <span class="number">1.2f</span>, <span class="number">1</span>)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> 　上边两种动画效果就是对BaseViewAnimator的两种实现，动画本身使用的库是NineOldAndroids。</p>
+<h4 id="3-_最后封装一个动画管理工具类AnimHelper供外部使用">3. <strong>最后封装一个动画管理工具类AnimHelper供外部使用</strong></h4><p> 　首先定义了一个静态类，使用helper来实例化这个静态类，并设置各个参数选项。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnimHelper</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> DURATION = BaseViewAnimator.DURATION;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> NO_DELAY = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	*实例化得到AnimationComposer的唯一接口</span><br><span class="line">	*/</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> AnimationComposer <span class="title">with</span><span class="params">(BaseViewAnimator animator)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AnimationComposer(animator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	*定义与动画效果相关联的各种参数，</span><br><span class="line">	*使用这种方法可以保证对象的构建和他的表示相互隔离开来</span><br><span class="line">	*/</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">AnimationComposer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> List&lt;Animator.AnimatorListener&gt; callbacks = <span class="keyword">new</span> ArrayList&lt;Animator.AnimatorListener&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> BaseViewAnimator animator;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">long</span> duration = DURATION;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">long</span> delay = NO_DELAY;</span><br><span class="line">        <span class="keyword">private</span> Interpolator interpolator;</span><br><span class="line">        <span class="keyword">private</span> View target;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">AnimationComposer</span><span class="params">(BaseViewAnimator animator)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.animator = animator;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> AnimationComposer <span class="title">duration</span><span class="params">(<span class="keyword">long</span> duration)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.duration = duration;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> AnimationComposer <span class="title">delay</span><span class="params">(<span class="keyword">long</span> delay)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.delay = delay;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> AnimationComposer <span class="title">interpolate</span><span class="params">(Interpolator interpolator)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.interpolator = interpolator;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> AnimationComposer <span class="title">withListener</span><span class="params">(Animator.AnimatorListener listener)</span> </span>&#123;</span><br><span class="line">            callbacks.add(listener);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> AnimManager <span class="title">playOn</span><span class="params">(View target)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.target = target;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AnimManager(play(), <span class="keyword">this</span>.target);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">private</span> BaseViewAnimator <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            animator.setTarget(target);</span><br><span class="line">            animator.setDuration(duration)</span><br><span class="line">                    .setInterpolator(interpolator)</span><br><span class="line">                    .setStartDelay(delay);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (callbacks.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Animator.AnimatorListener callback : callbacks) &#123;</span><br><span class="line">                    animator.addAnimatorListener(callback);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            animator.animate();</span><br><span class="line">            <span class="keyword">return</span> animator;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">    *动画管理类</span><br><span class="line">    */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">AnimManager</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> BaseViewAnimator animator;</span><br><span class="line">        <span class="keyword">private</span> View target;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">AnimManager</span><span class="params">(BaseViewAnimator animator, View target)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.target = target;</span><br><span class="line">            <span class="keyword">this</span>.animator = animator;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isStarted</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span> animator.isStarted();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isRunning</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span> animator.isRunning();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">(<span class="keyword">boolean</span> reset)</span></span>&#123;</span><br><span class="line">            animator.cancel();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(reset)</span><br><span class="line">                animator.reset(target);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> 　这段代码使用了类似Dialog的builder模式，感兴趣的可以搜一下 <strong>JAVA设计模式-Builder</strong>.晚点会另开一篇讲解。<br><em>（注： 复杂动画这一部分的内容这里只是拿出来展示和使用，包装和实现是由<a href="https://github.com/daimajia/AndroidViewAnimations" target="_blank" rel="external">代码家</a>大大原创，有想了解更多动画及效果的请点其名字链接）</em></p>
+<p> 　运行一下，就可以看到前面所演示的效果了。点击第一下，，伴随着图标变大一下并飘出“+1”的效果，图片切换到选中状态；再点则恢复未选中，而且不会触发动画。<br> 　<br> 　至此，点赞这块内容和关注点也说完了，希望各位能有点儿收获，另外便于自己也能加深理解。<br> 　最后，附上示例源码地址：<br> 　<br> 　<a href="http://download.csdn.net/detail/u011254308/8718381" target="_blank" rel="external"><strong>点击下载源码示例demo</strong></a></p>
+<hr>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android基础/" rel="tag">#Android基础</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/05/03/android_note/UI--从学习styleable自定义view属性到一点儿更有意思的尝试/" rel="prev">UI--从学习styleable自定义view属性到一点儿更有意思的尝试</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/27/android_note/UI--多行文本折叠展开效果/" rel="next">UI--多行文本折叠展开效果</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiaoidea" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Qiaoidea</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#《代码里的世界》_—UI篇"><span class="nav-number">1.</span> <span class="nav-text">《代码里的世界》  —UI篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概述"><span class="nav-number">2.</span> <span class="nav-text">1.概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#<!-more->"><span class="nav-number">3.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-从实现看门道"><span class="nav-number">4.</span> <span class="nav-text">2.从实现看门道</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1_Checkable接口实现CheckedImageView"><span class="nav-number">4.1.</span> <span class="nav-text">2.1 Checkable接口实现CheckedImageView</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2_动画库的封装和快速框架"><span class="nav-number">4.2.</span> <span class="nav-text">2.2 动画库的封装和快速框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-_首先定义一个基本动画效果类BaseViewAnimator"><span class="nav-number">4.2.1.</span> <span class="nav-text">1. 首先定义一个基本动画效果类BaseViewAnimator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-_其次基于这个类实现我们的各种动画效果XXAnimator"><span class="nav-number">4.2.2.</span> <span class="nav-text">2. 其次基于这个类实现我们的各种动画效果XXAnimator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-_最后封装一个动画管理工具类AnimHelper供外部使用"><span class="nav-number">4.2.3.</span> <span class="nav-text">3. 最后封装一个动画管理工具类AnimHelper供外部使用</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Qiaoidea</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
